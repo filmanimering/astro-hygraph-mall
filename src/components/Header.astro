@@ -1,0 +1,81 @@
+---
+import HeaderLink from "./HeaderLink.astro";
+
+/** * Vi hämtar globala inställningar direkt i headern
+ * så att vi slipper skicka ner props genom hela kedjan.
+ */
+const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
+
+const query = `
+query GetGlobalSettings {
+  globalSettings {  
+    logo {
+      url
+    }
+    navigation {
+      ... on Navigation {
+        id
+        label
+        url
+      }
+    }
+    siteName
+  }
+}`;
+
+const response = await fetch(HYGRAPH_ENDPOINT, {
+	method: "POST",
+	headers: { "Content-Type": "application/json" },
+	body: JSON.stringify({ query }),
+});
+
+const json = await response.json();
+const settings = json.data?.globalSettings[0] || {};
+const { siteName, logo, navigation = [] } = settings;
+---
+
+<header
+	class="w-full bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100"
+>
+	<nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+		{/* Vänster sida: Logo och Sajtnamn */}
+		<div class="flex items-center">
+			<a href="/" class="flex items-center gap-3 no-underline group">
+				{
+					logo?.url && (
+						<img
+							src={logo.url}
+							alt={siteName}
+							class="h-9 w-auto object-contain transition-transform group-hover:scale-105"
+						/>
+					)
+				}
+				<span
+					class="text-xl font-black tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors"
+				>
+					{siteName || "Webbsida"}
+				</span>
+			</a>
+		</div>
+
+		{/* Höger sida: Navigering */}
+		<div class="flex items-center gap-1 md:gap-2">
+			{
+				navigation.length > 0 ? (
+					navigation.map((link: any) => (
+						<HeaderLink
+							href={link.url}
+							class="px-4 py-2 rounded-xl text-[15px] font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all active:scale-95"
+						>
+							{link.label}
+						</HeaderLink>
+					))
+				) : (
+					<p class="text-slate-400 text-xs italic">
+						Inga länkar i Hygraph
+					</p>
+				)
+			}
+		</div>
+	</nav>
+</header>

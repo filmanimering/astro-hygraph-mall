@@ -1,0 +1,28 @@
+---
+import { marked } from "marked";
+const { data } = Astro.props;
+const htmlContent = marked.parse(data.heroText.markdown);
+
+// Kontrollera om det finns en bild, annars faller vi tillbaka på din slate-färg
+const bgUrl = data.bgBild?.url;
+---
+
+<section
+    class="relative mx-auto mb-8 flex items-center justify-center overflow-hidden shadow-lg border border-slate-100 bg-slate-50 min-h-[80vh]"
+    style={bgUrl
+        ? `background-image: url('${bgUrl}'); background-size: cover; background-position: center;`
+        : ""}
+>
+    {
+        /* Overlay: Gör bilden mörkare så att vit text poppar. Ta bort om du vill ha ljus bild + mörk text. */
+    }
+    {bgUrl && <div class="absolute inset-0 bg-black/40 z-0" />}
+
+    <div
+        class={`relative z-10 max-w-4xl mx-auto text-center px-6 py-16 prose ${bgUrl ? "prose-invert" : "prose-slate"}
+              prose-h3:text-5xl prose-h3:font-black prose-h3:tracking-tight
+              prose-p:text-xl prose-p:leading-relaxed`}
+    >
+        <div set:html={htmlContent} />
+    </div>
+</section>

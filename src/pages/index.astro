@@ -1,0 +1,53 @@
+---
+// index.astro
+import RenderSections from "../components/RenderSections.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
+
+const query = `
+query {
+  pages(where: {slug: "home"}) {
+    title
+    sections {
+      __typename
+      ... on SectionHero { 
+		heroText { markdown }
+		bgBild{url}
+	   }
+      ... on SectionText { content { markdown } }
+	  ... on SectionImageGrid {
+        title
+        description
+        images {
+          url
+          handle
+          width
+          height
+        }
+      }
+    }
+  }
+}`;
+
+const response = await fetch(HYGRAPH_ENDPOINT, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ query }),
+});
+
+const json = await response.json();
+const page = json.data?.pages[0];
+---
+
+<BaseLayout title={page?.title} description="Start" pubDate={new Date()}>
+  <div class="">
+    {
+      page ? (
+        <RenderSections sections={page.sections} />
+      ) : (
+        <p>Laddar eller saknar innehåll...</p>
+      )
+    }
+  </div>
+</BaseLayout>

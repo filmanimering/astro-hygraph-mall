@@ -1,0 +1,25 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+
+const { title, description } = Astro.props;
+---
+
+<html lang="sv" class="scroll-smooth">
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
+
+	<body
+		class="bg-white antialiased text-slate-900 flex flex-col min-h-screen font-sans"
+	>
+		<Header />
+
+		<main class="w-full mx-auto">
+			<slot />
+		</main>
+
+		<Footer />
+	</body>
+</html>
