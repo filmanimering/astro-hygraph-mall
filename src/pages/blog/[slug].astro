@@ -1,0 +1,148 @@
+---
+import FormattedDate from "../../components/FormattedDate.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
+    const query = `query GetPaths { blogPosts { slug } }`;
+    const response = await fetch(HYGRAPH_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+    });
+    const json = await response.json();
+    const posts = json.data?.blogPosts || [];
+    return posts.map((post: any) => ({ params: { slug: post.slug } }));
+}
+
+const { slug } = Astro.params;
+const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
+
+const query = `
+query GetSinglePost($slug: String!) {
+  blogPost(where: { slug: $slug }) {
+    title
+    publishedDate
+    content { html }
+    coverImage { url }
+  }
+  globalSettings {
+    siteName
+    logo { url }
+    footerText
+    navigation {
+      ... on Navigation {
+        label
+        url
+      }
+    }
+  }
+}`;
+
+const response = await fetch(HYGRAPH_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query, variables: { slug } }),
+});
+
+const json = await response.json();
+const post = json.data?.blogPost;
+const settings = json.data?.globalSettings[0] || {};
+
+if (!post) return Astro.redirect("/404");
+---
+
+<BaseLayout title={`${post.title} | ${settings.siteName}`} settings={settings}>
+    <main class="w-full bg-slate-50 antialiased min-h-screen">
+        {/* Top Banner Image - Kort och bred utan hakar */}
+        {
+            post.coverImage && (
+                <div class="w-full h-64 md:h-80 overflow-hidden relative border-b border-slate-200">
+                    <img
+                        src={post.coverImage.url}
+                        alt={post.title}
+                        class="w-full h-full object-cover grayscale-[0.2] brightness-90"
+                    />
+                    <div class="absolute inset-0 bg-linear-to-t from-slate-900/20 to-transparent" />
+                </div>
+            )
+        }
+
+        {/* Content Card - Centrerat och upplyft */}
+        <div class="max-w-4xl mx-auto px-4 -mt-16 relative z-10">
+            <article
+                class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden"
+            >
+                {/* Header inside card */}
+                <header class="p-8 md:p-16 pb-0">
+                    <div class="flex flex-col items-center text-center gap-6">
+                        <div class="px-4 py-1 bg-blue-50 rounded-full">
+                            <span
+                                class="text-[10px] font-bold tracking-widest text-blue-600 uppercase"
+                            >
+                                <FormattedDate
+                                    date={new Date(post.publishedDate)}
+                                />
+                            </span>
+                        </div>
+
+                        <h1
+                            class="text-4xl md:text-6xl font-black tracking-tighter text-slate-900 leading-tight uppercase italic"
+                        >
+                            {post.title}
+                        </h1>
+
+                        <div class="w-12 h-1 bg-blue-600 rounded-full"></div>
+                    </div>
+                </header>
+
+                {/* Brödtext */}
+                <div class="p-8 md:p-16 pt-12">
+                    <div
+                        class="prose prose-slate prose-lg md:prose-xl max-w-none
+            prose-headings:font-black prose-headings:tracking-tighter prose-headings:uppercase prose-headings:italic
+            prose-p:leading-relaxed prose-p:text-slate-600
+            prose-img:rounded-2xl prose-img:shadow-md
+            prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline"
+                    >
+                        <div set:html={post.content.html} />
+                    </div>
+
+                    {/* Footer inside card */}
+                    <footer class="mt-16 pt-10 border-t border-slate-100">
+                        <div class="flex justify-between items-center">
+                            <a
+                                href="/blog"
+                                class="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="3"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    class="transition-transform group-hover:-translate-x-1"
+                                    ><path d="m15 18-6-6 6-6"></path></svg
+                                >
+                                Back to all posts
+                            </a>
+
+                            <div
+                                class="text-[10px] text-slate-300 font-bold uppercase tracking-widest"
+                            >
+                                {settings.siteName}
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </article>
+        </div>
+
+        {/* Spacer bottom */}
+        <div class="h-20"></div>
+    </main>
+</BaseLayout>

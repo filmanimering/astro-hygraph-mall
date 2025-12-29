@@ -8,25 +8,27 @@ const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
 const query = `
 query {
   pages(where: {slug: "home"}) {
-    title
+    title    
     sections {
-      __typename
-      ... on SectionHero { 
-		heroText { markdown }
-		bgBild{url}
-	   }
-      ... on SectionText { content { markdown } }
-	  ... on SectionImageGrid {
-        title
-        description
-        images {
-          url
-          handle
-          width
-          height
+          __typename
+          ... on SectionHero { 
+        heroText { markdown }
+        buttonLabel
+        buttonUrl
+        bgBild{url}
         }
-      }
-    }
+       ... on SectionText { content { markdown } }
+        ... on SectionImageGrid {
+            title
+            description
+            images {
+              url
+              handle
+              width
+              height
+            }
+          }
+        }
   }
 }`;
 

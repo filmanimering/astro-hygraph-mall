@@ -1,10 +1,13 @@
 ---
 import { marked } from "marked";
+import MyButton from "../MyButton.astro";
 const { data } = Astro.props;
 const htmlContent = marked.parse(data.heroText.markdown);
 
 // Kontrollera om det finns en bild, annars faller vi tillbaka på din slate-färg
 const bgUrl = data.bgBild?.url;
+const buttonLabel = data.buttonLabel;
+const buttonUrl = data.buttonUrl;
 ---
 
 <section
@@ -24,5 +27,12 @@ const bgUrl = data.bgBild?.url;
               prose-p:text-xl prose-p:leading-relaxed`}
     >
         <div set:html={htmlContent} />
+        <div>
+            {
+                buttonLabel && buttonUrl && (
+                    <MyButton label={buttonLabel} url={buttonUrl} />
+                )
+            }
+        </div>
     </div>
 </section>
