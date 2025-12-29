@@ -3,46 +3,15 @@
 import RenderSections from "../components/RenderSections.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
+import { hygraphFetch } from "../lib/hygraph.js";
+import { PAGE_QUERY } from "../lib/queries";
 
-const query = `
-query {
-  pages(where: {slug: "home"}) {
-    title    
-    sections {
-          __typename
-          ... on SectionHero { 
-        heroText { markdown }
-        buttonLabel
-        buttonUrl
-        bgBild{url}
-        }
-       ... on SectionText { content { markdown } }
-        ... on SectionImageGrid {
-            title
-            description
-            images {
-              url
-              handle
-              width
-              height
-            }
-          }
-        }
-  }
-}`;
-
-const response = await fetch(HYGRAPH_ENDPOINT, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ query }),
-});
-
-const json = await response.json();
-const page = json.data?.pages[0];
+// Vi skickar med "home" som slug till vår globala query
+const data = await hygraphFetch(PAGE_QUERY, { slug: "hem" });
+const page = data.page;
 ---
 
-<BaseLayout title={page?.title} description="Start" pubDate={new Date()}>
+<BaseLayout title={page?.title} description={page?.title}>
   <div class="">
     {
       page ? (
