@@ -3,6 +3,7 @@ import Hero from "./sections/Hero.astro";
 import Text from "./sections/Text.astro";
 import ImageGrid from "./sections/ImageGrid.astro";
 import Video from "./sections/SectionVideo.astro";
+import InfoCard from "./sections/InfoCardGrid.astro";
 const { sections } = Astro.props;
 
 // Här mappar vi Hygraph __typename till Astro-komponenter
@@ -11,6 +12,7 @@ const components: Record<string, any> = {
     SectionText: Text,
     SectionImageGrid: ImageGrid,
     SectionVideo: Video,
+    SectionInfoCardGrid: InfoCard,
 };
 ---
 

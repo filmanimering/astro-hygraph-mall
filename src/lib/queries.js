@@ -18,11 +18,22 @@ export const PAGE_QUERY = `
         ... on SectionImageGrid {
           title
           description
+          numberOfColumns
           images {
             url
             width
             height
           }
+        }
+         ... on SectionInfoCardGrid {
+              id
+              beskrivning
+              buttonLabel
+              buttonLink
+              poster {
+                url
+              }
+              title
         }
         ... on SectionVideo {
           id
