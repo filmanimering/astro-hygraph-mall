@@ -69,17 +69,15 @@ if (!post) return Astro.redirect("/404");
         }
 
         {/* Content Card - Centrerat och upplyft */}
-        <div class="max-w-4xl mx-auto px-4 -mt-16 relative z-10">
+        <div class="max-w-5xl mx-auto px-4 md:px-8 pb2 -mt-44 relative z-10">
             <article
                 class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden"
             >
                 {/* Header inside card */}
-                <header class="p-8 md:p-16 pb-0">
+                <header class="p-4 pb-0">
                     <div class="flex flex-col items-center text-center gap-6">
                         <div class="px-4 py-1 bg-blue-50 rounded-full">
-                            <span
-                                class="text-[10px] font-bold tracking-widest text-blue-600 uppercase"
-                            >
+                            <span class="text-base">
                                 <FormattedDate
                                     date={new Date(post.publishedDate)}
                                 />
@@ -87,20 +85,19 @@ if (!post) return Astro.redirect("/404");
                         </div>
 
                         <h1
-                            class="text-4xl md:text-6xl font-black tracking-tighter text-slate-900 leading-tight uppercase italic"
+                            class="text-3xl md:text-4xl tracking-tight text-slate-900 font-semibold"
                         >
                             {post.title}
                         </h1>
 
-                        <div class="w-12 h-1 bg-blue-600 rounded-full"></div>
+                        <div class="w-32 h-1 bg-gray-600/30 rounded-full"></div>
                     </div>
                 </header>
 
                 {/* Brödtext */}
-                <div class="p-8 md:p-16 pt-12">
+                <div class="px-8">
                     <div
-                        class="prose prose-slate prose-lg md:prose-xl max-w-none
-            prose-headings:font-black prose-headings:tracking-tighter prose-headings:uppercase prose-headings:italic
+                        class="prose prose-slate prose-base md:prose-lg max-w-none
             prose-p:leading-relaxed prose-p:text-slate-600
             prose-img:rounded-2xl prose-img:shadow-md
             prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline"
@@ -109,11 +106,11 @@ if (!post) return Astro.redirect("/404");
                     </div>
 
                     {/* Footer inside card */}
-                    <footer class="mt-16 pt-10 border-t border-slate-100">
+                    <footer class="mt-8 pt-4 pb-8 border-t border-slate-100">
                         <div class="flex justify-between items-center">
                             <a
                                 href="/blog"
-                                class="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors"
+                                class="group inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-slate-700 hover:text-blue-600 transition-colors"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -128,11 +125,11 @@ if (!post) return Astro.redirect("/404");
                                     class="transition-transform group-hover:-translate-x-1"
                                     ><path d="m15 18-6-6 6-6"></path></svg
                                 >
-                                Back to all posts
+                                Tillbaka till bloggen
                             </a>
 
                             <div
-                                class="text-[10px] text-slate-300 font-bold uppercase tracking-widest"
+                                class="text-sm text-slate-500 font-bold uppercase tracking-widest"
                             >
                                 {settings.siteName}
                             </div>

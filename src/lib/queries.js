@@ -7,33 +7,39 @@ export const PAGE_QUERY = `
       sections {
         __typename
         ... on SectionHero {
-          heroText { markdown }
+          heroText { html }
           buttonLabel
           buttonUrl
           bgBild { url }
         }
         ... on SectionText {
-          content { markdown }
+          content { html }
         }
         ... on SectionImageGrid {
           title
-          description
+          description 
           numberOfColumns
           images {
             url
             width
             height
+            altText
           }
         }
-         ... on SectionInfoCardGrid {
+          ... on SectionInfoCardGrid {
               id
-              beskrivning
-              buttonLabel
-              buttonLink
-              poster {
-                url
-              }
               title
+              description
+              cards {
+                ... on InfoCard {
+                  id
+                  title
+                  text
+                  poster {  url}
+                  buttonLabel
+                  buttonLink
+                }
+              }
         }
         ... on SectionVideo {
           id

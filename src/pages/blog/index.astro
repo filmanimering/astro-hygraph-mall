@@ -42,15 +42,7 @@ const settings = json.data.globalSettings[0] || {};
 
 <BaseLayout title={settings.siteName} settings={settings}>
     <main class="w-full bg-white">
-        <div class="max-w-7xl mx-auto px-6 py-12">
-            <header class="mb-12">
-                <h1
-                    class="text-4xl font-black tracking-tighter text-slate-900 uppercase italic"
-                >
-                    Blog
-                </h1>
-            </header>
-
+        <div class="max-w-7xl mx-auto px-6 py-12 mt-16 md:mt-20 mb-24">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {
                     posts.map((post: any) => (
@@ -76,7 +68,7 @@ const settings = json.data.globalSettings[0] || {};
 
                                 {/* Textinnehåll */}
                                 <div class="space-y-2">
-                                    <div class="text-[10px] font-bold tracking-[0.2em] text-blue-600 uppercase">
+                                    <div class="text-sm ">
                                         <FormattedDate
                                             date={new Date(post.publishedDate)}
                                         />

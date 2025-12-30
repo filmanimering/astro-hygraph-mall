@@ -1,0 +1,21 @@
+---
+import RenderSections from "../components/RenderSections.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { hygraphFetch } from "../lib/hygraph.js";
+import { PAGE_QUERY } from "../lib/queries";
+
+const data = await hygraphFetch(PAGE_QUERY, { slug: "hemsidor" });
+const page = data.page;
+---
+
+<BaseLayout title={page?.title} description={page?.title}>
+  <div class="">
+    {
+      page ? (
+        <RenderSections sections={page.sections} />
+      ) : (
+        <p>Laddar eller saknar innehåll...</p>
+      )
+    }
+  </div>
+</BaseLayout>
