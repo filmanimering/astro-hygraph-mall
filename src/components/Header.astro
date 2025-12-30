@@ -20,7 +20,7 @@ query GetGlobalSettings {
       }
     }
     siteName
-	seo {
+    seo {
       seoTitle
       seoDescription
       ogImage { url }
@@ -29,9 +29,9 @@ query GetGlobalSettings {
 }`;
 
 const response = await fetch(HYGRAPH_ENDPOINT, {
-	method: "POST",
-	headers: { "Content-Type": "application/json" },
-	body: JSON.stringify({ query }),
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ query }),
 });
 
 const json = await response.json();
@@ -40,51 +40,102 @@ const { siteName, logo, navigation = [] } = settings;
 ---
 
 <header
-	class="w-full bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100"
+  class="w-full bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100"
 >
-	<nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-		{/* Vänster sida: Logo och Sajtnamn */}
-		<div class="flex items-center">
-			<a href="/" class="flex items-center gap-3 no-underline group">
-				{
-					logo?.url && (
-						<MyImage
-							src={logo.url}
-							alt={siteName}
-							width={logo.width || 100}
-							height={logo.height || 40}
-							aspect="auto"
-							fit="contain"
-							class="h-9 w-auto bg-transparent border-none shadow-none rounded-sm"
-						/>
-					)
-				}
-				<span
-					class="text-xl font-black tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors"
-				>
-					{siteName || "Webbsida"}
-				</span>
-			</a>
-		</div>
+  <nav class="max-w-8xl mx-auto px-6 h-20 flex items-center justify-between">
+    {/* Vänster sida: Logo och Sajtnamn */}
+    <div class="flex items-center">
+      <a href="/" class="flex items-center gap-3 no-underline group">
+        {
+          logo?.url && (
+            <MyImage
+              src={logo.url}
+              alt={siteName}
+              width={logo.width || 80}
+              height={logo.height || 30}
+              aspect="auto"
+              fit="contain"
+              class="h-9 w-auto bg-transparent border-none shadow-none rounded-sm"
+            />
+          )
+        }
+        <span
+          class="text-lg font-semibold tracking-tight text-slate-900 group-hover:opacity-70"
+        >
+          {siteName || "Photo and Film"}
+        </span>
+      </a>
+    </div>
 
-		{/* Höger sida: Navigering */}
-		<div class="flex items-center gap-1 md:gap-2">
-			{
-				navigation.length > 0 ? (
-					navigation.map((link: any) => (
-						<HeaderLink
-							href={link.url}
-							class="px-3 py-1 rounded-xl text-sm  text-slate-800  active:scale-95"
-						>
-							{link.label}
-						</HeaderLink>
-					))
-				) : (
-					<p class="text-slate-400 text-xs italic">
-						Inga länkar i Hygraph
-					</p>
-				)
-			}
-		</div>
-	</nav>
+    {/* Mobilmeny-knapp */}
+    <button
+      id="mobile-menu-button"
+      class="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-slate-700 hover:bg-slate-300 active:scale-95"
+      aria-label="Öppna meny"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+
+    {/* Desktop-navigering */}
+    <div class="hidden md:flex items-center gap-1 md:gap-2">
+      {
+        navigation.length > 0 ? (
+          navigation.map((link: any) => (
+            <HeaderLink
+              href={link.url}
+              class="px-3 py-1 rounded-xl text-sm text-slate-800 active:scale-95"
+            >
+              {link.label}
+            </HeaderLink>
+          ))
+        ) : (
+          <p class="text-slate-400 text-xs italic">Inga länkar i Hygraph</p>
+        )
+      }
+    </div>
+  </nav>
+
+  {/* Mobilmeny */}
+  <div
+    id="mobile-menu"
+    class="md:hidden hidden border-t border-slate-100 bg-white/95 backdrop-blur-md"
+  >
+    <div class="px-6 py-4 flex flex-col gap-2">
+      {
+        navigation.length > 0 ? (
+          navigation.map((link: any) => (
+            <HeaderLink
+              href={link.url}
+              class="block w-full px-3 py-2 rounded-lg text-slate-800 hover:bg-slate-400"
+            >
+              {link.label}
+            </HeaderLink>
+          ))
+        ) : (
+          <p class="text-slate-400 text-sm italic">Inga länkar i Hygraph</p>
+        )
+      }
+    </div>
+  </div>
 </header>
+
+<script>
+  const btn = document.getElementById("mobile-menu-button");
+  const menu = document.getElementById("mobile-menu");
+
+  btn?.addEventListener("click", () => {
+    menu?.classList.toggle("hidden");
+  });
+</script>

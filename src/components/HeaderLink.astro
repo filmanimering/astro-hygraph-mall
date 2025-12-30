@@ -11,16 +11,16 @@ const isActive = href === pathname || href === pathname.replace(/\/$/, "");
 ---
 
 <a
-	href={href}
-	class:list={[
-		className,
-		"px-3 py-1 text-sm   rounded-lg",
-		// Aktivt läge (behålls även vid klick/hover)
-		isActive
-			? "bg-slate-900 text-white shadow-md shadow-slate-200"
-			: "text-slate-800 ",
-	]}
-	{...props}
+  href={href}
+  class:list={[
+    className,
+    "px-3 py-1 text-sm   rounded-lg",
+    // Aktivt läge (behålls även vid klick/hover)
+    isActive
+      ? "bg-slate-900 text-white shadow-md shadow-slate-200"
+      : "text-slate-800 ",
+  ]}
+  {...props}
 >
-	<slot />
+  <slot />
 </a>

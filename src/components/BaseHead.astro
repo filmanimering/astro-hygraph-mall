@@ -15,8 +15,8 @@ const { pageSeo, globalSeo, fallbackTitle } = Astro.props;
 // Här gör vi logiken för prioritering EN gång, så slipper du göra det på varje sida
 const finalTitle =
 	pageSeo?.seoTitle || globalSeo?.seoTitle || fallbackTitle || SITE_TITLE;
-const finalDescription =
-	pageSeo?.seoDescription || globalSeo?.seoDescription || "";
+const finalDescription = pageSeo?.seoDescription ||
+	globalSeo?.seoDescription || { SITE_TITLE };
 const finalImage = pageSeo?.ogImage?.url || globalSeo?.ogImage?.url;
 ---
 

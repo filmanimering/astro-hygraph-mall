@@ -10,7 +10,7 @@ export const PAGE_QUERY = `
         ogImage { url }
         noIndex
       }
-      sections {
+      sections { 
         __typename
         ... on SectionHero {
           heroText { html }
@@ -59,6 +59,20 @@ export const PAGE_QUERY = `
     # Vi kan även passa på att hämta globala inställningar här om vi vill
     globalSettings {
       siteName
+      logo {
+        url
+        width
+        height
+      }
+      contactInfo {
+        html
+      }
+      navigation {
+        ... on Navigation {
+          label
+          url
+        }
+      }
       seo {
         seoTitle
         seoDescription

@@ -3,23 +3,28 @@ import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 
-const { title, description } = Astro.props;
+// Vi tar emot de nya propsen här
+const { pageSeo, globalSeo, fallbackTitle, settings } = Astro.props;
 ---
 
 <html lang="sv" class="scroll-smooth">
-	<head>
-		<BaseHead title={title} description={description} />
-	</head>
+  <head>
+    <BaseHead
+      pageSeo={pageSeo}
+      globalSeo={globalSeo}
+      fallbackTitle={fallbackTitle}
+    />
+  </head>
 
-	<body
-		class="bg-white antialiased text-slate-900 flex flex-col min-h-screen font-sans"
-	>
-		<Header />
+  <body
+    class="bg-white antialiased text-slate-900 flex flex-col min-h-screen font-sans"
+  >
+    <Header settings={settings} />
 
-		<main class="w-full mx-auto">
-			<slot />
-		</main>
+    <main class="w-full mx-auto grow">
+      <slot />
+    </main>
 
-		<Footer />
-	</body>
+    <Footer settings={settings} />
+  </body>
 </html>

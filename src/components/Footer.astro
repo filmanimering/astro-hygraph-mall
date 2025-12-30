@@ -1,37 +1,10 @@
 ---
 const today = new Date();
-const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
 
-const query = `
-query GetFooterSettings {
-  globalSettings {
-    navigation {
-      ... on Navigation {
-        label
-        url
-      }
-    }
-    siteName
-	seo {
-      seoTitle
-      seoDescription
-      ogImage { url }
-    }
-    footerText
-    contactInfo {
-      html
-    }
-  }
-}`;
+// Ta emot datan från BaseLayout
+const { settings = {} } = Astro.props;
 
-const response = await fetch(HYGRAPH_ENDPOINT, {
-	method: "POST",
-	headers: { "Content-Type": "application/json" },
-	body: JSON.stringify({ query }),
-});
-
-const json = await response.json();
-const settings = json.data?.globalSettings[0] || {};
+// Din befintliga logik för att förbereda texterna
 const { siteName, footerText, contactInfo, navigation = [] } = settings;
 const contactHtml = contactInfo?.html;
 ---
