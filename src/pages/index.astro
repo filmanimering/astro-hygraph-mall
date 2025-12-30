@@ -8,7 +8,7 @@ import { PAGE_QUERY } from "../lib/queries";
 
 const data = await hygraphFetch(PAGE_QUERY, { slug: "hem" });
 const page = data.page;
-// Hämta settings från listan som vi nu får från PAGE_QUERY
+// Hämta settings från listan vi nu får från PAGE_QUERY
 const settings = data.globalSettings?.[0] || {};
 ---
 
