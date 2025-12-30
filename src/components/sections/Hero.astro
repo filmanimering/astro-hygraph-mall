@@ -1,41 +1,40 @@
 ---
 // Vi behöver inte "import { marked } from 'marked';" längre
 import MyButton from "../MyButton.astro";
+import MyImage from "../MyImage.astro";
 import Prose from "../Prose.astro";
 const { data } = Astro.props;
 
 // Nu hämtar vi färdig HTML direkt från Hygraph
 const htmlContent = data.heroText.html;
-
 const bgUrl = data.bgBild?.url;
 const buttonLabel = data.buttonLabel;
 const buttonUrl = data.buttonUrl;
 ---
 
-<section
-  class="relative mx-auto mb-8 flex items-center justify-center overflow-hidden shadow-lg border border-slate-100 bg-slate-50 min-h-[80vh]"
-  style={bgUrl
-    ? `background-image: url('${bgUrl}'); background-size: cover; background-position: center;`
-    : ""}
->
-  {bgUrl && <div class="absolute inset-0 bg-black/50 z-0" />}
-
-  <div class="relative z-10 max-w-4xl mx-auto text-center px-6 py-16">
-    {/* Renderar den färdiga HTML:en */}
-    <Prose bgUrl={bgUrl}>
-      <div set:html={htmlContent} />
-    </Prose>
-    <div class="flex justify-center mt-8">
+<section class="px-4 py-8">
+  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+    <div class="p-2 md:p-8">
+      <Prose>
+        <div set:html={htmlContent} />
+      </Prose>
       {
         buttonLabel && buttonUrl && (
           <MyButton
             label={buttonLabel}
             url={buttonUrl}
-            bgColor="bg-transparent border-white/80 hover:bg-white/20"
+            bgColor="bg-gray-950  hover:gray-950/70"
             textColor="text-white"
           />
         )
       }
+    </div>
+    <div class="flex justify-center mt-8">
+      <MyImage
+        src={bgUrl}
+        alt={data.bgBild?.alt || "Hero Image"}
+        class="w-full h-auto max-w-3xl rounded-lg shadow-lg"
+      />
     </div>
   </div>
 </section>

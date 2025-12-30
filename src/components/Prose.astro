@@ -1,10 +1,12 @@
 ---
-const { bgUrl } = Astro.props;
+const { bgUrl = "" } = Astro.props;
 ---
 
 <div
   class=`prose prose-slate prose-lg max-w-none
-   prose-headings:font-bold prose-headings:tracking-tight
+  prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl
+  prose-h1:md:text-5xl prose-h2:md:text-4xl prose-h3:md:text-3xl
+   prose-headings:font-semibold prose-headings:tracking-tight
 prose-p:leading-relaxed prose-p:text-slate-600 prose-a:text-blue-600 prose-a:underline hover:prose-a:no-underline prose-a:transition-colors
  prose-blockquote:border-l-blue-600 prose-blockquote:bg-blue-50/50 prose-blockquote:text-slate-800
    prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
