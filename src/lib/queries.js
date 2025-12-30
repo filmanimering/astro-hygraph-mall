@@ -4,6 +4,12 @@ export const PAGE_QUERY = `
   query GetPage($slug: String!) {
     page(where: {slug: $slug}) {
       title
+      seo {
+        seoTitle
+        seoDescription
+        ogImage { url }
+        noIndex
+      }
       sections {
         __typename
         ... on SectionHero {
@@ -51,8 +57,15 @@ export const PAGE_QUERY = `
       }
     }
     # Vi kan även passa på att hämta globala inställningar här om vi vill
-    globalSettings(where: {id: "din-id"}) {
+    globalSettings {
       siteName
+      seo {
+        seoTitle
+        seoDescription
+        ogImage {
+          url
+        }
+      }
       footerText
     }
   }

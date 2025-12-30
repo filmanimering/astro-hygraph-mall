@@ -6,9 +6,16 @@ import { PAGE_QUERY } from "../lib/queries";
 
 const data = await hygraphFetch(PAGE_QUERY, { slug: "bilder" });
 const page = data.page;
+// Hämta settings från listan som vi nu får från PAGE_QUERY
+const settings = data.globalSettings?.[0] || {};
 ---
 
-<BaseLayout title={page?.title} description={page?.title}>
+<BaseLayout
+  pageSeo={page?.seo}
+  globalSeo={settings?.seo}
+  fallbackTitle={page?.title}
+  settings={settings}
+>
   <div class="">
     {
       page ? (

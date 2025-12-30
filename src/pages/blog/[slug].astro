@@ -26,6 +26,12 @@ query GetSinglePost($slug: String!) {
     publishedDate
     content { html }
     coverImage { url }
+    seo {
+      seoTitle
+      seoDescription
+      ogImage { url }
+      noIndex
+    }
   }
   globalSettings(where: {id: "din-id"}) {
     siteName
@@ -52,7 +58,11 @@ const settings = json.data?.globalSettings[0] || {};
 if (!post) return Astro.redirect("/404");
 ---
 
-<BaseLayout title={`${post.title} | ${settings.siteName}`} settings={settings}>
+<BaseLayout
+    pageSeo={post.seo}
+    globalSeo={settings.seo}
+    fallbackTitle={post.title}
+>
     <main class="w-full bg-slate-50 antialiased min-h-screen">
         {/* Banner - Vi använder MyImage här för konsekvens */}
         {
