@@ -1,6 +1,7 @@
 ---
 // Vi behöver inte "import { marked } from 'marked';" längre
 import MyButton from "../MyButton.astro";
+import Prose from "../Prose.astro";
 const { data } = Astro.props;
 
 // Nu hämtar vi färdig HTML direkt från Hygraph
@@ -19,21 +20,18 @@ const buttonUrl = data.buttonUrl;
 >
   {bgUrl && <div class="absolute inset-0 bg-black/50 z-0" />}
 
-  <div
-    class={`relative z-10 max-w-4xl mx-auto text-center px-6 py-16 prose ${bgUrl ? "prose-invert" : "prose-slate"}
-              prose-h1:text-4xl prose-h1:sm:text-5xl prose-h3:text-5xl prose-h3:font-black prose-h3:tracking-tight
-              prose-p:text-xl prose-p:leading-relaxed`}
-  >
+  <div class="relative z-10 max-w-4xl mx-auto text-center px-6 py-16">
     {/* Renderar den färdiga HTML:en */}
-    <div set:html={htmlContent} />
-
+    <Prose bgUrl={bgUrl}>
+      <div set:html={htmlContent} />
+    </Prose>
     <div class="flex justify-center mt-8">
       {
         buttonLabel && buttonUrl && (
           <MyButton
             label={buttonLabel}
             url={buttonUrl}
-            bgColor="bg-blue-600"
+            bgColor="bg-transparent border-white/80 hover:bg-white/20"
             textColor="text-white"
           />
         )

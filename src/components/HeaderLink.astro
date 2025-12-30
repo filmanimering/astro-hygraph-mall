@@ -14,7 +14,7 @@ const isActive = href === pathname || href === pathname.replace(/\/$/, "");
   href={href}
   class:list={[
     className,
-    "px-3 py-1 text-sm   rounded-lg",
+    "px-3 py-1 text-sm hover:opacity-70 rounded-lg",
     // Aktivt läge (behålls även vid klick/hover)
     isActive
       ? "bg-slate-900 text-white shadow-md shadow-slate-200"

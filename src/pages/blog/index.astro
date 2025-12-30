@@ -3,105 +3,98 @@ import FormattedDate from "../../components/FormattedDate.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import MyImage from "../../components/MyImage.astro";
 import MyButton from "../../components/MyButton.astro";
+import { hygraphFetch } from "../../lib/hygraph"; // Använd din hjälpfunktion
 
-const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
-
-const query = `
-query GetBlogData {
-  blogPosts(orderBy: publishedDate_DESC) {
-    title
-    slug
-    publishedDate
-    excerpt
-    coverImage {
-      url
-    }
-  }
-  globalSettings {
-    siteName
-    seo {
-      seoTitle
-      seoDescription
-      ogImage { url }
-    }
-    footerText
-    navigation {
-      ... on Navigation {
-        label
+// Vi skapar en specifik query för blogglistan men inkluderar globalSettings
+const BLOG_LIST_QUERY = `
+  query GetBlogData {
+    blogPosts(orderBy: publishedDate_DESC) {
+      title
+      slug
+      publishedDate
+      excerpt
+      coverImage {
         url
       }
     }
+    globalSettings {
+      siteName
+      logo {
+        url
+        width
+        height
+      }
+      footerText
+      contactInfo {
+        html
+      }
+      navigation {
+        ... on Navigation {
+          label
+          url
+        }
+      }
+      seo {
+        seoTitle
+        seoDescription
+        ogImage { url }
+      }
+    }
   }
-}`;
+`;
 
-const response = await fetch(HYGRAPH_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query }),
-});
-
-const json = await response.json();
-const posts = json.data?.blogPosts || [];
-const settings = json.data?.globalSettings[0] || {};
+const data = await hygraphFetch(BLOG_LIST_QUERY);
+const posts = data.blogPosts || [];
+const settings = data.globalSettings?.[0] || {};
 ---
 
 <BaseLayout
-    globalSeo={settings.seo}
-    fallbackTitle={`Blogg | ${settings.siteName}`}
+  globalSeo={settings.seo}
+  fallbackTitle={`Blogg | ${settings.siteName}`}
+  settings={settings}
 >
-    <main class="w-full bg-white antialiased">
-        <div class="max-w-7xl mx-auto px-6 py-20">
-            {/* Grid */}
-            <div
-                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16"
-            >
-                {
-                    posts.map((post: any) => (
-                        <article class="group relative flex flex-col">
-                            <a
-                                href={`/blog/${post.slug}`}
-                                class="block no-underline grow"
-                            >
-                                <div class="bg-gray-100 hover:bg-gray-200 p-4 rounded-2xl h-full justify-between">
-                                    <div class="mb-6">
-                                        <MyImage
-                                            src={
-                                                post.coverImage?.url ||
-                                                "/placeholder.jpg"
-                                            }
-                                            alt={post.title}
-                                            aspect="video"
-                                            class="group-hover:shadow-2xl group-hover:shadow-blue-600/10 transition-all duration-500"
-                                        />
-                                    </div>
+  <main class="w-full bg-white antialiased">
+    <div class="max-w-7xl mx-auto px-6 py-20">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16"
+      >
+        {
+          posts.map((post: any) => (
+            <article class="group relative flex flex-col ">
+              <a href={`/blog/${post.slug}`} class="block no-underline grow">
+                <div class="bg-gray-100 hover:bg-gray-200 p-4 rounded-2xl h-full flex flex-col  ">
+                  <div class="mb-4">
+                    <MyImage
+                      src={post.coverImage?.url || "/placeholder.jpg"}
+                      alt={post.title}
+                      aspect="video"
+                      class="group-hover:shadow-2xl group-hover:shadow-blue-600/10 transition-all duration-500"
+                    />
+                  </div>
 
-                                    <div class="space-y-3">
-                                        <div class="text-sm text-slate-700">
-                                            <FormattedDate
-                                                date={
-                                                    new Date(post.publishedDate)
-                                                }
-                                            />
-                                        </div>
+                  <div class="px-1 space-y-2 h-full flex flex-col">
+                    <div class="text-sm text-slate-700">
+                      <FormattedDate date={new Date(post.publishedDate)} />
+                    </div>
 
-                                        <h2 class="text-2xl font-black tracking-tight text-slate-900 leading-tight ">
-                                            {post.title}
-                                        </h2>
-
-                                        {post.excerpt && (
-                                            <p class="text-slate-500 text-sm leading-relaxed line-clamp-3">
-                                                {post.excerpt}
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-                            </a>
-                        </article>
-                    ))
-                }
-            </div>
-        </div>
-
-        <div class="h-24"></div>
-    </main>
+                    <h2 class="text-2xl font-black tracking-tight text-slate-900 leading-tight">
+                      {post.title}
+                    </h2>
+                    <div>
+                      {post.excerpt && (
+                        <p class="text-slate-500 text-sm leading-relaxed line-clamp-3">
+                          {post.excerpt}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+    <div class="h-24"></div>
+  </main>
 </BaseLayout>

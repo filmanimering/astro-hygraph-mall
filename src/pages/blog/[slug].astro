@@ -1,31 +1,24 @@
 ---
 import FormattedDate from "../../components/FormattedDate.astro";
+import Prose from "../../components/Prose.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import MyImage from "../../components/MyImage.astro"; // Importera din nya komponent
+import { hygraphFetch } from "../../lib/hygraph";
 
 export async function getStaticPaths() {
-    const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
-    const query = `query GetPaths { blogPosts { slug } }`;
-    const response = await fetch(HYGRAPH_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query }),
-    });
-    const json = await response.json();
-    const posts = json.data?.blogPosts || [];
-    return posts.map((post: any) => ({ params: { slug: post.slug } }));
+  const query = `query GetPaths { blogPosts { slug } }`;
+  const data = await hygraphFetch(query);
+  const posts = data.blogPosts || [];
+  return posts.map((post: any) => ({ params: { slug: post.slug } }));
 }
 
 const { slug } = Astro.params;
-const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
 
-const query = `
+const SINGLE_POST_QUERY = `
 query GetSinglePost($slug: String!) {
   blogPost(where: { slug: $slug }) {
     title
     publishedDate
     content { html }
-    coverImage { url }
     seo {
       seoTitle
       seoDescription
@@ -33,123 +26,98 @@ query GetSinglePost($slug: String!) {
       noIndex
     }
   }
-  globalSettings(where: {id: "din-id"}) {
+  # Hämta de 4 senaste inläggen för sidebaren
+  allPosts: blogPosts(first: 4, orderBy: publishedDate_DESC) {
+    title
+    slug
+    publishedDate
+  }
+  globalSettings {
     siteName
+    logo { url width height }
+    navigation { ... on Navigation { label url } }
     footerText
-    navigation {
-      ... on Navigation {
-        label
-        url
-      }
+    contactInfo { html }
+    seo {
+      seoTitle
+      seoDescription
+      ogImage { url }
     }
   }
 }`;
 
-const response = await fetch(HYGRAPH_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query, variables: { slug } }),
-});
-
-const json = await response.json();
-const post = json.data?.blogPost;
-const settings = json.data?.globalSettings[0] || {};
+const data = await hygraphFetch(SINGLE_POST_QUERY, { slug });
+const post = data.blogPost;
+const settings = data.globalSettings?.[0] || {};
+const relatedPosts = data.allPosts
+  ?.filter((p: any) => p.slug !== slug)
+  .slice(0, 3);
 
 if (!post) return Astro.redirect("/404");
 ---
 
 <BaseLayout
-    pageSeo={post.seo}
-    globalSeo={settings.seo}
-    fallbackTitle={post.title}
+  settings={settings}
+  pageSeo={post.seo}
+  globalSeo={settings.seo}
+  fallbackTitle={post.title}
 >
-    <main class="w-full bg-slate-50 antialiased min-h-screen">
-        {/* Banner - Vi använder MyImage här för konsekvens */}
-        {
-            post.coverImage && (
-                <div class="w-full h-[40vh] md:h-[50vh] relative">
-                    <MyImage
-                        src={post.coverImage.url}
-                        alt={post.title}
-                        aspect="auto"
-                        class="w-full h-full rounded-none border-none shadow-none"
-                        fit="cover"
-                    />
-                    <div class="absolute inset-0 bg-black/20" />
-                </div>
-            )
-        }
-
-        {/* Innehållskort */}
-        <div
-            class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 -mt-32 md:-mt-48"
-        >
-            <article
-                class="bg-white rounded-3xl shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden"
+  <main class="bg-white min-h-screen antialiased">
+    <div class="max-w-7xl mx-auto px-6 py-12 md:py-20">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
+        {/* VÄNSTER: Huvudinnehåll */}
+        <article class="lg:col-span-10">
+          <header class="mb-12">
+            <div class="flex items-center gap-4 mb-6">
+              <span class="text-sm tracking-widest uppercase">
+                <FormattedDate date={new Date(post.publishedDate)} />
+              </span>
+              <div class="h-px grow bg-slate-100"></div>
+            </div>
+            <h1
+              class="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] mb-8"
             >
-                <header class="pt-12 pb-8 px-8 md:px-16 text-center">
-                    <div
-                        class="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold uppercase tracking-widest mb-6"
-                    >
-                        <FormattedDate date={new Date(post.publishedDate)} />
-                    </div>
+              {post.title}
+            </h1>
+          </header>
 
-                    <h1
-                        class="text-3xl md:text-5xl font-black tracking-tight text-slate-900 leading-[1.1] mb-8"
-                    >
-                        {post.title}
-                    </h1>
+          <Prose>
+            <div set:html={post.content.html} />
+          </Prose>
+        </article>
 
-                    <div class="w-16 h-1.5 bg-blue-600 mx-auto rounded-full">
-                    </div>
-                </header>
-
-                <div class="px-8 md:px-16 pb-16">
-                    <div
-                        class="prose prose-slate prose-lg max-w-none
-                        prose-headings:font-bold prose-headings:tracking-tight
-                        prose-p:leading-relaxed prose-p:text-slate-600
-                        prose-img:rounded-2xl prose-img:shadow-lg
-                        prose-a:text-blue-600 prose-a:font-bold prose-a:no-underline hover:prose-a:underline"
-                    >
-                        <div set:html={post.content.html} />
-                    </div>
-
-                    <footer class="mt-16 pt-8 border-t border-slate-100">
-                        <div
-                            class="flex flex-col md:flex-row justify-between items-center gap-6"
-                        >
-                            <a
-                                href="/blog"
-                                class="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-blue-600 transition-colors"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="14"
-                                    height="14"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-width="3"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    class="transition-transform group-hover:-translate-x-1"
-                                    ><path d="m15 18-6-6 6-6"></path></svg
-                                >
-                                Tillbaka
-                            </a>
-
-                            <div
-                                class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]"
-                            >
-                                Publicerat av {settings.siteName}
-                            </div>
-                        </div>
-                    </footer>
-                </div>
-            </article>
-        </div>
-
-        <div class="h-20"></div>
-    </main>
+        {/* HÖGER: Diskret Sidebar */}
+        <aside class="lg:col-span-2">
+          <div class="sticky top-32 space-y-12">
+            <div>
+              <h3
+                class="text-sm font-bold uppercase text-slate-800 mb-6 pb-2 border-b border-slate-100"
+              >
+                Senaste artiklarna
+              </h3>
+              <ul class="space-y-6">
+                {
+                  relatedPosts.map((rel: any) => (
+                    <li>
+                      <a
+                        href={`/blog/${rel.slug}`}
+                        class="group block no-underline"
+                      >
+                        <span class="block text-xs text-slate-800 font-medium mb-1 uppercase tracking-wider">
+                          <FormattedDate date={new Date(rel.publishedDate)} />
+                        </span>
+                        <h4 class="text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors leading-snug">
+                          {rel.title}
+                        </h4>
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
 </BaseLayout>
