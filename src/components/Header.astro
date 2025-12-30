@@ -1,9 +1,7 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
+import MyImage from "./MyImage.astro"; // Importera komponenten
 
-/** * Vi hämtar globala inställningar direkt i headern
- * så att vi slipper skicka ner props genom hela kedjan.
- */
 const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
 
 const query = `
@@ -11,6 +9,8 @@ query GetGlobalSettings {
   globalSettings {  
     logo {
       url
+      width
+      height
     }
     navigation {
       ... on Navigation {
@@ -43,10 +43,14 @@ const { siteName, logo, navigation = [] } = settings;
 			<a href="/" class="flex items-center gap-3 no-underline group">
 				{
 					logo?.url && (
-						<img
+						<MyImage
 							src={logo.url}
 							alt={siteName}
-							class="h-9 w-auto object-contain transition-transform group-hover:scale-105"
+							width={logo.width || 100}
+							height={logo.height || 40}
+							aspect="auto"
+							fit="contain"
+							class="h-9 w-auto bg-transparent border-none shadow-none rounded-sm"
 						/>
 					)
 				}

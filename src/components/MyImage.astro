@@ -1,0 +1,57 @@
+---
+interface Props {
+    src: string;
+    alt?: string;
+    width?: number;
+    height?: number;
+    class?: string;
+    aspect?: "video" | "square" | "auto" | "portrait";
+    fit?: "cover" | "contain";
+    loading?: "lazy" | "eager";
+}
+
+const {
+    src,
+    alt = "",
+    width,
+    height,
+    class: className,
+    aspect = "video",
+    fit = "cover",
+    loading = "lazy",
+} = Astro.props;
+
+// Mappa aspect-ratio till Tailwind-klasser
+const aspectClasses = {
+    video: "aspect-video",
+    square: "aspect-square",
+    portrait: "aspect-[3/4]",
+    auto: "aspect-auto",
+};
+
+// Mappa object-fit till Tailwind-klasser
+const fitClasses = {
+    cover: "object-cover",
+    contain: "object-contain",
+};
+---
+
+<div
+    class:list={[
+        "relative overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 shadow-sm",
+        aspectClasses[aspect],
+        className,
+    ]}
+>
+    <img
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        loading={loading}
+        class:list={[
+            "w-full h-full transition-transform duration-700 hover:scale-105",
+            fitClasses[fit],
+        ]}
+    />
+</div>

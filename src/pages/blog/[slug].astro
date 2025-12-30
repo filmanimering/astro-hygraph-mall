@@ -1,6 +1,7 @@
 ---
 import FormattedDate from "../../components/FormattedDate.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import MyImage from "../../components/MyImage.astro"; // Importera din nya komponent
 
 export async function getStaticPaths() {
     const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
@@ -26,9 +27,8 @@ query GetSinglePost($slug: String!) {
     content { html }
     coverImage { url }
   }
-  globalSettings {
+  globalSettings(where: {id: "din-id"}) {
     siteName
-    logo { url }
     footerText
     navigation {
       ... on Navigation {
@@ -54,68 +54,70 @@ if (!post) return Astro.redirect("/404");
 
 <BaseLayout title={`${post.title} | ${settings.siteName}`} settings={settings}>
     <main class="w-full bg-slate-50 antialiased min-h-screen">
-        {/* Top Banner Image - Kort och bred utan hakar */}
+        {/* Banner - Vi använder MyImage här för konsekvens */}
         {
             post.coverImage && (
-                <div class="w-full h-64 md:h-80 overflow-hidden relative border-b border-slate-200">
-                    <img
+                <div class="w-full h-[40vh] md:h-[50vh] relative">
+                    <MyImage
                         src={post.coverImage.url}
                         alt={post.title}
-                        class="w-full h-full object-cover grayscale-[0.2] brightness-90"
+                        aspect="auto"
+                        class="w-full h-full rounded-none border-none shadow-none"
+                        fit="cover"
                     />
-                    <div class="absolute inset-0 bg-linear-to-t from-slate-900/20 to-transparent" />
+                    <div class="absolute inset-0 bg-black/20" />
                 </div>
             )
         }
 
-        {/* Content Card - Centrerat och upplyft */}
-        <div class="max-w-5xl mx-auto px-4 md:px-8 pb2 -mt-44 relative z-10">
+        {/* Innehållskort */}
+        <div
+            class="max-w-4xl mx-auto px-4 sm:px-6 relative z-10 -mt-32 md:-mt-48"
+        >
             <article
-                class="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden"
+                class="bg-white rounded-3xl shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden"
             >
-                {/* Header inside card */}
-                <header class="p-4 pb-0">
-                    <div class="flex flex-col items-center text-center gap-6">
-                        <div class="px-4 py-1 bg-blue-50 rounded-full">
-                            <span class="text-base">
-                                <FormattedDate
-                                    date={new Date(post.publishedDate)}
-                                />
-                            </span>
-                        </div>
+                <header class="pt-12 pb-8 px-8 md:px-16 text-center">
+                    <div
+                        class="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-bold uppercase tracking-widest mb-6"
+                    >
+                        <FormattedDate date={new Date(post.publishedDate)} />
+                    </div>
 
-                        <h1
-                            class="text-3xl md:text-4xl tracking-tight text-slate-900 font-semibold"
-                        >
-                            {post.title}
-                        </h1>
+                    <h1
+                        class="text-3xl md:text-5xl font-black tracking-tight text-slate-900 leading-[1.1] mb-8"
+                    >
+                        {post.title}
+                    </h1>
 
-                        <div class="w-32 h-1 bg-gray-600/30 rounded-full"></div>
+                    <div class="w-16 h-1.5 bg-blue-600 mx-auto rounded-full">
                     </div>
                 </header>
 
-                {/* Brödtext */}
-                <div class="px-8">
+                <div class="px-8 md:px-16 pb-16">
                     <div
-                        class="prose prose-slate prose-base md:prose-lg max-w-none
-            prose-p:leading-relaxed prose-p:text-slate-600
-            prose-img:rounded-2xl prose-img:shadow-md
-            prose-a:text-blue-600 prose-a:no-underline hover:prose-a:underline"
+                        class="prose prose-slate prose-lg max-w-none
+                        prose-headings:font-bold prose-headings:tracking-tight
+                        prose-p:leading-relaxed prose-p:text-slate-600
+                        prose-img:rounded-2xl prose-img:shadow-lg
+                        prose-a:text-blue-600 prose-a:font-bold prose-a:no-underline hover:prose-a:underline"
                     >
                         <div set:html={post.content.html} />
                     </div>
 
-                    {/* Footer inside card */}
-                    <footer class="mt-8 pt-4 pb-8 border-t border-slate-100">
-                        <div class="flex justify-between items-center">
+                    {/* Footer */}
+                    <footer class="mt-16 pt-8 border-t border-slate-100">
+                        <div
+                            class="flex flex-col md:flex-row justify-between items-center gap-6"
+                        >
                             <a
                                 href="/blog"
-                                class="group inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-slate-700 hover:text-blue-600 transition-colors"
+                                class="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-blue-600 transition-colors"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    width="16"
-                                    height="16"
+                                    width="14"
+                                    height="14"
                                     viewBox="0 0 24 24"
                                     fill="none"
                                     stroke="currentColor"
@@ -125,13 +127,13 @@ if (!post) return Astro.redirect("/404");
                                     class="transition-transform group-hover:-translate-x-1"
                                     ><path d="m15 18-6-6 6-6"></path></svg
                                 >
-                                Tillbaka till bloggen
+                                Tillbaka
                             </a>
 
                             <div
-                                class="text-sm text-slate-500 font-bold uppercase tracking-widest"
+                                class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]"
                             >
-                                {settings.siteName}
+                                Publicerat av {settings.siteName}
                             </div>
                         </div>
                     </footer>
@@ -139,7 +141,6 @@ if (!post) return Astro.redirect("/404");
             </article>
         </div>
 
-        {/* Spacer bottom */}
         <div class="h-20"></div>
     </main>
 </BaseLayout>
