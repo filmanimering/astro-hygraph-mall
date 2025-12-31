@@ -1,50 +1,59 @@
 ---
-// src/components/BaseHead.astro
+/**
+ * BaseHead.astro
+ * Hanterar metadata, SEO och resurser i <head>.
+ * Favicon är nu hårdkodad till /public/favicon.png
+ */
 import "../styles/global.css";
 import { SITE_TITLE } from "../consts";
 import SEO from "./SEO.astro";
 
 interface Props {
-	pageSeo?: any; // Objektet från den specifika sidan
-	globalSeo?: any; // Objektet från Global Settings
-	fallbackTitle?: string;
+  pageSeo?: any;
+  globalSeo?: any;
+  fallbackTitle?: string;
 }
 
 const { pageSeo, globalSeo, fallbackTitle } = Astro.props;
 
-// Här gör vi logiken för prioritering EN gång, så slipper du göra det på varje sida
+/* --- SEO-LOGIK --- */
 const finalTitle =
-	pageSeo?.seoTitle || globalSeo?.seoTitle || fallbackTitle || SITE_TITLE;
-const finalDescription = pageSeo?.seoDescription ||
-	globalSeo?.seoDescription || { SITE_TITLE };
+  pageSeo?.seoTitle || globalSeo?.seoTitle || fallbackTitle || SITE_TITLE;
+const finalDescription =
+  pageSeo?.seoDescription || globalSeo?.seoDescription || SITE_TITLE;
 const finalImage = pageSeo?.ogImage?.url || globalSeo?.ogImage?.url;
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.png" />
+
+{/* --- FAVICON (Hårdkodad till /public/favicon.png) --- */}
+<link rel="icon" type="image/png" href="/favicon.png" />
+<link rel="apple-touch-icon" href="/favicon.png" />
+
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
-	rel="alternate"
-	type="application/rss+xml"
-	title={SITE_TITLE}
-	href={new URL("rss.xml", Astro.site)}
+  rel="alternate"
+  type="application/rss+xml"
+  title={SITE_TITLE}
+  href={new URL("rss.xml", Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
 
+{/* --- TYPSNITT --- */}
 <link
-	rel="preload"
-	href="/fonts/atkinson-regular.woff"
-	as="font"
-	type="font/woff"
-	crossorigin
+  rel="preload"
+  href="/fonts/atkinson-regular.woff"
+  as="font"
+  type="font/woff"
+  crossorigin
 />
 <link
-	rel="preload"
-	href="/fonts/atkinson-bold.woff"
-	as="font"
-	type="font/woff"
-	crossorigin
+  rel="preload"
+  href="/fonts/atkinson-bold.woff"
+  as="font"
+  type="font/woff"
+  crossorigin
 />
 
 <SEO title={finalTitle} description={finalDescription} image={finalImage} />

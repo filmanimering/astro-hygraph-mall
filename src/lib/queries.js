@@ -75,7 +75,7 @@ export const PAGE_QUERY = `
         url
         width
         height
-      }
+      }   
       contactInfo {
         html
       }

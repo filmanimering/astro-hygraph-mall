@@ -1,7 +1,8 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
-import MyImage from "./MyImage.astro"; // Importera komponenten
+import MyImage from "./MyImage.astro";
 
+// --- DATAHÄMTNING (Global Settings) ---
 const HYGRAPH_ENDPOINT = import.meta.env.HYGRAPH_ENDPOINT;
 
 const query = `
@@ -43,7 +44,7 @@ const { siteName, logo, navigation = [] } = settings;
   class="w-full bg-white/70 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100"
 >
   <nav class="max-w-8xl mx-auto px-6 h-16 flex items-center justify-between">
-    {/* Vänster sida: Logo och Sajtnamn */}
+    {/* --- VÄNSTER: LOGO & NAMN --- */}
     <div class="flex items-center">
       <a href="/" class="flex items-center gap-3 no-underline group">
         {
@@ -55,22 +56,22 @@ const { siteName, logo, navigation = [] } = settings;
               height={logo.height || 30}
               aspect="auto"
               fit="contain"
-              class="h-5 w-auto bg-transparent border-none shadow-none rounded-sm"
+              class="h-5 w-auto bg-transparent border-none shadow-none rounded-sm group-hover:opacity-80 transition-opacity"
             />
           )
         }
         <span
-          class="mt-1 text-base font-semibold tracking-tight text-slate-900 group-hover:opacity-70"
+          class="mt-1 text-base font-semibold tracking-tight text-slate-900 group-hover:opacity-70 transition-opacity"
         >
           {siteName || "Photo and Film"}
         </span>
       </a>
     </div>
 
-    {/* Mobilmeny-knapp */}
+    {/* --- MOBILMENY-KNAPP --- */}
     <button
       id="mobile-menu-button"
-      class="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-slate-700 hover:bg-slate-300 active:scale-95"
+      class="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-slate-700 hover:bg-slate-100 active:scale-95 transition-all"
       aria-label="Öppna meny"
     >
       <svg
@@ -88,7 +89,7 @@ const { siteName, logo, navigation = [] } = settings;
       </svg>
     </button>
 
-    {/* Desktop-navigering */}
+    {/* --- DESKTOP-MENY --- */}
     <div class="hidden md:flex items-center gap-1 md:gap-2">
       {
         navigation.length > 0 ? (
@@ -101,31 +102,27 @@ const { siteName, logo, navigation = [] } = settings;
             </HeaderLink>
           ))
         ) : (
-          <p class="text-slate-400 text-xs italic">Inga länkar i Hygraph</p>
+          <p class="text-slate-400 text-xs italic">Inga länkar</p>
         )
       }
     </div>
   </nav>
 
-  {/* Mobilmeny */}
+  {/* --- MOBILMENY (Dropdown) --- */}
   <div
     id="mobile-menu"
     class="md:hidden hidden border-t border-slate-100 bg-white/95 backdrop-blur-md"
   >
     <div class="px-6 py-4 flex flex-col gap-2">
       {
-        navigation.length > 0 ? (
-          navigation.map((link: any) => (
-            <HeaderLink
-              href={link.url}
-              class="block w-full px-3 py-2 rounded-lg text-slate-800 hover:bg-slate-400"
-            >
-              {link.label}
-            </HeaderLink>
-          ))
-        ) : (
-          <p class="text-slate-400 text-sm italic">Inga länkar i Hygraph</p>
-        )
+        navigation.map((link: any) => (
+          <HeaderLink
+            href={link.url}
+            class="block w-full px-3 py-2 rounded-lg text-slate-800 hover:bg-slate-100"
+          >
+            {link.label}
+          </HeaderLink>
+        ))
       }
     </div>
   </div>

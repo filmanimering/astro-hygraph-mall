@@ -27,6 +27,7 @@ query GetSinglePost($slug: String!) {
       poster { url }
       video { url }
     }
+   
     seo {
       seoTitle
       seoDescription
@@ -70,29 +71,28 @@ if (!post) return Astro.redirect("/404");
   fallbackTitle={post.title}
 >
   <main class="bg-white min-h-screen antialiased">
-    <div
-      class="max-w-7xl mx-auto my-12 pt-8 px-6 bg-(--brand-primary)/10 border border-(--brand-primary)/10 shadow-sm rounded-3xl px-6 py-2"
-    >
+    <div class="max-w-7xl mx-auto py-12 pt-8 px-6 py-2">
       {/* --- GRID SYSTEM --- */}
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
         {/* --- VÄNSTER: HUVUDINNEHÅLL --- */}
         <article class="lg:col-span-9">
           {/* Header & Metadata */}
           <header class="mb-12">
-            <div class="flex items-center gap-4 mb-6">
-              <span
-                class="text-xs tracking-[0.2em] uppercase font-bold text-(--brand-text)"
-              >
+            <div class="flex items-center gap-4 mb-4">
+              <span class="text-sm uppercase font-semibold text-(--brand-text)">
                 <FormattedDate date={new Date(post.publishedDate)} />
               </span>
               <div class="h-px grow bg-(--brand-primary)/10"></div>
             </div>
 
-            <h1
-              class="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] mb-2"
+            <blockquote
+              class="text-xl italic font-semibold tracking-tight text-heading"
             >
-              {post.title}
-            </h1>
+              "{post.title}"
+            </blockquote>
+
+            {/* Understrykning */}
+            <div class="mt-4 h-0.5 w-72 bg-(--brand-primary)/90"></div>
           </header>
 
           {/* Innehållsyta  */}
@@ -128,9 +128,9 @@ if (!post) return Astro.redirect("/404");
           <div class="sticky top-32 space-y-12">
             <section>
               <h3
-                class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8 flex items-center gap-3"
+                class="text-base text-slate-700 font-semibold mb-4 flex items-center gap-3"
               >
-                Senaste nytt
+                Andra inlägg
                 <span class="h-px grow bg-slate-100"></span>
               </h3>
 
@@ -143,12 +143,12 @@ if (!post) return Astro.redirect("/404");
                         class="group block no-underline"
                       >
                         {/* Datum i sidebar */}
-                        <span class="block text-[10px] text-(--brand-text) font-bold mb-2 uppercase tracking-widest">
+                        <span class="block text-xs text-(--brand-text) font-bold mb-2 uppercase tracking-widest">
                           <FormattedDate date={new Date(rel.publishedDate)} />
                         </span>
 
                         {/* Titel som ändrar färg vid hover */}
-                        <h4 class="text-md font-bold text-slate-800 group-hover:text-(--brand-primary) transition-colors leading-tight">
+                        <h4 class="text-base  text-slate-700 group-hover:text-(--brand-primary) transition-colors leading-tight">
                           {rel.title}
                         </h4>
 

@@ -2,7 +2,7 @@
 // SectionVideoExternal.astro
 const { data } = Astro.props;
 const { title, text, poster, videoUrlLink } = data;
-
+console.log("SectionVideoExternal data:", videoUrlLink);
 // Funktion för att konvertera en vanlig YouTube-länk till en "embed"-länk
 const getEmbedUrl = (url: string) => {
   if (!url) return null;
