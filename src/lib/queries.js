@@ -47,10 +47,21 @@ export const PAGE_QUERY = `
                 }
               }
         }
+        ... on SectionVideoExternal {
+                id
+                title
+                text
+                poster {
+                  url
+                }
+                videoUrlLink
+        }        
         ... on SectionVideo {
           id
           title
           text
+          videoUrlLink 
+          videoUrlLabel
           video { url }
           poster { url }
         }

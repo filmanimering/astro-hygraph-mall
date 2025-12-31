@@ -1,0 +1,79 @@
+---
+// SectionVideoExternal.astro
+const { data } = Astro.props;
+const { title, text, poster, videoUrlLink } = data;
+
+// Funktion för att konvertera en vanlig YouTube-länk till en "embed"-länk
+const getEmbedUrl = (url: string) => {
+  if (!url) return null;
+
+  // Om det är en YouTube-länk
+  if (url.includes("youtube.com") || url.includes("youtu.be")) {
+    const regExp =
+      /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11
+      ? `https://www.youtube.com/embed/${match[2]}`
+      : url;
+  }
+
+  // Om det är Vimeo
+  if (url.includes("vimeo.com")) {
+    const id = url.split("/").pop();
+    return `https://player.vimeo.com/video/${id}`;
+  }
+
+  return url;
+};
+
+const embedUrl = getEmbedUrl(videoUrlLink);
+---
+
+<section class="max-w-7xl mx-auto px-6 py-8">
+  <div
+    class="bg-white rounded-3xl shadow-xl border border-slate-300 overflow-hidden"
+  >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 md:p-8">
+      {/* Videosidan */}
+      <div
+        class="relative bg-black rounded-2xl overflow-hidden aspect-video flex items-center justify-center"
+      >
+        {
+          embedUrl ? (
+            <iframe
+              src={embedUrl}
+              class="absolute inset-0 w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              title={title}
+            />
+          ) : (
+            <div class="text-white text-xs italic text-center p-4">
+              {poster?.url && (
+                <img
+                  src={poster.url}
+                  class="opacity-50 object-cover w-full h-full absolute inset-0"
+                />
+              )}
+              <span class="relative z-10">Ingen video hittades</span>
+            </div>
+          )
+        }
+      </div>
+
+      {/* Text-sidan */}
+      <div class="p-4 md:p-8 flex flex-col justify-center">
+        <h2
+          class="text-xl md:text-2xl font-black tracking-tight text-slate-900 italic uppercase mb-6 leading-[0.9]"
+        >
+          {title}
+        </h2>
+        <div class="prose prose-slate prose-lg">
+          <p class="text-slate-600 leading-relaxed">
+            {text}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

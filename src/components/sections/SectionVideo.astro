@@ -1,6 +1,7 @@
 ---
+// SectionVideo.astro
 const { data } = Astro.props;
-const { title, text, video, poster } = data;
+const { title, text, video, poster, videoUrlLink, videoUrlLabel } = data;
 ---
 
 <section class="max-w-7xl mx-auto px-6 py-8">
@@ -37,6 +38,24 @@ const { title, text, video, poster } = data;
           <p class="text-slate-600 leading-relaxed">
             {text}
           </p>
+        </div>
+        <div>
+          <!-- Extern länk till videon, om sådan finns -->
+          {
+            videoUrlLink && videoUrlLabel && (
+              <p class="mt-6 text-lg font-semibold">
+                {videoUrlLabel}
+              </p>
+              <a
+                href={videoUrlLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="block  text-base text-blue-600 hover:underline mb-4"
+              >
+                Titta på videon här
+              </a>
+            )
+          }
         </div>
       </div>
     </div>
