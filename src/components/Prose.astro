@@ -2,6 +2,11 @@
 /* src/components/Prose.astro **/
 ---
 
-<div class="prose prose-slate prose-lg max-w-none">
+<div
+  class="prose prose-max-w-none max-w-full prose-slate
+  prose-a:text-(--brand-primary) prose-a:hover:opacity-75 prose-a:no-underline
+  prose-p:text-justify
+  prose-img:rounded-xl"
+>
   <slot />
 </div>

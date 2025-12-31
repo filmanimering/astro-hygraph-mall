@@ -3,46 +3,46 @@ const { data } = Astro.props;
 ---
 
 <section class="max-w-7xl mx-auto px-6 sm:px-8 py-12 mb-8">
-    {/* Header */}
-    <div class="mb-4 text-center">
-        {
-            data.title && (
-                <h2 class="text-xl md:text-2xl font-black tracking-tight text-slate-900 mb-4 italic uppercase">
-                    {data.title}
-                </h2>
-            )
-        }
-        {
-            data.description && (
-                <p class="text-slate-600 max-w-2xl mx-auto leading-relaxed text-lg">
-                    {data.description}
-                </p>
-            )
-        }
-    </div>
+  {/* Header */}
+  <div class="mb-4 text-center">
+    {
+      data.title && (
+        <h2 class="text-xl md:text-2xl font-black tracking-tight text-slate-900 mb-4 italic uppercase">
+          {data.title}
+        </h2>
+      )
+    }
+    {
+      data.description && (
+        <p class="text-slate-600 max-w-2xl mx-auto leading-relaxed text-lg">
+          {data.description}
+        </p>
+      )
+    }
+  </div>
 
-    {/* Masonry Layout med Columns */}
-    <div class="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
-        {
-            data.images.map((image: any) => (
-                <div class="break-inside-avoid group relative overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 shadow-sm transition-all hover:shadow-xl mb-4">
-                    <img
-                        src={image.url}
-                        alt={image.altText || data.title || "Alt text saknas"}
-                        width={image.width}
-                        height={image.height}
-                        loading="lazy"
-                        class="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105"
-                    />
+  {/* Masonry Layout med Columns */}
+  <div class="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
+    {
+      data.images.map((image: any) => (
+        <div class="break-inside-avoid group relative overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 shadow-sm transition-all hover:shadow-xl mb-4">
+          <img
+            src={image.url}
+            alt={image.altText || data.title || "Alt text saknas"}
+            width={image.width}
+            height={image.height}
+            loading="lazy"
+            class="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105"
+          />
 
-                    {/* Text Overlay - Visas vid hover */}
-                    <div class="absolute inset-0 bg-black/40 flex items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                        <p class="text-white text-sm font-bold uppercase tracking-wider translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                            {image.altText || data.title}
-                        </p>
-                    </div>
-                </div>
-            ))
-        }
-    </div>
+          {/* Text Overlay - Visas vid hover */}
+          <div class="absolute inset-0 bg-black/40 flex items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <p class="text-white text-base font-bold  tracking-wider translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+              {image.altText || data.title}
+            </p>
+          </div>
+        </div>
+      ))
+    }
+  </div>
 </section>

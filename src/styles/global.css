@@ -6,7 +6,7 @@
 	src: url("/fonts/atkinson-regular.woff") format("woff");
 	font-weight: 500;
 	font-style: normal;
-	font-display: swap;
+	font-display: swap;	
 }
 
 @font-face {
@@ -25,12 +25,3 @@
 	--color-accent-dark: #000d8a;
 }
 
-/* Grundinställningar som Tailwind inte nollställer helt */
-@layer base {
-	body {
-		@apply bg-white text-slate-800 antialiased;
-		/* Den gamla gradienten i bakgrunden */
-		background: linear-gradient(rgba(229, 233, 240, 0.5), #fff) no-repeat;
-		background-size: 100% 600px;
-	}
-}

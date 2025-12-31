@@ -26,7 +26,7 @@ const { title, description, cards } = data;
     {
       cards &&
         cards.map((card: any) => (
-          <div class="group flex flex-col bg-white rounded-3xl border border-slate-100 p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 hover:border-(--brand-primary)/20">
+          <div class="group flex flex-col bg-white rounded-3xl border border-slate-300 p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 hover:border-(--brand-primary)/20">
             {card.poster?.url && (
               <MyImage
                 src={card.poster.url}

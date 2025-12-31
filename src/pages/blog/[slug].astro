@@ -124,7 +124,7 @@ if (!post) return Astro.redirect("/404");
           }
         </article>
 
-        {/* --- HÖGER: SIDEBAR --- */}
+        {/* --- HÖGER: SIDEBAR RELATERADE INLÄGG --- */}
         <aside class="lg:col-span-3">
           <div class="sticky top-32 space-y-12">
             <section>
@@ -155,6 +155,7 @@ if (!post) return Astro.redirect("/404");
                         <p class="mt-2 text-sm line-clamp-3 group-hover:text-(--brand-primary)">
                           {rel.excerpt}
                         </p>
+                        <div class="mt-2 mb-4 w-full h-0.5 bg-slate-500/40" />
                       </a>
                     </li>
                   ))
