@@ -1,16 +1,46 @@
 ---
+/**
+ * Prose.astro
+ * Hanterar all rik text (HTML) från Hygraph.
+ * Använder CSS-variabler för att matcha sajtens globala tema.
+ */
 const { bgUrl = "" } = Astro.props;
 ---
 
 <div
-  class=`prose prose-slate prose-lg max-w-none
-  prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl
-  prose-h1:md:text-5xl prose-h2:md:text-4xl prose-h3:md:text-3xl
-   prose-headings:font-semibold prose-headings:tracking-tight
-prose-p:leading-relaxed prose-p:text-slate-600 prose-a:text-blue-600 prose-a:underline hover:prose-a:no-underline prose-a:transition-colors
- prose-blockquote:border-l-blue-600 prose-blockquote:bg-blue-50/50 prose-blockquote:text-slate-800
-   prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-    prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-pre:rounded-lg prose-pre:shadow-lg prose-pre:overflow-x-auto ${bgUrl ? "prose-invert" : "prose-slate"}`
+  class:list={[
+    /* --- BAS-STYLING (Typography plugin) --- */
+    "prose prose-slate prose-lg max-w-none",
+
+    /* --- RUBRIKER (Responsiv storlek & Brand-känsla) --- */
+    "prose-h1:text-4xl prose-h1:md:text-5xl",
+    "prose-h2:text-3xl prose-h2:md:text-4xl",
+    "prose-h3:text-2xl prose-h3:md:text-3xl",
+    "prose-headings:font-bold prose-headings:tracking-tight",
+
+    /* --- BRÖDTEXT --- */
+    "prose-p:leading-relaxed prose-p:text-slate-600",
+
+    /* --- LÄNKAR (Fix för Hover-problemet) --- */
+    /* Vi använder "prose-a:hover:..." istället för "hover:prose-a:..." */
+    "prose-a:text-(--brand-text)",
+    "prose-a:underline",
+    "prose-a:transition-opacity",
+    "prose-a:hover:opacity-80",
+
+    /* --- CITAT (Blockquotes) --- */
+    "prose-blockquote:border-l-(--brand-primary)",
+    "prose-blockquote:bg-(--brand-primary)/5",
+    "prose-blockquote:text-slate-800",
+    "prose-blockquote:font-medium",
+
+    /* --- KOD-BLOCK --- */
+    "prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm",
+    "prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-pre:rounded-lg prose-pre:shadow-lg",
+
+    /* --- VILLKORLIG STYLING (Om bakgrundsbild finns) --- */
+    bgUrl ? "prose-invert" : "prose-slate",
+  ]}
 >
   <slot />
 </div>

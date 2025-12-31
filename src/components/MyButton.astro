@@ -1,17 +1,29 @@
 ---
+// MyButton.astro
 const {
-    label,
-    url,
-    bgColor = "bg-amber-900",
-    textColor = "text-gray-100",
-    fullWidth = false,
+  label,
+  url,
+  // Standardfärgen hämtas nu från vår globala variabel via Tailwind v4-syntax
+  bgColor = "bg-(--brand-primary)",
+  textColor = "text-white",
+  fullWidth = false,
 } = Astro.props;
 ---
 
-<a href={url} class="no-underline">
-    <div
-        class={`border-2  border-gray-800/10 ${textColor} ${bgColor} hover:opacity-80 py-2 px-4 rounded-2xl w-fit ${fullWidth ? "w-full text-center" : ""} `}
-    >
-        {label}
-    </div>
+<a
+  href={url}
+  class="no-underline group inline-block w-fit ${fullWidth ? 'w-full' : ''}"
+>
+  <div
+    class:list={[
+      "border-2 border-black/5 transition-all duration-200",
+      "py-2.5 px-6 rounded-2xl font-bold tracking-tight",
+      "hover:opacity-85 active:scale-95 shadow-sm hover:shadow-md",
+      textColor,
+      bgColor,
+      fullWidth ? "w-full text-center" : "w-fit",
+    ]}
+  >
+    {label}
+  </div>
 </a>

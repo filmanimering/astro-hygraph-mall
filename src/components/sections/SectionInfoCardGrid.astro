@@ -1,5 +1,4 @@
 ---
-// SectionInfoCardGrid.astro
 import MyButton from "../../components/MyButton.astro";
 import MyImage from "../../components/MyImage.astro";
 const { data } = Astro.props;
@@ -7,7 +6,7 @@ const { title, description, cards } = data;
 ---
 
 <section class="max-w-7xl mx-auto px-6 py-16">
-  <div class="mt-8 mb-4 text-center max-w-5xl mx-auto">
+  <div class="mt-8 mb-12 text-center max-w-5xl mx-auto">
     {
       title && (
         <h2 class="text-2xl md:text-3xl font-black tracking-tight text-slate-900 italic uppercase mb-4 leading-none">
@@ -15,39 +14,47 @@ const { title, description, cards } = data;
         </h2>
       )
     }
-    {description && <p class=" ">{description}</p>}
+    <div class="w-12 h-1 bg-(--brand-primary) mx-auto rounded-full mb-6"></div>
+    {
+      description && (
+        <p class="text-slate-600 max-w-2xl mx-auto">{description}</p>
+      )
+    }
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
     {
       cards &&
         cards.map((card: any) => (
-          <div class="flex flex-col bg-white rounded-3xl border border-slate-100 p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1">
+          <div class="group flex flex-col bg-white rounded-3xl border border-slate-100 p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 hover:border-(--brand-primary)/20">
             {card.poster?.url && (
               <MyImage
                 src={card.poster.url}
                 alt={card.poster.altText || card.title}
                 width={card.poster.width}
                 height={card.poster.height}
-                class="mb-6"
+                class="mb-6 rounded-2xl"
                 aspect="video"
               />
             )}
 
-            <h3 class="text-xl font-semibold text-slate-900 mb-3  leading-none">
+            <h3 class="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-(--brand-primary) transition-colors">
               {card.title}
             </h3>
 
-            <p class="text-slate-700 mb-4 leading-relaxed grow">{card.text}</p>
+            <p class="text-slate-600 mb-8 leading-relaxed grow text-sm">
+              {card.text}
+            </p>
 
-            {card.buttonLabel && card.buttonLink && (
-              <MyButton
-                url={card.buttonLink}
-                label={card.buttonLabel}
-                bgColor="bg-blue-600"
-                textColor="text-white"
-              />
-            )}
+            <div class="mt-auto">
+              {card.buttonLabel && card.buttonLink && (
+                <MyButton
+                  url={card.buttonLink}
+                  label={card.buttonLabel}
+                  textColor="text-white"
+                />
+              )}
+            </div>
           </div>
         ))
     }

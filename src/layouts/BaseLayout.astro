@@ -3,8 +3,10 @@ import BaseHead from "../components/BaseHead.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 
-// Vi tar emot de nya propsen här
 const { pageSeo, globalSeo, fallbackTitle, settings } = Astro.props;
+
+// Hämta färgen från dina globala inställningar, eller använd din standard
+const brandColor = settings?.brandColor || "#78350F";
 ---
 
 <html lang="sv" class="scroll-smooth">
@@ -14,10 +16,23 @@ const { pageSeo, globalSeo, fallbackTitle, settings } = Astro.props;
       globalSeo={globalSeo}
       fallbackTitle={fallbackTitle}
     />
+
+    {/* Här definierar vi CSS-variabeln baserat på Hygraph-datan */}
+    <style is:global define:vars={{ brandColor }}>
+      :root {
+        --brand-primary: var(--brandColor);
+
+        /* Skapar en mörkare version genom att blanda in 30% svart */
+        --brand-text: color-mix(in srgb, var(--brandColor), black 50%);
+
+        /* Skapar en mycket ljus version för bakgrunder (ersätter /5 opacitet om man vill) */
+        --brand-surface: color-mix(in srgb, var(--brandColor), white 95%);
+      }
+    </style>
   </head>
 
   <body
-    class="bg-slate-100 antialiased text-slate-900 flex flex-col min-h-screen font-sans"
+    class="bg-slate-100 antialiased text-slate-950 flex flex-col min-h-screen font-sans"
   >
     <Header settings={settings} />
 

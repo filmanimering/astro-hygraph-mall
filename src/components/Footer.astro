@@ -1,55 +1,52 @@
 ---
 import Prose from "./Prose.astro";
-
 const today = new Date();
-
-// Ta emot datan från BaseLayout
 const { settings = {} } = Astro.props;
-
-// Din befintliga logik för att förbereda texterna
 const { siteName, footerText, contactInfo, navigation = [] } = settings;
 const contactHtml = contactInfo?.html;
 ---
 
-<footer class="w-full bg-slate-200 text-gray-600">
+<footer
+  class="w-full bg-(--brand-primary)/5 border-t border-(--brand-primary)/10"
+>
   <div class="max-w-7xl mx-auto px-6 pt-12 pb-8">
-    <!-- Rad: Två kolumner med mindre text -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2 pt-2">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
       {/* Vänster: Info */}
-      <div class="text-center">
-        <!-- <h2 class="text-sm text-slate-950 mb-1">
-					{siteName}
-				</h2> -->
+      <div class="text-center md:text-left">
         <p class="text-sm italic leading-relaxed max-w-sm mx-auto md:mx-0">
           {footerText}
         </p>
       </div>
 
-      {/* Höger: Kontakt */}
-      <div class="flex flex-col items-center md:items-end">
+      {/* Höger: Kontakt - Nu med färgade länkar via Prose */}
+      <div class="flex flex-col items-center">
         <Prose>
           <div set:html={contactHtml} class="text-sm" />
         </Prose>
       </div>
     </div>
-    <!-- Rad: Kompakt horisontell meny  -->
-    <nav class="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2">
+
+    <hr class="border-(--brand-primary)/30 mb-8" />
+
+    {/* Navigation */}
+    <nav class="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-8">
       {
         navigation.map((link: any) => (
           <a
             href={link.url}
-            class="text-sm   tracking-wide  hover:text-slate-500"
+            class="text-sm    text-(--brand-text) hover:opacity-80 "
           >
             {link.label}
           </a>
         ))
       }
     </nav>
-    <!-- Rad: Centrerad Copyright  -->
-    <div class="pt-4 text-center">
-      <p class="text-sm tracking-wide">
+
+    {/* Copyright */}
+    <div class="text-center">
+      <p class="text-sm">
         &copy; {today.getFullYear()}
-        {siteName}
+        <span class="text-(--brand-text)">{siteName}</span>
       </p>
     </div>
   </div>

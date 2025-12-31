@@ -70,6 +70,7 @@ export const PAGE_QUERY = `
     # Vi kan även passa på att hämta globala inställningar här om vi vill
     globalSettings {
       siteName
+      brandColor
       logo {
         url
         width

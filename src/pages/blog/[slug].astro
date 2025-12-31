@@ -4,6 +4,7 @@ import Prose from "../../components/Prose.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { hygraphFetch } from "../../lib/hygraph";
 
+// --- PATH GENERERING ---
 export async function getStaticPaths() {
   const query = `query GetPaths { blogPosts { slug } }`;
   const data = await hygraphFetch(query);
@@ -13,6 +14,7 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
+// --- QUERY FÖR ENSTAKA INLÄGG ---
 const SINGLE_POST_QUERY = `
 query GetSinglePost($slug: String!) {
   blogPost(where: { slug: $slug }) {
@@ -22,12 +24,8 @@ query GetSinglePost($slug: String!) {
     video {
       title
       text
-      poster {
-        url
-      }
-      video {
-        url
-      }
+      poster { url }
+      video { url }
     }
     seo {
       seoTitle
@@ -36,7 +34,6 @@ query GetSinglePost($slug: String!) {
       noIndex
     }
   }
-  # Hämta de 4 senaste inläggen för sidebaren - related artiklar
   allPosts: blogPosts(first: 4, orderBy: publishedDate_DESC) {
     title
     slug
@@ -44,15 +41,12 @@ query GetSinglePost($slug: String!) {
   }
   globalSettings {
     siteName
+    brandColor
     logo { url width height }
     navigation { ... on Navigation { label url } }
     footerText
     contactInfo { html }
-    seo {
-      seoTitle
-      seoDescription
-      ogImage { url }
-    }
+    seo { seoTitle seoDescription ogImage { url } }
   }
 }`;
 
@@ -76,37 +70,50 @@ if (!post) return Astro.redirect("/404");
   fallbackTitle={post.title}
 >
   <main class="bg-white min-h-screen antialiased">
-    <div class="max-w-7xl mx-auto px-6 py-12 md:py-20">
+    <div
+      class="max-w-7xl mx-auto my-12 pt-8 px-6 bg-(--brand-primary)/10 border border-(--brand-primary)/10 shadow-sm rounded-3xl px-6 py-2"
+    >
+      {/* --- GRID SYSTEM --- */}
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-        {/* VÄNSTER: Huvudinnehåll */}
-        <article class="lg:col-span-10">
+        {/* --- VÄNSTER: HUVUDINNEHÅLL --- */}
+        <article class="lg:col-span-9">
+          {/* Header & Metadata */}
           <header class="mb-12">
             <div class="flex items-center gap-4 mb-6">
-              <span class="text-sm tracking-widest uppercase">
+              <span
+                class="text-xs tracking-[0.2em] uppercase font-bold text-(--brand-text)"
+              >
                 <FormattedDate date={new Date(post.publishedDate)} />
               </span>
-              <div class="h-px grow bg-slate-100"></div>
+              <div class="h-px grow bg-(--brand-primary)/10"></div>
             </div>
+
             <h1
-              class="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] mb-8"
+              class="text-4xl md:text-6xl font-black text-slate-900 leading-[1.1] mb-2"
             >
               {post.title}
             </h1>
           </header>
 
-          <Prose>
-            <div set:html={post.content.html} />
-          </Prose>
+          {/* Innehållsyta  */}
+          <div class="">
+            <Prose>
+              <div set:html={post.content.html} />
+            </Prose>
+          </div>
+
+          {/* Video-sektion (om tillgänglig) */}
           {
-            /* Visa video om den är ifylld i Hygraph*/
             videoUrl && (
-              <div class="mt-12">
-                <p class="text-2xl font-semibold">{post.video?.title}</p>
-                <p class="mt-2 mb-4">{post.video?.text}</p>
+              <div class="mt-12 p-8 bg-slate-900 rounded-3xl text-white shadow-xl">
+                <h3 class="text-2xl font-bold mb-2">{post.video?.title}</h3>
+                <p class="text-slate-300 mb-6 text-sm italic">
+                  {post.video?.text}
+                </p>
                 <video
                   controls
                   poster={videoPosterUrl}
-                  class="w-full rounded-lg shadow-lg"
+                  class="w-full rounded-xl border border-white/10"
                 >
                   <source src={videoUrl} type="video/mp4" />
                   Din webbläsare stödjer inte videouppspelning.
@@ -116,16 +123,18 @@ if (!post) return Astro.redirect("/404");
           }
         </article>
 
-        {/* HÖGER: Diskret Sidebar */}
-        <aside class="lg:col-span-2">
+        {/* --- HÖGER: SIDEBAR --- */}
+        <aside class="lg:col-span-3">
           <div class="sticky top-32 space-y-12">
-            <div>
+            <section>
               <h3
-                class="text-sm font-bold uppercase text-slate-800 mb-6 pb-2 border-b border-slate-100"
+                class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-8 flex items-center gap-3"
               >
-                Senaste artiklarna
+                Senaste nytt
+                <span class="h-px grow bg-slate-100"></span>
               </h3>
-              <ul class="space-y-6">
+
+              <ul class="space-y-10">
                 {
                   relatedPosts.map((rel: any) => (
                     <li>
@@ -133,18 +142,24 @@ if (!post) return Astro.redirect("/404");
                         href={`/blog/${rel.slug}`}
                         class="group block no-underline"
                       >
-                        <span class="block text-xs text-slate-800 font-medium mb-1 uppercase tracking-wider">
+                        {/* Datum i sidebar */}
+                        <span class="block text-[10px] text-(--brand-text) font-bold mb-2 uppercase tracking-widest">
                           <FormattedDate date={new Date(rel.publishedDate)} />
                         </span>
-                        <h4 class="text-sm font-semibold text-slate-700 group-hover:text-blue-600 transition-colors leading-snug">
+
+                        {/* Titel som ändrar färg vid hover */}
+                        <h4 class="text-md font-bold text-slate-800 group-hover:text-(--brand-primary) transition-colors leading-tight">
                           {rel.title}
                         </h4>
+
+                        {/* Subtil linje som växer vid hover */}
+                        <div class="mt-4 h-0.5 w-4 bg-(--brand-primary)/20 group-hover:w-full transition-all duration-300" />
                       </a>
                     </li>
                   ))
                 }
               </ul>
-            </div>
+            </section>
           </div>
         </aside>
       </div>
