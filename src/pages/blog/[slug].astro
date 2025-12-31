@@ -19,7 +19,7 @@ const SINGLE_POST_QUERY = `
 query GetSinglePost($slug: String!) {
   blogPost(where: { slug: $slug }) {
     title
-    publishedDate
+    publishedDate    
     content { html }
     video {
       title
@@ -37,6 +37,7 @@ query GetSinglePost($slug: String!) {
   }
   allPosts: blogPosts(first: 4, orderBy: publishedDate_DESC) {
     title
+    excerpt
     slug
     publishedDate
   }
@@ -134,7 +135,7 @@ if (!post) return Astro.redirect("/404");
                 <span class="h-px grow bg-slate-100"></span>
               </h3>
 
-              <ul class="space-y-10">
+              <ul class="space-y-5">
                 {
                   relatedPosts.map((rel: any) => (
                     <li>
@@ -143,17 +144,17 @@ if (!post) return Astro.redirect("/404");
                         class="group block no-underline"
                       >
                         {/* Datum i sidebar */}
-                        <span class="block text-xs text-(--brand-text) font-bold mb-2 uppercase tracking-widest">
+                        <span class="block text-sm  mb-1  group-hover:text-(--brand-primary)">
                           <FormattedDate date={new Date(rel.publishedDate)} />
                         </span>
 
                         {/* Titel som ändrar färg vid hover */}
-                        <h4 class="text-base  text-slate-700 group-hover:text-(--brand-primary) transition-colors leading-tight">
+                        <h4 class="text-lg   group-hover:text-(--brand-primary) transition-colors leading-tight">
                           {rel.title}
                         </h4>
-
-                        {/* Subtil linje som växer vid hover */}
-                        <div class="mt-4 h-0.5 w-4 bg-(--brand-primary)/20 group-hover:w-full transition-all duration-300" />
+                        <p class="mt-2 text-sm line-clamp-3 group-hover:text-(--brand-primary)">
+                          {rel.excerpt}
+                        </p>
                       </a>
                     </li>
                   ))
