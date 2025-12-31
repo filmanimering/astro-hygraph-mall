@@ -8,30 +8,11 @@ const contactHtml = contactInfo?.html;
 
 <footer class="w-full bg-(--brand-primary)/5 border-t border-gray-900/30">
   <div class="max-w-7xl mx-auto px-6 pt-12 pb-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-      {/* Vänster: Info */}
-      <div class="text-center md:text-left">
-        <p class="text-sm italic leading-relaxed max-w-sm mx-auto md:mx-0">
-          {footerText}
-        </p>
-      </div>
-
-      {/* Höger: Kontakt - Nu med färgade länkar via Prose */}
-      <div class="flex flex-col items-center">
-        <Prose>
-          <div set:html={contactHtml} class="text-sm" />
-        </Prose>
-      </div>
-    </div>
-
     {/* Navigation */}
-    <nav class="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-8">
+    <nav class="flex flex-wrap justify-center gap-x-8 gap-y-3 mb-4">
       {
         navigation.map((link: any) => (
-          <a
-            href={link.url}
-            class="text-sm    text-(--brand-text) hover:opacity-80 "
-          >
+          <a href={link.url} class="text-sm hover:opacity-70 ">
             {link.label}
           </a>
         ))
@@ -42,7 +23,7 @@ const contactHtml = contactInfo?.html;
     <div class="text-center">
       <p class="text-sm">
         &copy; {today.getFullYear()}
-        <span class="text-(--brand-text)">{siteName}</span>
+        <span class="">{siteName}</span>
       </p>
     </div>
   </div>
