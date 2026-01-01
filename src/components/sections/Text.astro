@@ -6,7 +6,7 @@ const { data } = Astro.props;
 const htmlContent = data.content.html;
 ---
 
-<section class="max-w-6xl mx-auto px-6 pt-24">
+<section class="bg-slate-50 max-w-6xl mx-auto px-6 pt-24">
   <div class=""></div>
   <Prose>
     <div set:html={htmlContent} />

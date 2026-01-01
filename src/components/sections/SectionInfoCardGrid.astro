@@ -5,7 +5,9 @@ const { data } = Astro.props;
 const { title, description, cards } = data;
 ---
 
-<section class="py-16 shadow-lg bg-linear-to-b from-[#5E51FF] to-[#9797FF]">
+<section
+  class="bg-slate-50 py-16 shadow-lg bg-linear-to-b from-[#5E51FF] to-[#9797FF]"
+>
   <div class="max-w-7xl mx-auto px-4">
     <div class="mt-8 mb-12">
       {
@@ -29,7 +31,7 @@ const { title, description, cards } = data;
       {
         cards &&
           cards.map((card: any) => (
-            <div class="group flex flex-col bg-white rounded-3xl border border-slate-300 p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 hover:border-(--brand-primary)/20">
+            <div class="group flex flex-col bg-white rounded-3xl border border-slate-300 p-8 shadow-sm transition-all hover:shadow-xl  hover:opacity-95">
               {card.poster?.url && (
                 <MyImage
                   src={card.poster.url}
@@ -41,7 +43,7 @@ const { title, description, cards } = data;
                 />
               )}
 
-              <h3 class="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-(--brand-primary) transition-colors">
+              <h3 class="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-opacity-70 transition-colors">
                 {card.title}
               </h3>
 

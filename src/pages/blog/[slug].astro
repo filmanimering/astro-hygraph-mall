@@ -43,8 +43,7 @@ query GetSinglePost($slug: String!) {
     publishedDate
   }
   globalSettings {
-    siteName
-    brandColor
+    siteName   
     logo { url width height }
     navigation { ... on Navigation { label url } }
     footerText
@@ -74,37 +73,31 @@ if (!post) return Astro.redirect("/404");
 >
   <main class="bg-white min-h-screen antialiased">
     <div class="max-w-7xl mx-auto pt-20 lg:pt-24 pb-12 px-6 py-2">
-      {/* --- GRID SYSTEM --- */}
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-        {/* --- VÄNSTER: HUVUDINNEHÅLL --- */}
+        {/* HUVUDINNEHÅLL */}
         <article class="lg:col-span-9">
-          {/* Header & Metadata */}
           <header class="mb-12">
             <div class="flex items-center gap-4 mb-4">
-              <span class="text-sm uppercase font-semibold text-(--brand-text)">
+              <span class="text-sm uppercase font-semibold text-slate-500">
                 <FormattedDate date={new Date(post.publishedDate)} />
               </span>
-              <div class="h-px grow bg-(--brand-primary)/10"></div>
             </div>
 
-            <blockquote
-              class="text-xl italic font-semibold tracking-tight text-heading"
+            <h1
+              class="text-3xl lg:text-4xl font-bold tracking-tight text-slate-900"
             >
-              "{post.title}"
-            </blockquote>
+              {post.title}
+            </h1>
 
-            {/* Understrykning */}
-            <div class="mt-4 h-0.5 w-72 bg-(--brand-primary)/90"></div>
+            <div class="mt-4 h-1 w-28 bg-slate-300 rounded-full"></div>
           </header>
 
-          {/* Innehållsyta  */}
-          <div class="">
+          <div>
             <Prose>
               <div set:html={post.content.html} />
             </Prose>
           </div>
 
-          {/* Video-sektion (om tillgänglig) */}
           {
             videoUrl && (
               <div class="mt-12 p-8 bg-slate-900 rounded-3xl text-white shadow-xl">
@@ -125,44 +118,39 @@ if (!post) return Astro.redirect("/404");
           }
         </article>
 
-        {/* --- HÖGER: SIDEBAR RELATERADE INLÄGG --- */}
+        {/* SIDEBAR: RELATERADE INLÄGG */}
         <aside class="lg:col-span-3">
-          <div class="sticky top-32 space-y-12">
-            <section>
-              <h3
-                class="text-base text-slate-700 font-semibold mb-4 flex items-center gap-3"
-              >
-                Andra inlägg
-                <span class="h-px grow bg-slate-100"></span>
-              </h3>
+          <div class="sticky top-32 space-y-6">
+            <h3
+              class="text-lg font-semibold text-slate-700 mb-4 border-b border-slate-200 pb-2"
+            >
+              Andra inlägg
+            </h3>
 
-              <ul class="space-y-5">
-                {
-                  relatedPosts.map((rel: any) => (
-                    <li>
-                      <a
-                        href={`/blog/${rel.slug}`}
-                        class="group block no-underline"
-                      >
-                        {/* Datum i sidebar */}
-                        <span class="block text-sm  mb-1  group-hover:text-(--brand-primary)">
-                          <FormattedDate date={new Date(rel.publishedDate)} />
-                        </span>
-
-                        {/* Titel som ändrar färg vid hover */}
-                        <h4 class="text-lg   group-hover:text-(--brand-primary) transition-colors leading-tight">
-                          {rel.title}
-                        </h4>
-                        <p class="mt-2 text-sm line-clamp-3 group-hover:text-(--brand-primary)">
+            <ul class="space-y-4">
+              {
+                relatedPosts.map((rel: any) => (
+                  <li>
+                    <a
+                      href={`/blog/${rel.slug}`}
+                      class="block bg-white/90 border border-slate-100 rounded-2xl p-4 shadow-sm transition hover:shadow-md hover:shadow-slate-900/30 hover:bg-white/95"
+                    >
+                      <span class="block text-xs font-semibold uppercase text-slate-400 mb-1">
+                        <FormattedDate date={new Date(rel.publishedDate)} />
+                      </span>
+                      <h4 class="text-lg font-bold text-slate-900 leading-snug transition-colors hover:text-slate-700">
+                        {rel.title}
+                      </h4>
+                      {rel.excerpt && (
+                        <p class="mt-2 text-sm text-slate-600 line-clamp-3 transition-colors hover:text-slate-700">
                           {rel.excerpt}
                         </p>
-                        <div class="mt-2 mb-4 w-full h-0.5 bg-slate-500/40" />
-                      </a>
-                    </li>
-                  ))
-                }
-              </ul>
-            </section>
+                      )}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
           </div>
         </aside>
       </div>

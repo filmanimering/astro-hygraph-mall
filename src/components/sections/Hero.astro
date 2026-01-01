@@ -1,58 +1,55 @@
 ---
-// Vi behöver inte "import { marked } from 'marked';" längre
+// Hero.astro
 import MyButton from "../MyButton.astro";
-import MyImage from "../MyImage.astro";
-import Prose from "../Prose.astro";
 
 const { data } = Astro.props;
 
-// Nu hämtar vi färdig HTML direkt från Hygraph...........
 const heroTitle = data.heroTitel || "Välkommen";
 const heroText = data.heroText || "Din beskrivande text här.";
 const bgUrl = data.bgBild?.url;
 const buttonLabel = data.buttonLabel;
 const buttonUrl = data.buttonUrl;
-const btnColor = data.btnColor || "bg-blue-600";
-const btnTextColor = data.btnTextColor || "text-white";
+const btnColor = data.btnColor || "#2563eb";
+const btnTextColor = data.btnTextColor || "#ffffff";
 ---
 
 <section
-  class="-mt-20 min-h-screen px-4 pt-32 lg:pt-44 pb-4 lg:pb-20 text-slate-900 relative"
-  style={`background-image: url('${bgUrl}'); background-size: cover; background-position: center;`}
+  class="-mt-20 min-h-screen px-4 pt-32 lg:pt-44 pb-4 lg:pb-20 flex items-center justify-center relative"
+  style={bgUrl
+    ? `background-image: url('${bgUrl}'); background-size: cover; background-position: center;`
+    : undefined}
 >
-  <!-- Overlay för kontrast -->
-  <div class="absolute inset-0 bg-black/50 md:bg-black/20"></div>
+  <!-- Subtil overlay -->
+  <div class="absolute inset-0 bg-black/20"></div>
 
-  <!-- Hero content -->
+  <!-- Glass-panel med text -->
   <div
-    class="absolute inset-0 flex flex-col justify-center md:justify-end px-4 pb-8 md:pb-16"
+    class="relative z-10 max-w-3xl w-full px-6 py-9 lg:px-8 lg:py-16 bg-white/40 backdrop-blur-sm rounded-3xl shadow-lg text-center md:text-left"
   >
-    <div class="max-w-4xl text-center md:text-left md:ml-16">
-      {
-        heroTitle && (
-          <h1 class="text-4xl md:text-5xl text-slate-50 font-extrabold mb-4 leading-tight">
-            {heroTitle}
-          </h1>
-        )
-      }
-      {
-        heroText && (
-          <p class="text-xl md:text-2xl text-slate-50 font-semibold mb-6 leading-snug">
-            {heroText}
-          </p>
-        )
-      }
-      {
-        buttonLabel && buttonUrl && (
-          <MyButton
-            titel={buttonLabel}
-            link={buttonUrl}
-            buttonColor={btnColor}
-            buttonTextColor={btnTextColor}
-            solid={true}
-          />
-        )
-      }
-    </div>
+    {
+      heroTitle && (
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4 leading-tight">
+          {heroTitle}
+        </h1>
+      )
+    }
+    {
+      heroText && (
+        <p class="text-lg md:text-xl text-slate-900 font-semibold mb-6 leading-snug">
+          {heroText}
+        </p>
+      )
+    }
+    {
+      buttonLabel && buttonUrl && (
+        <MyButton
+          titel={buttonLabel}
+          link={buttonUrl}
+          buttonColor={btnColor}
+          buttonTextColor={btnTextColor}
+          solid={true}
+        />
+      )
+    }
   </div>
 </section>

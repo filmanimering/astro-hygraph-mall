@@ -44,7 +44,7 @@ const { siteName, logo, navigation = [] } = settings;
 ---
 
 <header
-  class="mx-4 lg:mx-24 sticky top-4 z-50 rounded-xl bg-white/60 backdrop-blur-xl border border-white/40 shadow-xl shadow-slate-900/20"
+  class="mx-4 bg-slate-50 lg:mx-24 sticky top-4 z-50 rounded-xl border border-gray-200 shadow-lg shadow-slate-800/20"
 >
   <nav class="max-w-8xl mx-auto px-6 h-14 flex items-center justify-between">
     {/* --- VÄNSTER: LOGO & NAMN --- */}
@@ -64,7 +64,7 @@ const { siteName, logo, navigation = [] } = settings;
           )
         }
         <span
-          class="mt-1 text-base font-semibold tracking-tight text-slate-900 group-hover:opacity-70 transition-opacity"
+          class="mt-1 text-sm font-semibold text-slate-700 group-hover:opacity-70 transition-opacity"
         >
           {siteName || "Photo and Film"}
         </span>
@@ -74,7 +74,7 @@ const { siteName, logo, navigation = [] } = settings;
     {/* --- MOBILMENY-KNAPP --- */}
     <button
       id="mobile-menu-button"
-      class="lg:hidden inline-flex items-center justify-center rounded-lg p-2 text-slate-700 hover:bg-white/30 active:scale-95 transition-all"
+      class="lg:hidden inline-flex items-center justify-center rounded-lg p-2 text-slate-700 hover:bg-gray-800/20 active:scale-95 transition-all"
       aria-label="Öppna meny"
     >
       <Hamburger />
@@ -124,7 +124,7 @@ const { siteName, logo, navigation = [] } = settings;
                 ${
                   isActive
                     ? "bg-slate-900 text-white shadow-sm"
-                    : "text-slate-900 hover:bg-gray-800/50"
+                    : "text-slate-900 hover:bg-gray-800/20"
                 }
               `}
             >
