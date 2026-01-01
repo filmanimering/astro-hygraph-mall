@@ -15,6 +15,8 @@ export const PAGE_QUERY = `
         ... on SectionHero {
           heroText
           heroTitel
+          btnColor
+          btnTextColor
           buttonLabel
           buttonUrl
           bgBild { url }

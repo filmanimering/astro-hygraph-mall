@@ -12,6 +12,8 @@ const heroText = data.heroText || "Din beskrivande text här.";
 const bgUrl = data.bgBild?.url;
 const buttonLabel = data.buttonLabel;
 const buttonUrl = data.buttonUrl;
+const btnColor = data.btnColor || "bg-blue-600";
+const btnTextColor = data.btnTextColor || "text-white";
 ---
 
 <section
@@ -42,7 +44,13 @@ const buttonUrl = data.buttonUrl;
       }
       {
         buttonLabel && buttonUrl && (
-          <MyButton titel={buttonLabel} link={buttonUrl} solid={true} />
+          <MyButton
+            titel={buttonLabel}
+            link={buttonUrl}
+            buttonColor={btnColor}
+            buttonTextColor={btnTextColor}
+            solid={true}
+          />
         )
       }
     </div>

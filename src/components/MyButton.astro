@@ -1,9 +1,11 @@
 ---
 import LinkExternal from "./ikonerSvg/LinkExternal.astro";
+
 interface Props {
   titel: string;
   link: string;
-  target_link?: "_self" | "_blank";
+  buttonColor?: string; // "#2563eb"
+  buttonTextColor?: string; // "#ffffff"
   solid?: boolean;
   fullWidth?: boolean;
 }
@@ -11,55 +13,31 @@ interface Props {
 const {
   titel,
   link,
-  target_link = "_self",
+  buttonColor = "#2563eb",
+  buttonTextColor = "#ffffff",
   solid = false,
   fullWidth = false,
 } = Astro.props as Props;
 
-// Tailwind-klasser
-const solidClass = `
-  bg-blue-900 text-gray-100
-  hover:opacity-80
-  py-1 px-2 sm:py-3 sm:px-4
-  rounded-xl
-  text-xs sm:text-sm font-semibold
-  focus:outline-none
-  
-`;
+// 🔍 Känn av extern länk
+const isExternal = /^https?:\/\//.test(link);
 
-const transparentClass = `
-  bg-transparent text-gray-100 border-2 border-white/50
-  py-2 px-3 sm:py-3 sm:px-4
-  rounded-xl
-  text-base  
-  focus:outline-none
-  hover:bg-white/10
-  hover:border-white/60
-`;
-
-// Bredd
+const baseClasses =
+  "py-2 px-3 sm:py-3 sm:px-4 rounded-xl text-sm font-semibold focus:outline-none items-center gap-2 transition-all duration-300";
 const widthClass = fullWidth ? "w-full flex justify-center" : "inline-flex";
-
-// Visa ikon vid extern länk
-const isExternal = target_link === "_blank";
-
-// Slutliga klasser
-const classes = `
-  ${solid ? solidClass : transparentClass}
-  ${widthClass}
-  items-center gap-2
-  transition-all duration-300
-`.trim();
+const transparentClass =
+  "bg-transparent text-gray-100 border-2 border-white/50 hover:bg-white/10";
 ---
 
 <a
   href={link}
-  target={target_link}
+  target={isExternal ? "_blank" : undefined}
   rel={isExternal ? "noopener noreferrer" : undefined}
-  class={classes}
-  aria-label={titel}
+  class={`${baseClasses} ${widthClass} ${solid ? "" : transparentClass}`}
+  style={solid
+    ? `background-color: ${buttonColor}; color: ${buttonTextColor};`
+    : undefined}
 >
-  <span class="text-sm">{titel}</span>
-
+  {titel}
   {isExternal && <LinkExternal />}
 </a>
