@@ -3,37 +3,48 @@
 import MyButton from "../MyButton.astro";
 import MyImage from "../MyImage.astro";
 import Prose from "../Prose.astro";
+
 const { data } = Astro.props;
 
 // Nu hämtar vi färdig HTML direkt från Hygraph...........
-const htmlContent = data.heroText.html;
+const heroTitle = data.heroTitel || "Välkommen";
+const heroText = data.heroText || "Din beskrivande text här.";
 const bgUrl = data.bgBild?.url;
 const buttonLabel = data.buttonLabel;
 const buttonUrl = data.buttonUrl;
 ---
 
-<section class="px-4 pt-12">
-  <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-center">
-    <div class="p-2 md:p-8">
-      <Prose>
-        <div set:html={htmlContent} />
-      </Prose>
+<section
+  class="-mt-20 min-h-screen px-4 pt-32 lg:pt-44 pb-4 lg:pb-20 text-slate-900 relative"
+  style={`background-image: url('${bgUrl}'); background-size: cover; background-position: center;`}
+>
+  <!-- Overlay för kontrast -->
+  <div class="absolute inset-0 bg-black/50 md:bg-black/20"></div>
+
+  <!-- Hero content -->
+  <div
+    class="absolute inset-0 flex flex-col justify-center md:justify-end px-4 pb-8 md:pb-16"
+  >
+    <div class="max-w-4xl text-center md:text-left md:ml-16">
       {
-        buttonLabel && buttonUrl && (
-          <MyButton
-            label={buttonLabel}
-            url={buttonUrl}
-            textColor="text-white"
-          />
+        heroTitle && (
+          <h1 class="text-4xl md:text-5xl text-slate-50 font-extrabold mb-4 leading-tight">
+            {heroTitle}
+          </h1>
         )
       }
-    </div>
-    <div class="flex justify-center mt-8">
-      <MyImage
-        src={bgUrl}
-        alt={data.bgBild?.alt || "Hero Image"}
-        class="w-full h-auto max-w-3xl rounded-lg shadow-lg"
-      />
+      {
+        heroText && (
+          <p class="text-xl md:text-2xl text-slate-50 font-semibold mb-6 leading-snug">
+            {heroText}
+          </p>
+        )
+      }
+      {
+        buttonLabel && buttonUrl && (
+          <MyButton titel={buttonLabel} link={buttonUrl} solid={true} />
+        )
+      }
     </div>
   </div>
 </section>

@@ -1,27 +1,9 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-regular.woff") format("woff");
-	font-weight: 500;
-	font-style: normal;
-	font-display: swap;	
+
+/* Sätt default font i Tailwind */
+ @theme {  
+ --font-sans: 'Poppins', 'sans-serif';
 }
-
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-bold.woff") format("woff");
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
-
-@theme {
-	--font-sans: "Atkinson", ui-sans-serif, system-ui, sans-serif;
-
-	/* Vi mappar dina gamla variabler till v4-teman */
-	--color-accent: #2337ff;
-	--color-accent-dark: #000d8a;
-}
-
+ 

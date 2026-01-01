@@ -1,6 +1,7 @@
 ---
 import FormattedDate from "../../components/FormattedDate.astro";
 import Prose from "../../components/Prose.astro";
+
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { hygraphFetch } from "../../lib/hygraph";
 
@@ -72,7 +73,7 @@ if (!post) return Astro.redirect("/404");
   fallbackTitle={post.title}
 >
   <main class="bg-white min-h-screen antialiased">
-    <div class="max-w-7xl mx-auto py-12 pt-8 px-6 py-2">
+    <div class="max-w-7xl mx-auto pt-20 lg:pt-24 pb-12 px-6 py-2">
       {/* --- GRID SYSTEM --- */}
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
         {/* --- VÄNSTER: HUVUDINNEHÅLL --- */}

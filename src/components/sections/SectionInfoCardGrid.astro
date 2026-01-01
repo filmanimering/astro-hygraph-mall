@@ -5,58 +5,62 @@ const { data } = Astro.props;
 const { title, description, cards } = data;
 ---
 
-<section class="max-w-7xl mx-auto px-6 py-16">
-  <div class="mt-8 mb-12 text-center max-w-5xl mx-auto">
-    {
-      title && (
-        <h2 class="text-2xl md:text-3xl font-black tracking-tight text-slate-900 italic uppercase mb-4 leading-none">
-          {title}
-        </h2>
-      )
-    }
-    <div class="w-12 h-1 bg-(--brand-primary) mx-auto rounded-full mb-6"></div>
-    {
-      description && (
-        <p class="text-slate-600 max-w-2xl mx-auto">{description}</p>
-      )
-    }
-  </div>
+<section class="py-16 shadow-lg bg-linear-to-b from-[#5E51FF] to-[#9797FF]">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="mt-8 mb-12">
+      {
+        title && (
+          <h2 class="text-5xl lg:text-5xl  tracking-wide text-slate-50 italic  mb-4 leading-none">
+            {title}
+          </h2>
+        )
+      }
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    {
-      cards &&
-        cards.map((card: any) => (
-          <div class="group flex flex-col bg-white rounded-3xl border border-slate-300 p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 hover:border-(--brand-primary)/20">
-            {card.poster?.url && (
-              <MyImage
-                src={card.poster.url}
-                alt={card.poster.altText || card.title}
-                width={card.poster.width}
-                height={card.poster.height}
-                class="mb-6 rounded-2xl"
-                aspect="video"
-              />
-            )}
+      {
+        description && (
+          <p class="text-slate-50 text-lg tracking-wide max-w-2xl ">
+            {description}
+          </p>
+        )
+      }
+    </div>
 
-            <h3 class="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-(--brand-primary) transition-colors">
-              {card.title}
-            </h3>
-
-            <p class="text-slate-600 mb-8 leading-relaxed grow text-sm">
-              {card.text}
-            </p>
-
-            <div class="mt-auto">
-              {card.buttonLabel && card.buttonLink && (
-                <MyButton
-                  url={card.buttonLink}
-                  label={card.buttonLabel}
-                  textColor="text-white"
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      {
+        cards &&
+          cards.map((card: any) => (
+            <div class="group flex flex-col bg-white rounded-3xl border border-slate-300 p-8 shadow-sm transition-all hover:shadow-xl hover:-translate-y-1 hover:border-(--brand-primary)/20">
+              {card.poster?.url && (
+                <MyImage
+                  src={card.poster.url}
+                  alt={card.poster.altText || card.title}
+                  width={card.poster.width}
+                  height={card.poster.height}
+                  class="mb-6 rounded-2xl"
+                  aspect="video"
                 />
               )}
+
+              <h3 class="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-(--brand-primary) transition-colors">
+                {card.title}
+              </h3>
+
+              <p class="text-slate-600 mb-8 leading-relaxed grow text-sm">
+                {card.text}
+              </p>
+
+              <div class="mt-auto">
+                {card.buttonLabel && card.buttonLink && (
+                  <MyButton
+                    link={card.buttonLink}
+                    titel={card.buttonLabel}
+                    solid={true}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        ))
-    }
+          ))
+      }
+    </div>
   </div>
 </section>

@@ -13,7 +13,8 @@ export const PAGE_QUERY = `
       sections { 
         __typename
         ... on SectionHero {
-          heroText { html }
+          heroText
+          heroTitel
           buttonLabel
           buttonUrl
           bgBild { url }
@@ -46,16 +47,7 @@ export const PAGE_QUERY = `
                   buttonLink
                 }
               }
-        }
-        ... on SectionVideoExternal {
-                id
-                title
-                text
-                poster {
-                  url
-                }
-                videoUrlLink
-        }        
+        }     
         ... on SectionVideo {
           id
           title
