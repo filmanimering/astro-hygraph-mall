@@ -1,8 +1,9 @@
 ---
 const { data } = Astro.props;
+const nrOfCols = data.numberOfColumns || 3;
 ---
 
-<section class="max-w-7xl mx-auto px-6 sm:px-8 py-24 bg-slate-50">
+<section class="max-w-7xl mx-auto px-6 sm:px-8 pt-24 pb-20 bg-slate-50">
   {/* Header */}
   <div class="mb-4">
     {
@@ -18,7 +19,10 @@ const { data } = Astro.props;
   </div>
 
   {/* Masonry Layout med Columns */}
-  <div class="mt-8 columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
+  <div
+    style={`--cols: ${nrOfCols};`}
+    class="mt-8 columns-1 md:columns-2 lg:columns-(--cols) gap-4 space-y-4"
+  >
     {
       data.images.map((image: any) => (
         <div class="break-inside-avoid group relative overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 shadow-sm transition-all hover:shadow-xl mb-4">

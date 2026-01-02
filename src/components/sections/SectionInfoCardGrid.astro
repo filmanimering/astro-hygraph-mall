@@ -3,6 +3,8 @@ import MyButton from "../../components/MyButton.astro";
 import MyImage from "../../components/MyImage.astro";
 const { data } = Astro.props;
 const { title, description, cards } = data;
+const btnColor = data.btnColor || "#2563eb";
+const btnTextColor = data.btnTextColor || "#ffffff";
 ---
 
 <section
@@ -31,7 +33,7 @@ const { title, description, cards } = data;
       {
         cards &&
           cards.map((card: any) => (
-            <div class="group flex flex-col bg-white rounded-3xl border border-slate-300 p-8 shadow-sm transition-all hover:shadow-xl  hover:opacity-95">
+            <div class="group flex flex-col bg-slate-50 rounded-3xl border border-slate-300 p-8 shadow-sm transition-all hover:shadow-xl  hover:opacity-95">
               {card.poster?.url && (
                 <MyImage
                   src={card.poster.url}
@@ -57,6 +59,7 @@ const { title, description, cards } = data;
                     link={card.buttonLink}
                     titel={card.buttonLabel}
                     solid={true}
+                    buttonDark={true}
                   />
                 )}
               </div>

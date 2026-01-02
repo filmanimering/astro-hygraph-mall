@@ -4,39 +4,48 @@ import LinkExternal from "./ikonerSvg/LinkExternal.astro";
 interface Props {
   titel: string;
   link: string;
-  buttonColor?: string; // "#2563eb"
-  buttonTextColor?: string; // "#ffffff"
   solid?: boolean;
+  buttonDark?: boolean; // true = Mörk (Slate-900), false = Ljus (Slate-100)
   fullWidth?: boolean;
 }
 
 const {
   titel,
   link,
-  buttonColor = "#2563eb",
-  buttonTextColor = "#ffffff",
   solid = false,
+  buttonDark = true,
   fullWidth = false,
-} = Astro.props as Props;
+} = Astro.props;
 
-// 🔍 Känn av extern länk
 const isExternal = /^https?:\/\//.test(link);
 
+// Bas-stilar för knappen
 const baseClasses =
-  "py-2 px-3 sm:py-3 sm:px-4 rounded-xl text-sm font-semibold focus:outline-none items-center gap-2 transition-all duration-300 hover:scale-[1.03]";
-const widthClass = fullWidth ? "w-full flex justify-center" : "inline-flex";
-const transparentClass =
-  "bg-transparent text-gray-100 border-2 border-white/50 hover:bg-white/10";
+  "py-2 px-3 sm:py-3 sm:px-4 rounded-xl text-sm font-semibold tracking-wide items-center gap-2 transition-all duration-300 hover:scale-[1.03] inline-flex";
+
+// Varianter baserat på solid och buttonDark
+let themeClasses = "";
+
+if (solid) {
+  themeClasses = buttonDark
+    ? "bg-slate-900 text-white hover:bg-slate-800"
+    : "bg-slate-100 text-slate-900 hover:bg-slate-200";
+} else {
+  // Transparent variant (outline-ish)
+  themeClasses =
+    "bg-transparent text-white border-2 border-white/50 hover:bg-white/10";
+}
 ---
 
 <a
   href={link}
   target={isExternal ? "_blank" : undefined}
   rel={isExternal ? "noopener noreferrer" : undefined}
-  class={`${baseClasses} ${widthClass} ${solid ? "" : transparentClass}`}
-  style={solid
-    ? `background-color: ${buttonColor}; color: ${buttonTextColor};`
-    : undefined}
+  class:list={[
+    baseClasses,
+    themeClasses,
+    { "w-full justify-center": fullWidth },
+  ]}
 >
   {titel}
   {isExternal && <LinkExternal />}

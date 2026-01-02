@@ -1,4 +1,7 @@
 ---
+import ArrowUp from "./ikonerSvg/ArrowUp.astro";
+import LinkExternal from "./ikonerSvg/LinkExternal.astro";
+
 const today = new Date();
 const { settings = {} } = Astro.props;
 const { siteName, footerText, contactInfo, navigation = [] } = settings;
@@ -24,6 +27,17 @@ const contactHtml = contactInfo?.html;
         &copy; {today.getFullYear()}
         <span class="">{siteName}</span>
       </p>
+    </div>
+    <div class="flex justify-center mt-4">
+      <button
+        class="text-blue-700 text-base tracking-wide hover:text-blue-500 transition-colors duration-200"
+        onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      >
+        <span class="inline-flex gap-1 text-sm items-center">
+          Till toppen
+          <ArrowUp />
+        </span>
+      </button>
     </div>
   </div>
 </footer>

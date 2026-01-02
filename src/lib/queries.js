@@ -14,9 +14,7 @@ export const PAGE_QUERY = `
         __typename
         ... on SectionHero {
           heroText
-          heroTitel
-          btnColor
-          btnTextColor
+          heroTitel      
           buttonLabel
           buttonUrl
           bgBild { url }
@@ -26,8 +24,8 @@ export const PAGE_QUERY = `
         }
         ... on SectionImageGrid {
           title
-          description 
-          numberOfColumns
+          description  
+          numberOfColumns        
           images {
             url
             width
@@ -38,7 +36,7 @@ export const PAGE_QUERY = `
           ... on SectionInfoCardGrid {
               id
               title
-              description
+              description            
               cards {
                 ... on InfoCard {
                   id
@@ -53,9 +51,7 @@ export const PAGE_QUERY = `
         ... on SectionVideo {
           id
           title
-          text
-          videoUrlLink 
-          videoUrlLabel
+          text       
           video { url }
           poster { url }
         }

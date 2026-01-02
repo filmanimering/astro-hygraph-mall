@@ -10,3 +10,24 @@
 >
   <slot />
 </div>
+
+<style is:global>
+  /* Här lägger vi dina globala inställningar för element inuti prose */
+
+  /* 1. Fixa alla YouTube-videos/IFrames */
+  .prose iframe {
+    width: 100% !important; /* Tvingar full bredd i behållaren */
+    aspect-ratio: 16 / 9 !important; /* Tvingar filmformat */
+    height: auto !important; /* Gör att den räknar ut höjden baserat på aspect-ratio */
+    border-radius: 0.75rem;
+    border: none;
+    margin: 2rem 0;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  }
+
+  /* 2. Fixa bilder om du vill ha dem centrerade med marginal */
+  .prose img {
+    margin: 2rem auto;
+    border-radius: 0.75rem;
+  }
+</style>

@@ -1,14 +1,14 @@
 ---
 import Prose from "../Prose.astro";
 
-// Ingen import av 'marked' behövs längre!
 const { data } = Astro.props;
 const htmlContent = data.content.html;
 ---
 
-<section class="bg-slate-50 max-w-6xl mx-auto px-6 pt-24">
-  <div class=""></div>
-  <Prose>
-    <div set:html={htmlContent} />
-  </Prose>
+<section class="bg-slate-50 max-w-7xl mx-auto px-6 sm:px-8 pt-24">
+  <div class="">
+    <Prose>
+      <div set:html={htmlContent} />
+    </Prose>
+  </div>
 </section>
