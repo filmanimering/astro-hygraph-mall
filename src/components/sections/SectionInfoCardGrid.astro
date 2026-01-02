@@ -7,14 +7,12 @@ const btnColor = data.btnColor || "#2563eb";
 const btnTextColor = data.btnTextColor || "#ffffff";
 ---
 
-<section
-  class="bg-slate-50 py-16 shadow-lg bg-linear-to-b from-[#5E51FF] to-[#9797FF]"
->
+<section class="py-16 shadow-lg bg-[#F1F1F1]">
   <div class="max-w-7xl mx-auto px-4">
     <div class="mt-8 mb-12">
       {
         title && (
-          <h2 class="text-5xl lg:text-5xl  tracking-wide text-slate-50 italic  mb-4 leading-none">
+          <h2 class="text-3xl lg:text-4xl  font-semibold italic  mb-2 leading-none">
             {title}
           </h2>
         )
@@ -22,9 +20,7 @@ const btnTextColor = data.btnTextColor || "#ffffff";
 
       {
         description && (
-          <p class="text-slate-50 text-lg tracking-wide max-w-2xl ">
-            {description}
-          </p>
+          <p class=" text-lg  tracking-wide max-w-2xl ">{description}</p>
         )
       }
     </div>
@@ -33,7 +29,7 @@ const btnTextColor = data.btnTextColor || "#ffffff";
       {
         cards &&
           cards.map((card: any) => (
-            <div class="group flex flex-col bg-slate-50 rounded-3xl border border-slate-300 p-8 shadow-sm transition-all hover:shadow-xl  hover:opacity-95">
+            <div class="group flex flex-col bg-slate-50 rounded-3xl  p-4 shadow-xl transition-all hover:shadow-2xl  hover:opacity-95 hover:shadow-gray-400">
               {card.poster?.url && (
                 <MyImage
                   src={card.poster.url}
@@ -45,13 +41,11 @@ const btnTextColor = data.btnTextColor || "#ffffff";
                 />
               )}
 
-              <h3 class="text-xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-opacity-70 transition-colors">
+              <h3 class="text-xl font-bold  mb-3 leading-tight group-hover:text-opacity-70 transition-colors">
                 {card.title}
               </h3>
 
-              <p class="text-slate-600 mb-8 leading-relaxed grow text-sm">
-                {card.text}
-              </p>
+              <p class=" mb-8 leading-relaxed grow text-sm">{card.text}</p>
 
               <div class="mt-auto">
                 {card.buttonLabel && card.buttonLink && (

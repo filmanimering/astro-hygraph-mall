@@ -5,13 +5,12 @@ const { title, text, video, poster } = data;
 ---
 
 <section class="max-w-7xl mx-auto py-8 px-4">
-  <div
-    class="bg-purple-950 rounded-3xl shadow-xl border border-slate-100 overflow-hidden"
-  >
+  <div class="rounded-3xl overflow-hidden bg-neutral-950">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 p-8">
       {/* VIDEO - Tar upp 7 kolumner på desktop */}
       <div
-        class="lg:col-span-8 relative bg-slate-900 rounded-2xl overflow-hidden aspect-video shadow-2xl"
+        class="lg:col-span-8 relative bg-slate-900 rounded-2xl overflow-hidden
+        aspect-video"
       >
         {
           video?.url && (
@@ -20,7 +19,7 @@ const { title, text, video, poster } = data;
               poster={poster?.url}
               controls
               preload="none"
-              class="w-full h-full object-contain"
+              class="w-full h-full object-contain "
             />
           )
         }
