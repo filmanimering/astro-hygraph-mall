@@ -8,6 +8,7 @@ interface Props {
   aspect?: "video" | "square" | "auto" | "portrait";
   fit?: "cover" | "contain";
   loading?: "lazy" | "eager";
+  priority?: boolean; // Ny: för LCP-bilder
 }
 
 const {
@@ -19,9 +20,13 @@ const {
   aspect = "video",
   fit = "cover",
   loading = "lazy",
+  priority = false,
 } = Astro.props;
 
-// Mappa aspect-ratio till Tailwind-klasser
+// 1. Optimera URL:en direkt (WebP + Komprimering)
+// Vi lägger även till en dynamisk bredd baserat på den inskickade width-propen
+const optimizedSrc = `${src}?auto=format,compress${width ? `&w=${width}` : ""}`;
+
 const aspectClasses = {
   video: "aspect-video",
   square: "aspect-square",
@@ -29,7 +34,6 @@ const aspectClasses = {
   auto: "aspect-auto",
 };
 
-// Mappa object-fit till Tailwind-klasser
 const fitClasses = {
   cover: "object-cover",
   contain: "object-contain",
@@ -38,17 +42,18 @@ const fitClasses = {
 
 <div
   class:list={[
-    "relative overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 shadow-sm",
+    "relative overflow-hidden border border-slate-100 bg-slate-200/50 shadow-sm",
     aspectClasses[aspect],
     className,
   ]}
 >
   <img
-    src={src}
+    src={optimizedSrc}
     alt={alt}
     width={width}
     height={height}
-    loading={loading}
-    class:list={["w-full h-full ", fitClasses[fit]]}
+    loading={priority ? "eager" : loading}
+    fetchpriority={priority ? "high" : "auto"}
+    class:list={["w-full h-full", fitClasses[fit]]}
   />
 </div>

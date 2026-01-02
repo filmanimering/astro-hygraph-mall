@@ -2,61 +2,103 @@
 // SectionVideo.astro
 const { data } = Astro.props;
 const { title, text, video, poster, videoUrlLink, videoUrlLabel } = data;
+
+// Kolla om länken är en YouTube-video
+const isYouTube =
+  videoUrlLink?.includes("youtube.com") || videoUrlLink?.includes("youtu.be");
+
+// Extrahera ID för att kunna göra en optimerad inbäddning (valfritt men bra)
+let youtubeId = "";
+if (isYouTube) {
+  const regExp =
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = videoUrlLink.match(regExp);
+  youtubeId = match && match[2].length === 11 ? match[2] : "";
+}
 ---
 
 <section class="bg-slate-50 max-w-7xl mx-auto px-6 py-8">
-  <div class="bg-white rounded-3xl shadow-xl border border-slate-300">
+  <div
+    class="bg-white rounded-3xl shadow-xl border border-slate-300 overflow-hidden"
+  >
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 md:p-8">
-      {/* Videosidan - Nu med padding och egna hörn */}
+      {/* Videosidan */}
       <div
-        class="relative bg-slate-900 rounded-2xl overflow-hidden flex items-center justify-center pt-6"
+        class="relative bg-slate-900 rounded-2xl overflow-hidden aspect-video flex items-center justify-center"
       >
         {
-          video?.url && (
+          /* Fall 1: Egenuppladdad video (MP4) */
+          video?.url ? (
             <video
               src={video.url}
               poster={poster?.url}
+              width={poster?.width || 800}
+              height={poster?.height || 450}
               controls
               playsinline
               preload="metadata"
-              class="w-full h-full aspect-video object-contain"
+              class="w-full h-full object-contain"
             >
               Din webbläsare stödjer inte video.
             </video>
-          )
+          ) : /* Fall 2: Extern YouTube-video */
+          isYouTube ? (
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+              title={title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              loading="lazy"
+              class="absolute inset-0 w-full h-full border-0"
+            />
+          ) : null
         }
       </div>
 
       {/* Text-sidan */}
       <div class="p-4 md:p-8 flex flex-col justify-center">
         <h2
-          class="text-xl md:text-2xl font-black tracking-tight text-slate-900 italic uppercase mb-6 leading-[0.9]"
+          class="text-xl md:text-2xl font-black tracking-tight text-slate-900 italic uppercase mb-4 leading-tight"
         >
           {title}
         </h2>
+
         <div class="prose prose-slate prose-base">
           <p class="text-slate-600 leading-relaxed">
             {text}
           </p>
         </div>
-        <div>
-          <!-- Extern länk till videon, om sådan finns -->
-          {
-            videoUrlLink && videoUrlLabel && (
-              <p class="mt-6 text-lg font-semibold">
+
+        {
+          videoUrlLink && videoUrlLabel && !isYouTube && (
+            <div class="mt-6">
+              <p class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-2">
                 {videoUrlLabel}
               </p>
               <a
                 href={videoUrlLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="block  text-base text-blue-600 hover:underline mb-4"
+                class="inline-flex items-center text-blue-600 font-semibold hover:text-blue-800 transition-colors"
               >
-                Titta på videon här
+                Visa externt innehåll
+                <svg
+                  class="w-4 h-4 ml-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
               </a>
-            )
-          }
-        </div>
+            </div>
+          )
+        }
       </div>
     </div>
   </div>

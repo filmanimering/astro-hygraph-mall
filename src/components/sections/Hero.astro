@@ -1,19 +1,21 @@
 ---
 // Hero.astro
 import MyButton from "../MyButton.astro";
+import MyImage from "../MyImage.astro"; // Importera din bildkomponent
 
 const { data } = Astro.props;
 
 const heroTitle = data.heroTitel || "Välkommen";
 const heroText = data.heroText || "Din beskrivande text här.";
-const bgUrl = data.bgBild?.url;
 const buttonLabel = data.buttonLabel;
 const buttonUrl = data.buttonUrl;
+
+// Hämta hela bildobjektet
+const heroImage = data.bgBild;
 ---
 
 <section class="pt-24 px-4 max-w-7xl mx-auto">
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <!-- Left text -->
     <div class="flex items-center">
       <div class="">
         {
@@ -23,7 +25,7 @@ const buttonUrl = data.buttonUrl;
             </h1>
           )
         }
-        {heroText && <p class="text-base  mb-6">{heroText}</p>}
+        {heroText && <p class="text-base mb-6 text-slate-700">{heroText}</p>}
         {
           buttonLabel && buttonUrl && (
             <MyButton
@@ -36,14 +38,18 @@ const buttonUrl = data.buttonUrl;
         }
       </div>
     </div>
+
     <div class="">
-      <!--  Right image -->
       {
-        bgUrl && (
-          <img
-            src={bgUrl}
-            alt="Hero Background"
-            class="w-full h-auto object-cover rounded-2xl"
+        heroImage?.url && (
+          <MyImage
+            src={heroImage.url}
+            alt={heroImage.altText || "Hero bild"}
+            width={heroImage.width}
+            height={heroImage.height}
+            priority={true}
+            class="rounded-2xl shadow-lg"
+            aspect="auto"
           />
         )
       }

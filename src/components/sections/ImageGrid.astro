@@ -1,4 +1,5 @@
 ---
+import MyImage from "../../components/MyImage.astro";
 const { data } = Astro.props;
 const nrOfCols = data.numberOfColumns || 3;
 ---
@@ -8,12 +9,12 @@ const nrOfCols = data.numberOfColumns || 3;
   <div class="mb-4">
     {
       data.title && (
-        <h2 class="text-2xl md:text-4xl  tracking-wide  mb-4 ">{data.title}</h2>
+        <h2 class="text-2xl md:text-4xl tracking-wide mb-4">{data.title}</h2>
       )
     }
     {
       data.description && (
-        <p class=" max-w-2xl  leading-relaxed text-lg">{data.description}</p>
+        <p class="max-w-2xl leading-relaxed text-lg">{data.description}</p>
       )
     }
   </div>
@@ -25,19 +26,20 @@ const nrOfCols = data.numberOfColumns || 3;
   >
     {
       data.images.map((image: any) => (
-        <div class="break-inside-avoid group relative overflow-hidden rounded-2xl border border-slate-100 bg-slate-50 shadow-sm transition-all hover:shadow-xl mb-4">
-          <img
+        <div class="break-inside-avoid group relative mb-4">
+          <MyImage
             src={image.url}
-            alt={image.altText || data.title || "Alt text saknas"}
+            alt={image.altText || data.title || "Galleri bild"}
             width={image.width}
             height={image.height}
             loading="lazy"
-            class="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105"
+            aspect="auto"
+            class="transition-transform duration-700 group-hover:scale-105"
           />
 
           {/* Text Overlay - Visas vid hover */}
-          <div class="absolute inset-0 bg-black/40 flex items-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            <p class="text-white text-base font-bold  tracking-wider translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+          <div class="absolute inset-0 bg-black/40 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl">
+            <p class="text-white text-base font-bold tracking-wider translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
               {image.altText || data.title}
             </p>
           </div>

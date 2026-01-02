@@ -17,7 +17,11 @@ export const PAGE_QUERY = `
           heroTitel      
           buttonLabel
           buttonUrl
-          bgBild { url }
+          bgBild { 
+            url 
+            width   # Tillagt för Hero
+            height  # Tillagt för Hero
+          }
         }
         ... on SectionText {
           content { html }
@@ -33,31 +37,39 @@ export const PAGE_QUERY = `
             altText
           }
         }
-          ... on SectionInfoCardGrid {
-              id
-              title
-              description            
-              cards {
-                ... on InfoCard {
-                  id
-                  title
-                  text
-                  poster {  url}
-                  buttonLabel
-                  buttonLink
+        ... on SectionInfoCardGrid {
+            id
+            title
+            description            
+            cards {
+              ... on InfoCard {
+                id
+                title
+                text
+                poster { 
+                  url
+                  width   # Tillagt för Cards
+                  height  # Tillagt för Cards
                 }
+                buttonLabel
+                buttonLink
               }
+            }
         }     
         ... on SectionVideo {
           id
           title
           text       
           video { url }
-          poster { url }
+          videoUrlLink  # Extern länk till video
+          poster { 
+            url
+            width   # Tillagt för Video-poster
+            height  # Tillagt för Video-poster
+          }
         }
       }
     }
-    # Vi kan även passa på att hämta globala inställningar här om vi vill
     globalSettings {
       siteName    
       logo {
