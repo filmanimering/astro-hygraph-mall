@@ -60,14 +60,15 @@ export const PAGE_QUERY = `
           id
           title
           text       
-          video { url }
-          videoUrlLink  # Extern länk till video
+          video { url }       
           poster { 
             url
             width   # Tillagt för Video-poster
             height  # Tillagt för Video-poster
           }
         }
+   
+
       }
     }
     globalSettings {

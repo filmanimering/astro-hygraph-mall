@@ -1,9 +1,9 @@
 ---
 import FormattedDate from "../../components/FormattedDate.astro";
 import Prose from "../../components/Prose.astro";
-
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { hygraphFetch } from "../../lib/hygraph";
+import SectionVideo from "../../components/sections/SectionVideo.astro";
 
 // --- PATH GENERERING ---
 export async function getStaticPaths() {
@@ -20,15 +20,22 @@ const SINGLE_POST_QUERY = `
 query GetSinglePost($slug: String!) {
   blogPost(where: { slug: $slug }) {
     title
+    excerpt
     publishedDate    
     content { html }
+    youTubeId
+    # 1. Den interna videon (MP4)
     video {
       title
       text
-      poster { url }
+      poster { 
+        url 
+        width
+        height
+      }
       video { url }
-    }
-   
+    }  
+    
     seo {
       seoTitle
       seoDescription
@@ -53,14 +60,13 @@ query GetSinglePost($slug: String!) {
 }`;
 
 const data = await hygraphFetch(SINGLE_POST_QUERY, { slug });
+
 const post = data.blogPost;
+
 const settings = data.globalSettings?.[0] || {};
 const relatedPosts = data.allPosts
   ?.filter((p: any) => p.slug !== slug)
   .slice(0, 3);
-
-const videoUrl = post?.video?.video?.url || null;
-const videoPosterUrl = post?.video?.poster?.url || null;
 
 if (!post) return Astro.redirect("/404");
 ---
@@ -84,45 +90,56 @@ if (!post) return Astro.redirect("/404");
             </div>
 
             <h1
-              class="text-3xl lg:text-4xl font-bold tracking-tight text-slate-900"
+              class="text-3xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-tight"
             >
               {post.title}
             </h1>
+            <p class="mt-4 text-lg text-slate-600">
+              {post.excerpt}
+            </p>
 
-            <div class="mt-4 h-1 w-28 bg-slate-300 rounded-full"></div>
+            <div class="mt-4 h-1 w-full bg-slate-200 rounded-full"></div>
           </header>
 
-          <div>
+          <div class="mb-4">
             <Prose>
               <div set:html={post.content.html} />
             </Prose>
           </div>
 
-          {
-            videoUrl && (
-              <div class="mt-12 p-8 bg-slate-900 rounded-3xl text-white shadow-xl">
-                <h3 class="text-2xl font-bold mb-2">{post.video?.title}</h3>
-                <p class="text-slate-300 mb-6 text-sm italic">
-                  {post.video?.text}
-                </p>
-                <video
-                  controls
-                  poster={videoPosterUrl}
-                  class="w-full rounded-xl border border-white/10"
-                >
-                  <source src={videoUrl} type="video/mp4" />
-                  Din webbläsare stödjer inte videouppspelning.
-                </video>
-              </div>
-            )
-          }
+          {/* --- VIDEO-SEKTIONEN --- */}
+          <div class="space-y-2 mb-2">
+            {/* Renderar den interna videon om den finns */}
+            {
+              post.video && (
+                <div class="border-t border-slate-100 pt-2">
+                  <SectionVideo data={post.video} />
+                </div>
+              )
+            }
+          </div>
+          {/* --- YOUTUBE-VIDEON  --- */}
+          <div class="space-y-2 mb-2">
+            {/* Renderar youtube videon om den finns */}
+            {
+              post.youTubeId && (
+                <div class="my-12 aspect-video w-full">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${post.youTubeId}`}
+                    class="w-full h-full rounded-3xl shadow-lg"
+                    allowfullscreen
+                  />
+                </div>
+              )
+            }
+          </div>
         </article>
 
-        {/* SIDEBAR: RELATERADE INLÄGG */}
+        {/* SIDEBAR */}
         <aside class="lg:col-span-3">
           <div class="sticky top-32 space-y-6">
             <h3
-              class="text-lg font-semibold text-slate-700 mb-4 border-b border-slate-200 pb-2"
+              class="text-lg font-semibold text-slate-700 mb-1 pl-4 border-b border-slate-200 pb-2"
             >
               Andra inlägg
             </h3>
@@ -133,19 +150,14 @@ if (!post) return Astro.redirect("/404");
                   <li>
                     <a
                       href={`/blog/${rel.slug}`}
-                      class="block bg-white/90 border border-slate-100 rounded-2xl p-4 shadow-sm transition hover:shadow-md hover:shadow-slate-900/30 hover:bg-white/95"
+                      class="block bg-white border border-slate-100 rounded-2xl p-4 shadow-sm transition hover:shadow-md hover:bg-slate-50"
                     >
-                      <span class="block text-xs font-semibold uppercase text-slate-400 mb-1">
+                      <span class="block text-xs uppercase mb-1 text-slate-400">
                         <FormattedDate date={new Date(rel.publishedDate)} />
                       </span>
-                      <h4 class="text-lg font-bold text-slate-900 leading-snug transition-colors hover:text-slate-700">
+                      <h4 class="text-base font-bold text-slate-900 leading-snug">
                         {rel.title}
                       </h4>
-                      {rel.excerpt && (
-                        <p class="mt-2 text-sm text-slate-600 line-clamp-3 transition-colors hover:text-slate-700">
-                          {rel.excerpt}
-                        </p>
-                      )}
                     </a>
                   </li>
                 ))
