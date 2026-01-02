@@ -4,13 +4,14 @@ const { data } = Astro.props;
 const { title, text, video, poster } = data;
 ---
 
-<section class="max-w-7xl mx-auto py-4">
+<section class="max-w-7xl mx-auto py-8 px-4">
   <div
     class="bg-purple-950 rounded-3xl shadow-xl border border-slate-100 overflow-hidden"
   >
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 py-4">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 p-8">
+      {/* VIDEO - Tar upp 7 kolumner på desktop */}
       <div
-        class="relative bg-slate-900 rounded-2xl overflow-hidden aspect-video"
+        class="lg:col-span-8 relative bg-slate-900 rounded-2xl overflow-hidden aspect-video shadow-2xl"
       >
         {
           video?.url && (
@@ -24,8 +25,9 @@ const { title, text, video, poster } = data;
           )
         }
       </div>
-      <div class="flex flex-col justify-center text-slate-50">
-        <h2 class="text-xl font-bold mb-4 uppercase italic">{title}</h2>
+      {/* TEXT - Tar upp 5 kolumner (eller 3 om du vill ha mer luft) */}
+      <div class="lg:col-span-4 flex flex-col justify-center text-slate-50">
+        <h2 class="text-xl font-semibold mb-4 uppercase italic">{title}</h2>
         <p class="text-sm leading-relaxed">{text}</p>
       </div>
     </div>
