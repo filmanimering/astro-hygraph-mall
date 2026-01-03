@@ -25,6 +25,8 @@ export const PAGE_QUERY = `
         }
         ... on SectionText {
           content { html }
+          image { url }
+          layout
         }
         ... on SectionImageGrid {
           title
@@ -37,6 +39,20 @@ export const PAGE_QUERY = `
             altText
           }
         }
+        ... on SectionVideoGrid {
+        numberOfColumns  
+        videos {
+            title
+            videoUrl
+            description {
+              html
+            }
+            # Om du vill ha med din thumbnail också
+            thumbnail {
+              url
+            }
+          }
+        }  
         ... on SectionInfoCardGrid {
             id
             title
@@ -56,18 +72,7 @@ export const PAGE_QUERY = `
               }
             }
         }     
-        ... on SectionVideo {
-          id
-          title
-          text       
-          video { url }       
-          poster { 
-            url
-            width   # Tillagt för Video-poster
-            height  # Tillagt för Video-poster
-          }
-        }
-   
+        
 
       }
     }

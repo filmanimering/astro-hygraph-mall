@@ -1,14 +1,72 @@
 ---
+// Text.astro
 import Prose from "../Prose.astro";
+import MyImage from "../MyImage.astro";
 
 const { data } = Astro.props;
-const htmlContent = data.content.html;
+const { content, layout, image } = data;
+const htmlContent = content?.html;
+
+// Debug för att se exakt vad Hygraph skickar
+// console.log("Aktuell layout:", layout);
 ---
 
-<section class="bg-slate-50 max-w-7xl mx-auto px-6 sm:px-8 pt-24">
-  <div class="">
-    <Prose>
-      <div set:html={htmlContent} />
-    </Prose>
+<section class="pt-2 pb-20 bg-slate-50 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 sm:px-8">
+    {/* FALL 1: Text till vänster, Bild till höger */}
+    {
+      layout === "textLeftImageRight" && (
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <Prose>
+              <div set:html={htmlContent} />
+            </Prose>
+          </div>
+          <div>
+            <MyImage
+              src={image?.url}
+              alt=""
+              width={800}
+              height={600}
+              class="rounded-3xl shadow-2xl"
+            />
+          </div>
+        </div>
+      )
+    }
+
+    {/* FALL 2: Text till höger, Bild till vänster */}
+    {
+      layout === "textRightImageLeft" && (
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* På mobil hamnar texten först (standard ordning) */}
+          <div class="lg:order-2">
+            <Prose>
+              <div set:html={htmlContent} />
+            </Prose>
+          </div>
+          <div class="lg:order-1">
+            <MyImage
+              src={image?.url}
+              alt=""
+              width={800}
+              height={600}
+              class="rounded-3xl shadow-2xl"
+            />
+          </div>
+        </div>
+      )
+    }
+
+    {/* FALL 3: Default (Endast text) */}
+    {
+      (layout === "default" || !layout) && (
+        <div class="max-w-4xl mx-auto">
+          <Prose>
+            <div set:html={htmlContent} />
+          </Prose>
+        </div>
+      )
+    }
   </div>
 </section>

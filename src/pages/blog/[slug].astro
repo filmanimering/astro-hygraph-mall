@@ -2,8 +2,8 @@
 import FormattedDate from "../../components/FormattedDate.astro";
 import Prose from "../../components/Prose.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import SectionVideoGrid from "../../components/sections/SectionVideoGrid.astro";
 import { hygraphFetch } from "../../lib/hygraph";
-import SectionVideo from "../../components/sections/SectionVideo.astro";
 
 // --- PATH GENERERING ---
 export async function getStaticPaths() {
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 
-// --- QUERY FÖR ENSTAKA INLÄGG ---
+// --- QUERY FÖR ENSTAKA INLÄGG (STÄDAD) ---
 const SINGLE_POST_QUERY = `
 query GetSinglePost($slug: String!) {
   blogPost(where: { slug: $slug }) {
@@ -23,19 +23,21 @@ query GetSinglePost($slug: String!) {
     excerpt
     publishedDate    
     content { html }
-    youTubeId
-    # 1. Den interna videon (MP4)
-    video {
-      title
-      text
-      poster { 
-        url 
-        width
-        height
-      }
-      video { url }
-    }  
     
+    videoGrid {
+      numberOfColumns
+      videos {
+        videoUrl
+        title # Kontrollera att detta finns i Hygraph inuti 'videos'-listan!
+        thumbnail {
+          url
+        }
+        description {
+          html
+        }
+      }
+    }
+
     seo {
       seoTitle
       seoDescription
@@ -60,9 +62,9 @@ query GetSinglePost($slug: String!) {
 }`;
 
 const data = await hygraphFetch(SINGLE_POST_QUERY, { slug });
-
 const post = data.blogPost;
 
+// Globala inställningar (använder din föredragna struktur)
 const settings = data.globalSettings?.[0] || {};
 const relatedPosts = data.allPosts
   ?.filter((p: any) => p.slug !== slug)
@@ -78,7 +80,7 @@ if (!post) return Astro.redirect("/404");
   fallbackTitle={post.title}
 >
   <main class="bg-white min-h-screen antialiased">
-    <div class="max-w-7xl mx-auto pt-20 lg:pt-24 pb-12 px-6 pt-2 pb-12">
+    <div class="max-w-7xl mx-auto pb-12 px-6 pt-2">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
         {/* HUVUDINNEHÅLL */}
         <article class="lg:col-span-9">
@@ -89,12 +91,10 @@ if (!post) return Astro.redirect("/404");
               </span>
             </div>
 
-            <h1
-              class="text-3xl lg:text-4xl font-bold tracking-tight text-slate-900 leading-tight"
-            >
+            <h1 class="text-2xl lg:text-3xl leading-tight">
               {post.title}
             </h1>
-            <p class="mt-4 text-lg text-slate-600">
+            <p class="mt-4 text-slate-600 italic">
               {post.excerpt}
             </p>
 
@@ -107,39 +107,21 @@ if (!post) return Astro.redirect("/404");
             </Prose>
           </div>
 
-          {/* --- VIDEO-SEKTIONEN --- */}
-          <div class="space-y-2 mb-2">
-            {/* Renderar den interna videon om den finns */}
-            {
-              post.video && (
-                <div class="border-t border-slate-100 pt-2">
-                  <SectionVideo data={post.video} />
-                </div>
-              )
-            }
-          </div>
-          {/* --- YOUTUBE-VIDEON  --- */}
-          <div class="space-y-2 mb-2">
-            {/* Renderar youtube videon om den finns */}
-            {
-              post.youTubeId && (
-                <div class="my-12 aspect-video w-full">
-                  <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${post.youTubeId}`}
-                    class="w-full h-full rounded-3xl shadow-lg"
-                    allowfullscreen
-                  />
-                </div>
-              )
-            }
-          </div>
+          {/* Video-sektionen */}
+          {
+            post.videoGrid && (
+              <div class="my-12">
+                <SectionVideoGrid data={post.videoGrid} />
+              </div>
+            )
+          }
         </article>
 
         {/* SIDEBAR */}
         <aside class="lg:col-span-3">
           <div class="sticky top-32 space-y-6">
             <h3
-              class="text-lg font-semibold text-slate-700 mb-1 pl-4 border-b border-slate-200 pb-2"
+              class="text-lg font-medium mb-1 pl-4 border-b border-slate-200 pb-2"
             >
               Andra inlägg
             </h3>
@@ -147,18 +129,20 @@ if (!post) return Astro.redirect("/404");
             <ul class="space-y-4">
               {
                 relatedPosts.map((rel: any) => (
-                  <li class="">
+                  <li>
                     <a
                       href={`/blog/${rel.slug}`}
-                      class="block bg-white border border-slate-100 rounded-2xl p-4 shadow-sm transition hover:shadow-md hover:bg-slate-200"
+                      class="block bg-white border border-slate-100 rounded-2xl p-4 shadow-sm transition hover:shadow-md hover:bg-gray-100"
                     >
                       <span class="block text-xs uppercase mb-1 text-slate-900">
                         <FormattedDate date={new Date(rel.publishedDate)} />
                       </span>
-                      <h4 class="text-base font-bold text-slate-900 leading-snug">
+                      <h4 class="text-base font-semibold leading-snug">
                         {rel.title}
                       </h4>
-                      <p class="text-sm line-clamp-4">{rel.excerpt}</p>
+                      <p class="text-sm line-clamp-2 text-slate-500">
+                        {rel.excerpt}
+                      </p>
                     </a>
                   </li>
                 ))

@@ -1,26 +1,94 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* poppins-regular - latin */
+/* --- 1. FONTS & THEME --- */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;
-  src: url('/fonts/poppins-v24-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url('/fonts/poppins-v24-latin-regular.woff2') format('woff2');
 }
-/* poppins-700 - latin */
 @font-face {
-  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-display: swap;
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 700;
-  src: url('/fonts/poppins-v24-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  src: url('/fonts/poppins-v24-latin-700.woff2') format('woff2');
 }
 
-/* 2. Sätt default font i Tailwind 4 */
-@theme {  
+@theme {
   --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
 }
 
- 
+/* --- 2. BASE (Globala storlekar för hela sajten) --- */
+@layer base {
+  body {
+    /* text-base (16px) på mobil -> text-lg (18px) på desktop */
+    @apply antialiased text-slate-900 bg-slate-50 flex flex-col min-h-screen font-sans text-base lg:text-lg;
+    max-width: 1600px;
+    margin-inline: auto;
+  }
+
+  /* Responsiv typografi-skala för alla rubriker */
+  h1 { @apply text-3xl lg:text-5xl font-bold leading-tight m-0; }
+  h2 { @apply text-2xl lg:text-4xl font-bold leading-tight m-0; }
+  h3 { @apply text-xl lg:text-3xl font-bold leading-tight m-0; }
+  h4 { @apply text-lg lg:text-2xl font-bold leading-tight m-0; }
+  h5 { @apply text-base lg:text-xl font-bold leading-tight m-0; }
+  h6 { @apply text-sm lg:text-lg font-bold uppercase tracking-wider m-0; }
+  p { @apply m-0; }
+
+  a { @apply transition-colors duration-200 underline-offset-4; }
+  :focus-visible { @apply outline-2 outline-offset-2 outline-blue-600; }
+}
+
+/********************************************************/
+/* --- 3. PROSE (Artiklar & Rich Text från Hygraph) --- */
+/********************************************************/
+@layer components {
+  .prose-custom {
+    /* Vi nollställer prose-pluginets egna storlekar så de inte bråkar med våra */
+    @apply prose prose-slate max-w-none mx-auto px-2;
+
+    /* --- Brödtext --- */
+    & p {
+      @apply text-base lg:text-lg text-slate-700 leading-relaxed mb-6;
+    }
+
+    /* --- Rubriker (Vi applicerar samma skalning som i Base + marginaler) --- */
+    & h1 { @apply text-3xl lg:text-5xl font-semibold mb-8; }
+    & h2 { @apply text-2xl lg:text-4xl font-semibold mt-12 mb-6; }
+    & h3 { @apply text-xl lg:text-3xl font-semibold mt-8 mb-4; }
+    & h4 { @apply text-lg lg:text-2xl font-semibold mt-6 mb-3; }
+    & h5 { @apply text-base lg:text-xl font-semibold mt-4 mb-2; }
+    & h6 { @apply text-sm lg:text-lg font-semibold mt-4 mb-2; }
+
+    /* --- Länkar --- */
+    & a {
+      @apply text-blue-700 font-medium no-underline;
+      &:hover { @apply text-blue-600 underline; }
+    }
+
+    /* --- Media --- */
+    & img {
+      @apply mx-auto rounded-2xl lg:rounded-3xl my-10 shadow-md;
+    }
+
+   & iframe {
+      width: 100% !important;
+      aspect-ratio: 16 / 9 !important;
+      height: auto !important; /* <--- DETTA ÄR NYCKELN! */
+      display: block;
+      @apply rounded-2xl lg:rounded-3xl border-none my-10 shadow-xl bg-black;
+    }
+
+    /* --- Listor --- */
+    & ul, & ol {
+      @apply mb-6 ml-4;
+    }
+    & li {
+      @apply mb-2;
+    }
+  }
+}

@@ -1,35 +1,24 @@
 ---
+// SectionInfoCardGrid.astro
 import MyButton from "../../components/MyButton.astro";
 import MyImage from "../../components/MyImage.astro";
 const { data } = Astro.props;
 const { title, description, cards } = data;
-const btnColor = data.btnColor || "#2563eb";
-const btnTextColor = data.btnTextColor || "#ffffff";
 ---
 
-<section class="py-16 shadow-lg bg-[#F1F1F1]">
+<section class="pb-12 pt-4 lg:pt-12 shadow-lg bg-slate-100">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="mt-8 mb-12">
-      {
-        title && (
-          <h2 class="text-3xl lg:text-4xl  font-semibold italic  mb-2 leading-none">
-            {title}
-          </h2>
-        )
-      }
+    <div class="mb-4">
+      {title && <h2 class=""> {title}</h2>}
 
-      {
-        description && (
-          <p class=" text-lg  tracking-wide max-w-2xl ">{description}</p>
-        )
-      }
+      {description && <p class="mt-4 max-w-2xl opacity-80"> {description}</p>}
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
       {
         cards &&
           cards.map((card: any) => (
-            <div class="group flex flex-col bg-slate-50 rounded-3xl  p-4 shadow-xl transition-all hover:shadow-2xl  hover:opacity-95 hover:shadow-gray-400">
+            <div class="group flex flex-col bg-white rounded-3xl p-6 shadow-xl transition-all hover:shadow-2xl ">
               {card.poster?.url && (
                 <MyImage
                   src={card.poster.url}
@@ -41,11 +30,12 @@ const btnTextColor = data.btnTextColor || "#ffffff";
                 />
               )}
 
-              <h3 class="text-xl font-bold  mb-3 leading-tight group-hover:text-opacity-70 transition-colors">
-                {card.title}
-              </h3>
+              <h3 class="text-lg"> {card.title}</h3>
 
-              <p class=" mb-8 leading-relaxed grow text-sm">{card.text}</p>
+              <p class="grow text-sm opacity-90 mb-8">
+                {/* Här behåller vi text-sm för att kort-text ofta ska vara lite kompaktare */}
+                {card.text}
+              </p>
 
               <div class="mt-auto">
                 {card.buttonLabel && card.buttonLink && (

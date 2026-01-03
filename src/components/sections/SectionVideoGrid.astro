@@ -1,0 +1,24 @@
+---
+// src/components/sections/SectionVideoGrid.astro
+import VideoCard from "../VideoCard.astro";
+const { data } = Astro.props;
+const videos = data?.videos || [];
+
+console.log(data.numberOfColumns);
+---
+
+<section class="max-w-9xl mx-auto pt-1 pb-2 px-4">
+  <div class=`grid grid-cols-1 lg:grid-cols-${data.numberOfColumns} gap-4`>
+    {
+      videos.map((v: any) => (
+        <VideoCard
+          videoUrl={v.videoUrl}
+          title={v.title}
+          description={v.description?.html}
+          poster={v.thumbnail?.url}
+        />
+      ))
+    }
+  </div>
+  {/* <--- Denna glöms ofta bort! */}
+</section>
