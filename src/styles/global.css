@@ -41,6 +41,14 @@
 
   a { @apply transition-colors duration-200 underline-offset-4; }
   :focus-visible { @apply outline-2 outline-offset-2 outline-blue-600; }
+
+   & iframe {
+      width: 100% !important;
+      aspect-ratio: 16 / 9 !important;
+      height: auto !important; /* <--- DETTA ÄR NYCKELN! */
+      display: block;
+      @apply rounded-2xl lg:rounded-3xl border-none my-10 shadow-xl bg-black;
+    }
 }
 
 /********************************************************/
@@ -73,6 +81,11 @@
     /* --- Media --- */
     & img {
       @apply mx-auto rounded-2xl lg:rounded-3xl my-10 shadow-md;
+      width: 100%;
+      height: auto;
+      /* Detta hjälper webbläsaren att förstå att bilden tar plats innan den laddats */
+      display: block;
+      content-visibility: auto;
     }
 
    & iframe {
