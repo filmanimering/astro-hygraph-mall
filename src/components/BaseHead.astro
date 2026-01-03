@@ -40,20 +40,4 @@ const finalImage = pageSeo?.ogImage?.url || globalSeo?.ogImage?.url;
 />
 <meta name="generator" content={Astro.generator} />
 
-{/* --- TYPSNITT --- */}
-<link
-  rel="preload"
-  href="/fonts/atkinson-regular.woff"
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
-<link
-  rel="preload"
-  href="/fonts/atkinson-bold.woff"
-  as="font"
-  type="font/woff"
-  crossorigin
-/>
-
 <SEO title={finalTitle} description={finalDescription} image={finalImage} />

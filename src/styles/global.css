@@ -79,22 +79,16 @@
     }
 
     /* --- Media --- */
-    & img {
-      @apply mx-auto rounded-2xl lg:rounded-3xl my-10 shadow-md;
-      width: 100%;
-      height: auto;
-      /* Detta hjälper webbläsaren att förstå att bilden tar plats innan den laddats */
-      display: block;
-      content-visibility: auto;
-    }
-
-   & iframe {
-      width: 100% !important;
-      aspect-ratio: 16 / 9 !important;
-      height: auto !important; /* <--- DETTA ÄR NYCKELN! */
-      display: block;
-      @apply rounded-2xl lg:rounded-3xl border-none my-10 shadow-xl bg-black;
-    }
+   & img {
+  @apply mx-auto rounded-2xl lg:rounded-3xl my-10 shadow-md;
+  
+    /* Dessa tre rader nollställer de fasta måtten från Hygraph-rutan */
+    width: 100% !important;   
+    height: auto !important;  
+    max-width: 100%;
+    
+    display: block;
+  }
 
     /* --- Listor --- */
     & ul, & ol {
