@@ -8,6 +8,7 @@ export async function hygraphFetch(query, variables = {}) {
 
     const json = await response.json();
     if (json.errors) {
+        //console.error("Hygraph Error Details:", JSON.stringify(json.errors, null, 2));
         throw new Error("Failed to fetch API");
     }
     return json.data;

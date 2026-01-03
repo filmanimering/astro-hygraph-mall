@@ -61,7 +61,7 @@
 
     /* --- Brödtext --- */
     & p {
-      @apply text-base lg:text-lg text-slate-700 leading-relaxed mb-6;
+      @apply text-base  text-slate-800 leading-relaxed mb-6;
     }
 
     /* --- Rubriker (Vi applicerar samma skalning som i Base + marginaler) --- */

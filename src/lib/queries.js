@@ -17,16 +17,22 @@ export const PAGE_QUERY = `
           heroTitel      
           buttonLabel
           buttonUrl
+          heroLayout
           bgBild { 
             url 
-            width   # Tillagt för Hero
-            height  # Tillagt för Hero
+            width
+            height
           }
         }
         ... on SectionText {
-          content { html }
-          image { url }
+          id
           layout
+          content { 
+            html 
+          }
+          image { 
+            url 
+          }
         }
         ... on SectionImageGrid {
           title
@@ -40,14 +46,16 @@ export const PAGE_QUERY = `
           }
         }
         ... on SectionVideoGrid {
-        numberOfColumns  
-        videos {
-            title
+          id
+          numberOfColumns  
+          textVideoGrid
+          titleVideoGrid
+          videos {
+            title 
             videoUrl
             description {
               html
             }
-            # Om du vill ha med din thumbnail också
             thumbnail {
               url
             }
@@ -56,7 +64,9 @@ export const PAGE_QUERY = `
         ... on SectionInfoCardGrid {
             id
             title
-            description            
+            description  
+            infoCardLayout
+            buttonStyle           
             cards {
               ... on InfoCard {
                 id
@@ -64,16 +74,14 @@ export const PAGE_QUERY = `
                 text
                 poster { 
                   url
-                  width   # Tillagt för Cards
-                  height  # Tillagt för Cards
+                  width
+                  height
                 }
                 buttonLabel
                 buttonLink
               }
             }
         }     
-        
-
       }
     }
     globalSettings {
@@ -99,7 +107,7 @@ export const PAGE_QUERY = `
           url
         }
       }
-      footerText
+      footerText 
     }
   }
 `;

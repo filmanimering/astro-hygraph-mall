@@ -3,53 +3,111 @@
 import MyButton from "../../components/MyButton.astro";
 import MyImage from "../../components/MyImage.astro";
 const { data } = Astro.props;
-const { title, description, cards } = data;
+const { title, description, cards, infoCardLayout, buttonStyle } = data;
+console.log("Layout: ", infoCardLayout);
 ---
 
 <section class="pb-12 pt-4 lg:pt-12 shadow-lg bg-slate-100">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="mb-4">
-      {title && <h2 class=""> {title}</h2>}
-
-      {description && <p class="mt-4 max-w-2xl opacity-80"> {description}</p>}
+    <div class="mb-8">
+      {title && <h2 class="text-3xl font-bold">{title}</h2>}
+      {description && <p class="mt-2 max-w-2xl opacity-80">{description}</p>}
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      {
-        cards &&
-          cards.map((card: any) => (
-            <div class="group flex flex-col bg-white rounded-3xl p-6 shadow-xl transition-all hover:shadow-2xl ">
+    {/* FALL 1: Grid (Standard - 3 i bredd, fokus på bilder) */}
+    {
+      (infoCardLayout === "grid" || !infoCardLayout) && (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {cards?.map((card: any) => (
+            <div class="group flex flex-col bg-white rounded-3xl p-6 shadow-xl transition-all hover:shadow-2xl">
               {card.poster?.url && (
                 <MyImage
                   src={card.poster.url}
-                  alt={card.poster.altText || card.title}
+                  alt={card.title}
                   width={card.poster.width}
                   height={card.poster.height}
                   class="mb-6 rounded-2xl"
                   aspect="video"
                 />
               )}
-
-              <h3 class="text-lg"> {card.title}</h3>
-
-              <p class="grow text-sm opacity-90 mb-8">
-                {/* Här behåller vi text-sm för att kort-text ofta ska vara lite kompaktare */}
-                {card.text}
-              </p>
-
+              <h3 class="text-xl mb-2">{card.title}</h3>
+              <p class="grow text-sm opacity-90 mb-8">{card.text}</p>
               <div class="mt-auto">
                 {card.buttonLabel && card.buttonLink && (
                   <MyButton
                     link={card.buttonLink}
                     titel={card.buttonLabel}
-                    solid={true}
-                    buttonDark={true}
+                    variant={buttonStyle || "primary"}
                   />
                 )}
               </div>
             </div>
-          ))
-      }
-    </div>
+          ))}
+        </div>
+      )
+    }
+
+    {/* FALL 2: List (Vertikal - Bild till vänster, text till höger) */}
+    {
+      infoCardLayout === "list" && (
+        <div class="flex flex-col gap-6 max-w-5xl mx-auto">
+          {cards?.map((card: any) => (
+            <div class="flex flex-col md:flex-row bg-white rounded-3xl overflow-hidden shadow-lg transition-all hover:shadow-xl">
+              {card.poster?.url && (
+                <div class="w-full md:w-2/5 shrink-0">
+                  <MyImage
+                    src={card.poster.url}
+                    alt={card.title}
+                    width={600}
+                    height={400}
+                    class="h-full w-full object-cover"
+                    aspect="video"
+                  />
+                </div>
+              )}
+              <div class="p-8 flex flex-col justify-center">
+                <h3 class="text-2xl font-bold mb-3">{card.title}</h3>
+                <p class="text-base opacity-90 mb-6 leading-relaxed">
+                  {card.text}
+                </p>
+                {card.buttonLabel && card.buttonLink && (
+                  <div class="w-fit">
+                    <MyButton
+                      link={card.buttonLink}
+                      titel={card.buttonLabel}
+                      variant={buttonStyle || "primary"}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )
+    }
+
+    {/* FALL 3: Mini (Kompakt - 4 i bredd, inga bilder) */}
+    {
+      infoCardLayout === "mini" && (
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {cards?.map((card: any) => (
+            <div class="bg-white rounded-2xl p-5 shadow-md border-t-4 border-slate-800 flex flex-col h-full">
+              <h3 class="font-bold text-lg mb-2">{card.title}</h3>
+              <p class="text-sm opacity-80 grow">{card.text}</p>
+
+              {card.buttonLabel && card.buttonLink && (
+                <div class="w-fit  mt-2">
+                  <MyButton
+                    link={card.buttonLink}
+                    titel={card.buttonLabel}
+                    variant={buttonStyle || "primary"}
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      )
+    }
   </div>
 </section>
