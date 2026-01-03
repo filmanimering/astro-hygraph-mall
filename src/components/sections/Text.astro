@@ -6,9 +6,6 @@ import MyImage from "../MyImage.astro";
 const { data } = Astro.props;
 const { content, layout, image } = data;
 const htmlContent = content?.html;
-
-// Debug för att se exakt vad Hygraph skickar
-// console.log("Aktuell layout:", layout);
 ---
 
 <section class="pt-2 pb-20 bg-slate-50 overflow-hidden">

@@ -2,7 +2,6 @@
 import FormattedDate from "../../components/FormattedDate.astro";
 import Prose from "../../components/Prose.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import SectionVideoGrid from "../../components/sections/SectionVideoGrid.astro";
 import { hygraphFetch } from "../../lib/hygraph";
 
 // --- PATH GENERERING ---
@@ -23,20 +22,6 @@ query GetSinglePost($slug: String!) {
     excerpt
     publishedDate    
     content { html }
-    
-    videoGrid {
-      numberOfColumns
-      videos {
-        videoUrl
-        title # Kontrollera att detta finns i Hygraph inuti 'videos'-listan!
-        thumbnail {
-          url
-        }
-        description {
-          html
-        }
-      }
-    }
 
     seo {
       seoTitle
@@ -106,15 +91,6 @@ if (!post) return Astro.redirect("/404");
               <div set:html={post.content.html} />
             </Prose>
           </div>
-
-          {/* Video-sektionen */}
-          {
-            post.videoGrid && (
-              <div class="my-12">
-                <SectionVideoGrid data={post.videoGrid} />
-              </div>
-            )
-          }
         </article>
 
         {/* SIDEBAR */}
