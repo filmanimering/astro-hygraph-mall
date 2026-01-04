@@ -56,9 +56,7 @@ export const PAGE_QUERY = /* GraphQL */ `
           videos {
             title
             videoUrl
-            description {
-              html
-            }
+            videoText
             thumbnail {
               url
             }

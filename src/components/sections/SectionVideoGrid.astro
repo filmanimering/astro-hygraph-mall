@@ -14,7 +14,7 @@ const videos = data?.videos || [];
         <VideoCard
           videoUrl={v.videoUrl}
           title={v.title}
-          description={v.description?.html}
+          description={v.videoText}
           poster={v.thumbnail?.url}
         />
       ))
