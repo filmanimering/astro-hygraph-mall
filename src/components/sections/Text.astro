@@ -4,7 +4,7 @@ import Prose from "../Prose.astro";
 import MyImage from "../MyImage.astro";
 
 const { data } = Astro.props;
-const { content, layout, image } = data;
+const { content, textLayout, image } = data;
 const htmlContent = content?.html;
 ---
 
@@ -12,7 +12,7 @@ const htmlContent = content?.html;
   <div class="max-w-7xl mx-auto px-6 sm:px-8">
     {/* FALL 1: Text till vänster, Bild till höger */}
     {
-      layout === "textLeftImageRight" && (
+      textLayout === "textLeftImageRight" && (
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <Prose>
@@ -34,7 +34,7 @@ const htmlContent = content?.html;
 
     {/* FALL 2: Text till höger, Bild till vänster */}
     {
-      layout === "textRightImageLeft" && (
+      textLayout === "textRightImageLeft" && (
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* På mobil hamnar texten först (standard ordning) */}
           <div class="lg:order-2">
@@ -57,7 +57,7 @@ const htmlContent = content?.html;
 
     {/* FALL 3: Default (Endast text) */}
     {
-      (layout === "default" || !layout) && (
+      (textLayout === "default" || !textLayout) && (
         <div class="max-w-4xl mx-auto">
           <Prose>
             <div set:html={htmlContent} />

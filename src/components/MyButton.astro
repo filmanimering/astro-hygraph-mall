@@ -13,27 +13,27 @@ const { titel, link, variant = "primary", fullWidth = false } = Astro.props;
 
 const isExternal = /^https?:\/\//.test(link);
 
+console.log("Button style: ", variant);
+
 const baseClasses =
   "py-2 px-4 rounded-xl text-sm tracking-wide items-center gap-2 transition-all duration-300 hover:scale-[1.03] inline-flex font-medium border-2 transition-colors";
 
-const variants = {
-  // 1. PRIMÄR: Svart med svart kant. Syns alltid på ljus botten.
+// Vi definierar objekten med Record för att TypeScript ska veta exakt vilka nycklar som finns
+const variants: Record<string, string> = {
   primary: "bg-slate-900 text-white border-slate-900 hover:bg-slate-800",
 
-  // 2. SEKUNDÄR: Vit med en tunn grå kant. Nu syns den även på vit bakgrund!
   secondary:
-    "bg-white text-slate-900 border-slate-200 hover:border-slate-300 hover:bg-slate-50 shadow-sm",
+    "bg-white text-slate-900 border-slate-300 hover:bg-slate-50 shadow-sm",
 
-  // 3. OUTLINE DARK: Mörk text och tydligare ram.
-  "outline-dark":
-    "bg-transparent text-slate-900 border-slate-900/30 hover:border-slate-900 hover:bg-slate-900/5",
+  outlineDark:
+    "bg-transparent text-slate-900 border-slate-900/40 hover:border-slate-900 hover:bg-slate-900/5",
 
-  // 4. OUTLINE LIGHT: Vit text/ram. (Bör endast användas på mörk botten, men vi ger den lite skugga)
-  "outline-light":
-    "bg-transparent text-white border-white/60 hover:border-white hover:bg-white/10",
+  outlineLight:
+    "bg-white/10 backdrop-blur-sm text-white border-white/60 hover:bg-white/20",
 };
 
-const themeClasses = variants[variant] || variants["primary"];
+// Här hämtar vi rätt klasser, och faller tillbaka på primary om något går fel
+const themeClasses = variants[variant] || variants.primary;
 ---
 
 <a

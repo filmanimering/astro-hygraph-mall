@@ -4,14 +4,13 @@ import MyButton from "../../components/MyButton.astro";
 import MyImage from "../../components/MyImage.astro";
 const { data } = Astro.props;
 const { title, description, cards, infoCardLayout, buttonStyle } = data;
-console.log("Layout: ", infoCardLayout);
 ---
 
-<section class="pb-12 pt-4 lg:pt-12 shadow-lg bg-slate-100">
+<section class="pb-12 pt-8 shadow-lg bg-slate-100">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="mb-8">
+    <div class="mb-4">
       {title && <h2 class="text-3xl font-bold">{title}</h2>}
-      {description && <p class="mt-2 max-w-2xl opacity-80">{description}</p>}
+      {description && <p class="mt-4 max-w-2xl opacity-80">{description}</p>}
     </div>
 
     {/* FALL 1: Grid (Standard - 3 i bredd, fokus på bilder) */}
@@ -50,7 +49,7 @@ console.log("Layout: ", infoCardLayout);
     {/* FALL 2: List (Vertikal - Bild till vänster, text till höger) */}
     {
       infoCardLayout === "list" && (
-        <div class="flex flex-col gap-6 max-w-5xl mx-auto">
+        <div class="flex flex-col gap-12 max-w-6xl mx-auto">
           {cards?.map((card: any) => (
             <div class="flex flex-col md:flex-row bg-white rounded-3xl overflow-hidden shadow-lg transition-all hover:shadow-xl">
               {card.poster?.url && (
@@ -89,14 +88,14 @@ console.log("Layout: ", infoCardLayout);
     {/* FALL 3: Mini (Kompakt - 4 i bredd, inga bilder) */}
     {
       infoCardLayout === "mini" && (
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {cards?.map((card: any) => (
             <div class="bg-white rounded-2xl p-5 shadow-md border-t-4 border-slate-800 flex flex-col h-full">
               <h3 class="font-bold text-lg mb-2">{card.title}</h3>
               <p class="text-sm opacity-80 grow">{card.text}</p>
 
               {card.buttonLabel && card.buttonLink && (
-                <div class="w-fit  mt-2">
+                <div class="w-fit  mt-4">
                   <MyButton
                     link={card.buttonLink}
                     titel={card.buttonLabel}

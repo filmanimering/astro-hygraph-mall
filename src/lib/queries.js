@@ -17,6 +17,7 @@ export const PAGE_QUERY = `
           heroTitel      
           buttonLabel
           buttonUrl
+          buttonStyle 
           heroLayout
           bgBild { 
             url 
@@ -26,7 +27,7 @@ export const PAGE_QUERY = `
         }
         ... on SectionText {
           id
-          layout
+          textLayout
           content { 
             html 
           }
