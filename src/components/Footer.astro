@@ -33,13 +33,17 @@ const { siteName, navigation = [] } = settings;
 
       {/* Till toppen - Nu mer som ett designelement */}
       <button
+        aria-label="Gå till toppen"
         class="mt-1 group flex flex-col items-center text-slate-700 hover:text-slate-900 transition-all duration-300"
         onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
       >
-        <div
-          class="p-3 rounded-full border border-slate-300 bg-white shadow-sm group-hover:-translate-y-1 group-hover:shadow-md transition-all duration-300"
-        >
-          <ArrowUp />
+        <div class="flex items-center">
+          <span class="pr-2 text-xs">Gå till toppen</span>
+          <div
+            class="p-2 rounded-full border border-slate-300 bg-white shadow-sm group-hover:-translate-y-1 group-hover:shadow-md transition-all duration-300"
+          >
+            <ArrowUp />
+          </div>
         </div>
       </button>
     </div>
