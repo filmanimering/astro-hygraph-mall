@@ -52,6 +52,9 @@ export const PAGE_QUERY = /* GraphQL */ `
           buttonLabel
           buttonUrl
           buttonStyle
+          buttonLabel2
+          buttonUrl2
+          buttonStyle2
           heroLayout
           bgBild { url width height }
         }

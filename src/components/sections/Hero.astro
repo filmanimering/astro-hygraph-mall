@@ -9,9 +9,13 @@ const heroTitle = data.heroTitel || "Välkommen";
 const heroText = data.heroText || "Din beskrivande text här.";
 const buttonLabel = data.buttonLabel;
 const buttonUrl = data.buttonUrl;
+const buttonStyle = data.buttonStyle;
 const heroLayout = data.heroLayout;
 const heroImage = data.bgBild;
-const buttonStyle = data.buttonStyle;
+const buttonLabel2 = data.buttonLabel2;
+const buttonUrl2 = data.buttonUrl2;
+const buttonStyle2 = data.buttonStyle2;
+//console.log("data: ", data);
 ---
 
 <section>
@@ -23,13 +27,26 @@ const buttonStyle = data.buttonStyle;
           <div>
             {heroTitle && <h1 class="mb-4">{heroTitle}</h1>}
             {heroText && <p class="mb-6">{heroText}</p>}
-            {buttonLabel && buttonUrl && (
-              <MyButton
-                titel={buttonLabel}
-                link={buttonUrl}
-                variant={buttonStyle || "primary"}
-              />
-            )}
+            <div class="mt-6 flex gap-4">
+              <div class="">
+                {buttonLabel && buttonUrl && (
+                  <MyButton
+                    titel={buttonLabel}
+                    link={buttonUrl}
+                    variant={buttonStyle || "primary"}
+                  />
+                )}
+              </div>
+              <div class="">
+                {buttonLabel2 && buttonUrl2 && (
+                  <MyButton
+                    titel={buttonLabel2}
+                    link={buttonUrl2}
+                    variant={buttonStyle2 || "primary"}
+                  />
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -71,14 +88,26 @@ const buttonStyle = data.buttonStyle;
                   {heroText}
                 </p>
               )}
-              <div class="mt-6">
-                {buttonLabel && buttonUrl && (
-                  <MyButton
-                    titel={buttonLabel}
-                    link={buttonUrl}
-                    variant={buttonStyle || "primary"}
-                  />
-                )}
+              <div class="mt-6 flex gap-4">
+                <div class="">
+                  {" "}
+                  {buttonLabel && buttonUrl && (
+                    <MyButton
+                      titel={buttonLabel}
+                      link={buttonUrl}
+                      variant={buttonStyle || "primary"}
+                    />
+                  )}
+                </div>
+                <div class="">
+                  {buttonLabel2 && buttonUrl2 && (
+                    <MyButton
+                      titel={buttonLabel2}
+                      link={buttonUrl2}
+                      variant={buttonStyle2 || "primary"}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           </div>
