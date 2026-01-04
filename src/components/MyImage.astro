@@ -8,7 +8,7 @@ interface Props {
   aspect?: "video" | "square" | "auto" | "portrait";
   fit?: "cover" | "contain";
   loading?: "lazy" | "eager";
-  priority?: boolean; // Ny: för LCP-bilder
+  priority?: boolean;
 }
 
 const {
@@ -23,9 +23,20 @@ const {
   priority = false,
 } = Astro.props;
 
-// 1. Optimera URL:en direkt (WebP + Komprimering)
-// Vi lägger även till en dynamisk bredd baserat på den inskickade width-propen
-const optimizedSrc = `${src}?auto=format,compress${width ? `&w=${width}` : ""}`;
+/**
+ * 1. OPTIMERING (Hygraph Transformations)
+ * - auto=format: Viktigt för WebP/AVIF (Sparar de där 849 KiB).
+ * - quality=75: Standard för webben, minskar filstorleken drastiskt utan synlig förlust.
+ * - width: Vi skalar ner bilden på servern så vi inte laddar 1MB i onödan.
+ */
+const params = new URLSearchParams();
+params.append("auto", "format,compress");
+params.append("quality", "75");
+if (width) params.append("width", width.toString());
+
+// Vi rensar URL:en från eventuella gamla querys för att maxa cache-träffar
+const baseUrl = src.split("?")[0];
+const optimizedSrc = `${baseUrl}?${params.toString()}`;
 
 const aspectClasses = {
   video: "aspect-video",
@@ -42,7 +53,7 @@ const fitClasses = {
 
 <div
   class:list={[
-    "relative overflow-hidden  bg-slate-200/50 shadow-sm rounded-lg",
+    "relative overflow-hidden bg-slate-200/50 shadow-sm rounded-lg",
     aspectClasses[aspect],
     className,
   ]}
@@ -54,6 +65,7 @@ const fitClasses = {
     height={height}
     loading={priority ? "eager" : loading}
     fetchpriority={priority ? "high" : "auto"}
+    decoding={priority ? "sync" : "async"}
     class:list={["w-full h-full", fitClasses[fit]]}
   />
 </div>
