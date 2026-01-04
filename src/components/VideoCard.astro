@@ -1,89 +1,91 @@
 ---
 // src/components/VideoCard.astro
 const { videoUrl, title, description, poster } = Astro.props;
-
-const isYouTube =
-  videoUrl?.includes("youtube.com") || videoUrl?.includes("youtu.be");
-let embedUrl = "";
-
-if (isYouTube) {
-  const videoId = videoUrl.includes("v=")
-    ? videoUrl.split("v=")[1].split("&")[0]
-    : videoUrl.split("/").pop();
-  // Vi lägger till autoplay=1 så den startar direkt när man klickar
-  embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-}
 ---
 
 <div
   class="video-card group bg-slate-950 rounded-2xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300 shadow-xl"
 >
-  <div class="relative aspect-video bg-black overflow-hidden">
+  <div
+    class="relative aspect-video bg-black overflow-hidden cursor-pointer"
+    id="video-wrapper"
+  >
     {
-      isYouTube ? (
-        <div class="youtube-wrapper w-full h-full cursor-pointer">
-          {/* Placeholder: Visas så länge man inte klickat */}
-          <div class="placeholder-overlay absolute inset-0 z-10">
-            {poster && (
-              <img
-                src={poster}
-                alt={title}
-                class="w-full h-full object-cover"
-              />
-            )}
-            <div class="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all">
-              <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
-                <div class="w-0 h-0 border-t-10 border-t-transparent border-l-18 border-l-black border-b-10 border-b-transparent ml-1" />
-              </div>
-            </div>
-          </div>
-
-          {/* Själva iframen: Laddas först när man klickar */}
-          <template data-url={embedUrl}>
-            <iframe
-              src=""
-              class="w-full h-full absolute inset-0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            />
-          </template>
-        </div>
-      ) : (
-        <video
-          src={videoUrl}
-          poster={poster}
-          controls
-          playsinline
-          class="w-full h-full object-contain"
-        />
-      )
+      /* 1. ENDAST bilden renderas vid start - Ingen video-tagg = Ingen snurra */
     }
+    <div class="placeholder-overlay absolute inset-0 z-20">
+      {
+        poster && (
+          <img
+            src={poster}
+            alt={title}
+            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            loading="lazy"
+            decoding="async"
+          />
+        )
+      }
+
+      {/* Play-ikon */}
+      <div
+        class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/30 transition-all"
+      >
+        <div
+          class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-2xl group-hover:scale-110 transition-transform"
+        >
+          <div
+            class="w-0 h-0 border-t-8 border-t-transparent border-l-14 border-l-white border-b-8 border-b-transparent ml-1"
+          >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* 2. Vi gömmer URL:en i ett template-element */}
+    <template data-video-url={videoUrl}>
+      <video
+        src={videoUrl}
+        controls
+        autoplay
+        playsinline
+        class="w-full h-full object-cover absolute inset-0 z-30 bg-black"
+      ></video>
+    </template>
   </div>
 
-  <div class="p-4">
-    {title && <h2 class="text-xl font-semibold text-white mb-2">{title}</h2>}
-    {description && <p class="text-sm text-white mb-2">{description}</p>}
+  <div class="p-5">
+    {title && <h3 class="text-lg font-medium text-white">{title}</h3>}
+    {
+      description && (
+        <p class="text-sm text-slate-400 mt-1 line-clamp-2">{description}</p>
+      )
+    }
   </div>
 </div>
 
 <script>
-  // Denna script-tag körs i webbläsaren
-  const wrappers = document.querySelectorAll(".youtube-wrapper");
+  function initVideoCards() {
+    const wrappers = document.querySelectorAll("#video-wrapper");
 
-  wrappers.forEach((wrapper) => {
-    wrapper.addEventListener("click", () => {
-      const template = wrapper.querySelector("template");
-      const placeholder = wrapper.querySelector(".placeholder-overlay");
-      const url = template?.dataset.url;
+    wrappers.forEach((wrapper) => {
+      if (wrapper.getAttribute("data-ready")) return;
 
-      if (template && placeholder && url) {
-        const content = template.content.cloneNode(true) as HTMLElement;
-        const iframe = content.querySelector("iframe");
-        if (iframe) iframe.src = url;
+      wrapper.addEventListener("click", () => {
+        const template = wrapper.querySelector("template");
+        const placeholder = wrapper.querySelector(".placeholder-overlay");
+        const url = template?.dataset.videoUrl;
 
-        wrapper.appendChild(content);
-        placeholder.remove(); // Tar bort din poster och play-knapp
-      }
+        if (template && placeholder && url) {
+          const videoHTML = template.content.cloneNode(true);
+          wrapper.appendChild(videoHTML);
+          placeholder.remove();
+        }
+      });
+      wrapper.setAttribute("data-ready", "true");
     });
-  });
+  }
+
+  // Kör direkt och vid sidbyten
+  initVideoCards();
+  document.addEventListener("astro:after-swap", initVideoCards);
 </script>

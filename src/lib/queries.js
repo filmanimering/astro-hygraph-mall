@@ -1,5 +1,39 @@
 // src/lib/queries.js
 
+/**
+ * Fragment för Globala inställningar.
+ * Detta gör att vi slipper repetera samma fält i varje query.
+ */
+const GLOBAL_SETTINGS_FRAGMENT = `
+  globalSettings {
+    siteName
+    logo {
+      url
+      width
+      height
+    }
+    siteFavicon {
+      url
+      width
+      height
+    }
+    navigation {
+      ... on Navigation {
+        label
+        url
+      }
+    }
+    seo {
+      seoTitle
+      seoDescription
+      ogImage {
+        url
+      }
+    }
+  }
+`;
+
+// 1. Query för vanliga landningssidor (Home, Om oss, etc.)
 export const PAGE_QUERY = /* GraphQL */ `
   query GetPage($slug: String!) {
     page(where: { slug: $slug }) {
@@ -7,9 +41,7 @@ export const PAGE_QUERY = /* GraphQL */ `
       seo {
         seoTitle
         seoDescription
-        ogImage {
-          url
-        }
+        ogImage { url }
         noIndex
       }
       sections {
@@ -21,46 +53,26 @@ export const PAGE_QUERY = /* GraphQL */ `
           buttonUrl
           buttonStyle
           heroLayout
-          bgBild {
-            url
-            width
-            height
-          }
+          bgBild { url width height }
         }
         ... on SectionText {
           id
           textLayout
-          content {
-            html
-          }
-          image {
-            url
-          }
+          content { html }
+          image { url }
         }
         ... on SectionImageGrid {
           title
           description
           numberOfColumns
-          images {
-            url
-            width
-            height
-            altText
-          }
+          images { url width height altText }
         }
         ... on SectionVideoGrid {
           id
           numberOfColumns
           textVideoGrid
           titleVideoGrid
-          videos {
-            title
-            videoUrl
-            videoText
-            thumbnail {
-              url
-            }
-          }
+          videos { title videoUrl videoText thumbnail { url } }
         }
         ... on SectionInfoCardGrid {
           id
@@ -70,42 +82,61 @@ export const PAGE_QUERY = /* GraphQL */ `
           buttonStyle
           cards {
             ... on InfoCard {
-              id
-              title
-              text
-              poster {
-                url
-                width
-                height
-              }
-              buttonLabel
-              buttonLink
+              id title text buttonLabel buttonLink
+              poster { url width height }
             }
           }
         }
       }
     }
-    globalSettings {
-      siteName
-      logo {
-        url
-        width
-        height
-      }
+    ${GLOBAL_SETTINGS_FRAGMENT}
+  }
+`;
 
-      navigation {
-        ... on Navigation {
-          label
-          url
-        }
+// 2. Query för blogg-listan
+export const BLOG_LIST_QUERY = /* GraphQL */ `
+  query GetBlogData {
+    blogPosts(orderBy: publishedDate_DESC) {
+      title
+      slug
+      publishedDate
+      excerpt
+      coverImage {
+        url
       }
+    }
+    ${GLOBAL_SETTINGS_FRAGMENT}
+  }
+`;
+
+// 3. Query för enskilda blogginlägg
+export const SINGLE_POST_QUERY = /* GraphQL */ `
+  query GetSinglePost($slug: String!) {
+    blogPost(where: { slug: $slug }) {
+      title
+      excerpt
+      publishedDate
+      content { html }
       seo {
         seoTitle
         seoDescription
-        ogImage {
-          url
-        }
+        ogImage { url }
+        noIndex
       }
     }
+    allPosts: blogPosts(first: 4, orderBy: publishedDate_DESC) {
+      title
+      excerpt
+      slug
+      publishedDate
+    }
+    ${GLOBAL_SETTINGS_FRAGMENT}
+  }
+`;
+
+// 4. Ren query för endast globala inställningar (vid behov)
+export const SETTINGS_QUERY = /* GraphQL */ `
+  query GetSettings {
+    ${GLOBAL_SETTINGS_FRAGMENT}
   }
 `;

@@ -2,19 +2,34 @@
 /**
  * BaseHead.astro
  * Hanterar metadata, SEO och resurser i <head>.
- * Favicon är nu hårdkodad till /public/favicon.png
  */
 import "../styles/global.css";
 import { SITE_TITLE } from "../consts";
 import SEO from "./SEO.astro";
 
+interface HygraphImage {
+  url: string;
+  width?: number;
+  height?: number;
+}
+
 interface Props {
-  pageSeo?: any;
-  globalSeo?: any;
+  pageSeo?: {
+    seoTitle?: string;
+    seoDescription?: string;
+    ogImage?: HygraphImage;
+    noIndex?: boolean;
+  };
+  globalSeo?: {
+    seoTitle?: string;
+    seoDescription?: string;
+    ogImage?: HygraphImage;
+  };
+  favicon?: HygraphImage; // Här lägger vi till faviconen
   fallbackTitle?: string;
 }
 
-const { pageSeo, globalSeo, fallbackTitle } = Astro.props;
+const { pageSeo, globalSeo, fallbackTitle, favicon } = Astro.props;
 
 /* --- SEO-LOGIK --- */
 const finalTitle =
@@ -27,10 +42,24 @@ const finalImage = pageSeo?.ogImage?.url || globalSeo?.ogImage?.url;
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-{/* --- FAVICON (Hårdkodad till /public/favicon.png) --- */}
-<link rel="icon" type="image/png" href="/favicon.png" />
-<link rel="apple-touch-icon" href="/favicon.png" />
+{favicon?.url && <link rel="icon" href={favicon.url} />}
+{favicon?.url && <link rel="apple-touch-icon" href={favicon.url} />}
 
+<link rel="preconnect" href="https://eu-west-2.graphassets.com" />
+<link
+  rel="preload"
+  href="/fonts/poppins-v24-latin-regular.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/poppins-v24-latin-700.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
 <link rel="sitemap" href="/sitemap-index.xml" />
 <link
   rel="alternate"
