@@ -12,7 +12,7 @@ const videos = data?.videos || [];
     {
       videos.map((v: any) => (
         <VideoCard
-          videoUrl={v.videoUrl}
+          videoUrl={v.videoUploadedUrl.url}
           title={v.title}
           description={v.videoText}
           poster={v.thumbnail?.url}

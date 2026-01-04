@@ -4,7 +4,7 @@
  * Fragment för Globala inställningar.
  * Detta gör att vi slipper repetera samma fält i varje query.
  */
-const GLOBAL_SETTINGS_FRAGMENT = `
+const GLOBAL_SETTINGS_FRAGMENT = /* GraphQL */ `
   globalSettings {
     siteName
     logo {
@@ -72,7 +72,11 @@ export const PAGE_QUERY = /* GraphQL */ `
           numberOfColumns
           textVideoGrid
           titleVideoGrid
-          videos { title videoUrl videoText thumbnail { url } }
+          videos { 
+            title 
+            videoUploadedUrl { url } 
+            videoText 
+            thumbnail { url } }
         }
         ... on SectionInfoCardGrid {
           id
