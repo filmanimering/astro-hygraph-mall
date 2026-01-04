@@ -4,26 +4,40 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import MyImage from "../../components/MyImage.astro";
 import { hygraphFetch } from "../../lib/hygraph";
 
-const BLOG_LIST_QUERY = `
-query GetBlogData {
-  blogPosts(orderBy: publishedDate_DESC) {
-    title
-    slug
-    publishedDate
-    excerpt
-    coverImage { url }
-  }
-  globalSettings {
-    siteName
-    logo { url width height }
-    footerText
-    contactInfo { html }
-    navigation {
-      ... on Navigation { label url }
+const BLOG_LIST_QUERY = /* GraphQL */ `
+  query GetBlogData {
+    blogPosts(orderBy: publishedDate_DESC) {
+      title
+      slug
+      publishedDate
+      excerpt
+      coverImage {
+        url
+      }
     }
-    seo { seoTitle seoDescription ogImage { url } }
+    globalSettings {
+      siteName
+      logo {
+        url
+        width
+        height
+      }
+
+      navigation {
+        ... on Navigation {
+          label
+          url
+        }
+      }
+      seo {
+        seoTitle
+        seoDescription
+        ogImage {
+          url
+        }
+      }
+    }
   }
-}
 `;
 
 const data = await hygraphFetch(BLOG_LIST_QUERY);

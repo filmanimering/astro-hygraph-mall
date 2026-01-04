@@ -1,26 +1,28 @@
 // src/lib/queries.js
 
-export const PAGE_QUERY = `
+export const PAGE_QUERY = /* GraphQL */ `
   query GetPage($slug: String!) {
-    page(where: {slug: $slug}) {
+    page(where: { slug: $slug }) {
       title
       seo {
         seoTitle
         seoDescription
-        ogImage { url }
+        ogImage {
+          url
+        }
         noIndex
       }
-      sections { 
+      sections {
         __typename
         ... on SectionHero {
           heroText
-          heroTitel      
+          heroTitel
           buttonLabel
           buttonUrl
-          buttonStyle 
+          buttonStyle
           heroLayout
-          bgBild { 
-            url 
+          bgBild {
+            url
             width
             height
           }
@@ -28,17 +30,17 @@ export const PAGE_QUERY = `
         ... on SectionText {
           id
           textLayout
-          content { 
-            html 
+          content {
+            html
           }
-          image { 
-            url 
+          image {
+            url
           }
         }
         ... on SectionImageGrid {
           title
-          description  
-          numberOfColumns        
+          description
+          numberOfColumns
           images {
             url
             width
@@ -48,11 +50,11 @@ export const PAGE_QUERY = `
         }
         ... on SectionVideoGrid {
           id
-          numberOfColumns  
+          numberOfColumns
           textVideoGrid
           titleVideoGrid
           videos {
-            title 
+            title
             videoUrl
             description {
               html
@@ -61,40 +63,38 @@ export const PAGE_QUERY = `
               url
             }
           }
-        }  
+        }
         ... on SectionInfoCardGrid {
-            id
-            title
-            description  
-            infoCardLayout
-            buttonStyle           
-            cards {
-              ... on InfoCard {
-                id
-                title
-                text
-                poster { 
-                  url
-                  width
-                  height
-                }
-                buttonLabel
-                buttonLink
+          id
+          title
+          description
+          infoCardLayout
+          buttonStyle
+          cards {
+            ... on InfoCard {
+              id
+              title
+              text
+              poster {
+                url
+                width
+                height
               }
+              buttonLabel
+              buttonLink
             }
-        }     
+          }
+        }
       }
     }
     globalSettings {
-      siteName    
+      siteName
       logo {
         url
         width
         height
-      }   
-      contactInfo {
-        html
       }
+
       navigation {
         ... on Navigation {
           label
@@ -108,7 +108,6 @@ export const PAGE_QUERY = `
           url
         }
       }
-      footerText 
     }
   }
 `;

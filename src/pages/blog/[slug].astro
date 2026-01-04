@@ -15,36 +15,55 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 
 // --- QUERY FÖR ENSTAKA INLÄGG (STÄDAD) ---
-const SINGLE_POST_QUERY = `
-query GetSinglePost($slug: String!) {
-  blogPost(where: { slug: $slug }) {
-    title
-    excerpt
-    publishedDate    
-    content { html }
+const SINGLE_POST_QUERY = /* GraphQL */ `
+  query GetSinglePost($slug: String!) {
+    blogPost(where: { slug: $slug }) {
+      title
+      excerpt
+      publishedDate
+      content {
+        html
+      }
 
-    seo {
-      seoTitle
-      seoDescription
-      ogImage { url }
-      noIndex
+      seo {
+        seoTitle
+        seoDescription
+        ogImage {
+          url
+        }
+        noIndex
+      }
+    }
+    allPosts: blogPosts(first: 4, orderBy: publishedDate_DESC) {
+      title
+      excerpt
+      slug
+      publishedDate
+    }
+    globalSettings {
+      siteName
+      logo {
+        url
+        width
+        height
+      }
+      navigation {
+        ... on Navigation {
+          label
+          url
+        }
+      }
+
+      seo {
+        seoTitle
+        seoDescription
+        ogImage {
+          url
+        }
+      }
     }
   }
-  allPosts: blogPosts(first: 4, orderBy: publishedDate_DESC) {
-    title
-    excerpt
-    slug
-    publishedDate
-  }
-  globalSettings {
-    siteName   
-    logo { url width height }
-    navigation { ... on Navigation { label url } }
-    footerText
-    contactInfo { html }
-    seo { seoTitle seoDescription ogImage { url } }
-  }
-}`;
+`;
 
 const data = await hygraphFetch(SINGLE_POST_QUERY, { slug });
 const post = data.blogPost;
