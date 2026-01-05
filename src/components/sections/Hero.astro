@@ -2,6 +2,7 @@
 // Hero.astro
 import MyButton from "../MyButton.astro";
 import MyImage from "../MyImage.astro";
+import VideoCard from "../VideoCard.astro";
 
 const { data } = Astro.props;
 
@@ -15,6 +16,8 @@ const heroImage = data.bgBild;
 const buttonLabel2 = data.buttonLabel2;
 const buttonUrl2 = data.buttonUrl2;
 const buttonStyle2 = data.buttonStyle2;
+const videoPoster = data.videoPoster.url;
+const videoUploadedUrl = data.videoUploadedUrl.url;
 //console.log("data: ", data);
 ---
 
@@ -109,6 +112,48 @@ const buttonStyle2 = data.buttonStyle2;
           </div>
         </div>
       </section>
+    )
+  }
+  {/* FALL 3: Text vönster - video höger */}
+  {
+    heroLayout === "textLeftVideoRight" && (
+      <div>
+        <div class="px-4 pt-4 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div class=" px-4">
+            <div>
+              {heroTitle && <h1 class="mb-4">{heroTitle}</h1>}
+              {heroText && <p class="mb-6">{heroText}</p>}
+              <div class="mt-6 flex gap-4">
+                <div class="flex flex-col sm:flex-row gap-4">
+                  {buttonLabel && buttonUrl && (
+                    <MyButton
+                      titel={buttonLabel}
+                      link={buttonUrl}
+                      variant={buttonStyle || "primary"}
+                    />
+                  )}
+
+                  {buttonLabel2 && buttonUrl2 && (
+                    <MyButton
+                      titel={buttonLabel2}
+                      link={buttonUrl2}
+                      variant={buttonStyle2 || "primary"}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Right section */}
+          <div>
+            <VideoCard
+              videoUrl={videoUploadedUrl}
+              poster={videoPoster}
+              videoStyle="defaultLayout"
+            />
+          </div>
+        </div>
+      </div>
     )
   }
 </section>

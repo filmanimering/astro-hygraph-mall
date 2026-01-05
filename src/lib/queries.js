@@ -56,6 +56,8 @@ export const PAGE_QUERY = /* GraphQL */ `
           buttonUrl2
           buttonStyle2
           heroLayout
+          videoUploadedUrl { url }
+          videoPoster { url }
           bgBild { url width height }
         }
         ... on SectionText {

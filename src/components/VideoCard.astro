@@ -1,23 +1,23 @@
 ---
 // src/components/VideoCard.astro
+import MyImage from "./MyImage.astro"; // Använd din optimerade bildkomponent
 const { videoUrl, poster, videoStyle } = Astro.props;
 const isAutoplay = videoStyle === "singleVideoAutoPlay";
 ---
 
 <div
-  class="video-card group bg-slate-950 rounded-2xl overflow-hidden border border-white/5 shadow-xl"
+  class="video-card group bg-slate-950 rounded-2xl overflow-hidden
+  border border-white/5 shadow-xl shadow-gray-500"
 >
   <div
     class:list={[
       "relative aspect-video bg-black overflow-hidden",
-      !isAutoplay && "cursor-pointer",
+      !isAutoplay && "cursor-pointer video-click-wrapper", // Ändrat från id till klass
     ]}
-    id={!isAutoplay ? "video-wrapper" : undefined}
     data-video-src={videoUrl}
   >
     {
       isAutoplay ? (
-        /* Autoplay-läge: Rendera videon direkt */
         <video
           src={videoUrl}
           poster={poster}
@@ -28,14 +28,13 @@ const isAutoplay = videoStyle === "singleVideoAutoPlay";
           class="w-full h-full object-cover absolute inset-0 z-30 bg-black pointer-events-none"
         />
       ) : (
-        /* Grid-läge: Visa bara bilden och play-knappen */
         <div class="placeholder-overlay absolute inset-0 z-20">
           {poster && (
-            <img
+            <MyImage
               src={poster}
               alt=""
+              width={800}
               class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              loading="lazy"
             />
           )}
           <div class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/30 transition-all">
@@ -51,8 +50,8 @@ const isAutoplay = videoStyle === "singleVideoAutoPlay";
 
 <script>
   function initVideoCards() {
-    // Hitta alla wrappers som INTE är autoplay (de har id="video-wrapper")
-    const wrappers = document.querySelectorAll("#video-wrapper");
+    // Ändrat selector till klass för att hantera flera videor på samma sida
+    const wrappers = document.querySelectorAll(".video-click-wrapper");
 
     wrappers.forEach((wrapper) => {
       if (wrapper.getAttribute("data-ready")) return;
@@ -62,7 +61,6 @@ const isAutoplay = videoStyle === "singleVideoAutoPlay";
         const placeholder = wrapper.querySelector(".placeholder-overlay");
 
         if (url && placeholder) {
-          // Vi skapar video-elementet "på flykt" i minnet
           const video = document.createElement("video");
           video.src = url;
           video.className =
@@ -71,7 +69,6 @@ const isAutoplay = videoStyle === "singleVideoAutoPlay";
           video.controls = true;
           video.playsInline = true;
 
-          // Byt ut bilden mot videon
           placeholder.remove();
           wrapper.appendChild(video);
         }

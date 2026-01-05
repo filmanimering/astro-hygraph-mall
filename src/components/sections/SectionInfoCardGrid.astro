@@ -6,9 +6,9 @@ const { data } = Astro.props;
 const { title, description, cards, infoCardLayout, buttonStyle } = data;
 ---
 
-<section class="pb-12 pt-8 shadow-lg bg-slate-100">
+<section class="pb-12 pt-8 sm:pt-20 shadow-lg bg-slate-100">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="mb-8">
+    <div class="mb-2">
       {
         title && (
           <h2 class="text-3xl md:text-4xl font-semibold mb-2">{title}</h2>
@@ -98,8 +98,8 @@ const { title, description, cards, infoCardLayout, buttonStyle } = data;
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {cards?.map((card: any) => (
             <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-slate-800 flex flex-col h-full hover:shadow-lg transition-shadow">
-              <h3 class="font-bold text-lg mb-3">{card.title}</h3>
-              <p class="text-sm text-slate-600 grow mb-6 leading-relaxed">
+              <h3 class="font-bold text-lg mb-1">{card.title}</h3>
+              <p class="text-sm text-slate-600 grow mb-2 leading-relaxed">
                 {card.text}
               </p>
               {card.buttonLabel && card.buttonLink && (
