@@ -1,63 +1,49 @@
 ---
 // src/components/VideoCard.astro
-const { videoUrl, title, description, poster } = Astro.props;
+const { videoUrl, poster, videoStyle } = Astro.props;
+const isAutoplay = videoStyle === "singleVideoAutoPlay";
 ---
 
 <div
-  class="video-card group bg-slate-950 rounded-2xl overflow-hidden border border-white/5 hover:border-white/20 transition-all duration-300 shadow-xl"
+  class="video-card group bg-slate-950 rounded-2xl overflow-hidden border border-white/5 shadow-xl"
 >
   <div
-    class="relative aspect-video bg-black overflow-hidden cursor-pointer"
-    id="video-wrapper"
+    class:list={[
+      "relative aspect-video bg-black overflow-hidden",
+      !isAutoplay && "cursor-pointer",
+    ]}
+    id={!isAutoplay ? "video-wrapper" : undefined}
+    data-video-src={videoUrl}
   >
     {
-      /* 1. ENDAST bilden renderas vid start - Ingen video-tagg = Ingen snurra */
-    }
-    <div class="placeholder-overlay absolute inset-0 z-20">
-      {
-        poster && (
-          <img
-            src={poster}
-            alt={title}
-            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
-            decoding="async"
-          />
-        )
-      }
-
-      {/* Play-ikon */}
-      <div
-        class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/30 transition-all"
-      >
-        <div
-          class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 shadow-2xl group-hover:scale-110 transition-transform"
-        >
-          <div
-            class="w-0 h-0 border-t-8 border-t-transparent border-l-14 border-l-white border-b-8 border-b-transparent ml-1"
-          >
+      isAutoplay ? (
+        /* Autoplay-läge: Rendera videon direkt */
+        <video
+          src={videoUrl}
+          poster={poster}
+          autoplay
+          muted
+          loop
+          playsinline
+          class="w-full h-full object-cover absolute inset-0 z-30 bg-black pointer-events-none"
+        />
+      ) : (
+        /* Grid-läge: Visa bara bilden och play-knappen */
+        <div class="placeholder-overlay absolute inset-0 z-20">
+          {poster && (
+            <img
+              src={poster}
+              alt=""
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+          )}
+          <div class="absolute inset-0 flex items-center justify-center bg-black/10 group-hover:bg-black/30 transition-all">
+            <div class="w-14 h-14 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform">
+              <div class="w-0 h-0 border-t-8 border-t-transparent border-l-14 border-l-white border-b-8 border-b-transparent ml-1" />
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-
-    {/* 2. Vi gömmer URL:en i ett template-element */}
-    <template data-video-url={videoUrl}>
-      <video
-        src={videoUrl}
-        controls
-        autoplay
-        playsinline
-        class="w-full h-full object-cover absolute inset-0 z-30 bg-black"
-      ></video>
-    </template>
-  </div>
-
-  <div class="p-5">
-    {title && <h2 class="text-lg font-medium text-white">{title}</h2>}
-    {
-      description && (
-        <p class="text-sm text-slate-400 mt-1 line-clamp-2">{description}</p>
       )
     }
   </div>
@@ -65,27 +51,35 @@ const { videoUrl, title, description, poster } = Astro.props;
 
 <script>
   function initVideoCards() {
+    // Hitta alla wrappers som INTE är autoplay (de har id="video-wrapper")
     const wrappers = document.querySelectorAll("#video-wrapper");
 
     wrappers.forEach((wrapper) => {
       if (wrapper.getAttribute("data-ready")) return;
 
       wrapper.addEventListener("click", () => {
-        const template = wrapper.querySelector("template");
+        const url = (wrapper as HTMLElement).dataset.videoSrc;
         const placeholder = wrapper.querySelector(".placeholder-overlay");
-        const url = template?.dataset.videoUrl;
 
-        if (template && placeholder && url) {
-          const videoHTML = template.content.cloneNode(true);
-          wrapper.appendChild(videoHTML);
+        if (url && placeholder) {
+          // Vi skapar video-elementet "på flykt" i minnet
+          const video = document.createElement("video");
+          video.src = url;
+          video.className =
+            "w-full h-full object-cover absolute inset-0 z-30 bg-black";
+          video.autoplay = true;
+          video.controls = true;
+          video.playsInline = true;
+
+          // Byt ut bilden mot videon
           placeholder.remove();
+          wrapper.appendChild(video);
         }
       });
       wrapper.setAttribute("data-ready", "true");
     });
   }
 
-  // Kör direkt och vid sidbyten
   initVideoCards();
   document.addEventListener("astro:after-swap", initVideoCards);
 </script>

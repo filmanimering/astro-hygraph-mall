@@ -75,6 +75,7 @@ export const PAGE_QUERY = /* GraphQL */ `
           numberOfColumns
           textVideoGrid
           titleVideoGrid
+          videoStyle
           videos { 
             title 
             videoUploadedUrl { url } 
