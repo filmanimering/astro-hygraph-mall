@@ -14,7 +14,7 @@ const { titel, link, variant = "primary", fullWidth = false } = Astro.props;
 const isExternal = /^https?:\/\//.test(link);
 
 const baseClasses =
-  "py-2 px-4 rounded-xl text-sm tracking-wide items-center gap-2 transition-all duration-300 hover:scale-[1.03] inline-flex font-medium border transition-colors";
+  "py-2 px-4 rounded-xl text-sm tracking-wide items-center gap-2 transition-all duration-300 hover:scale-[1.03] flex font-medium border transition-colors";
 
 // Vi definierar objekten med Record för att TypeScript ska veta exakt vilka nycklar som finns
 const variants: Record<string, string> = {

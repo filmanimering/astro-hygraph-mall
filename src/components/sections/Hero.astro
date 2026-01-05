@@ -28,7 +28,7 @@ const buttonStyle2 = data.buttonStyle2;
             {heroTitle && <h1 class="mb-4">{heroTitle}</h1>}
             {heroText && <p class="mb-6">{heroText}</p>}
             <div class="mt-6 flex gap-4">
-              <div class="">
+              <div class="flex flex-col sm:flex-row gap-4">
                 {buttonLabel && buttonUrl && (
                   <MyButton
                     titel={buttonLabel}
@@ -36,8 +36,7 @@ const buttonStyle2 = data.buttonStyle2;
                     variant={buttonStyle || "primary"}
                   />
                 )}
-              </div>
-              <div class="">
+
                 {buttonLabel2 && buttonUrl2 && (
                   <MyButton
                     titel={buttonLabel2}
@@ -76,7 +75,7 @@ const buttonStyle2 = data.buttonStyle2;
       >
         <div class="min-h-screen md:pl-20 px-4 flex items-center">
           {/* Här använder vi glass-panel och v4 important syntax */}
-          <div class="max-w-2xl glass-panel bg-black/30! md:bg-black/20! border-white/20 rounded-t-4xl shadow-[0_-10px_40px_rgba(0,0,0,0.3)]">
+          <div class="mt-8 max-w-2xl glass-panel bg-black/30! md:bg-black/20! border-white/20 rounded-t-4xl shadow-[0_-10px_40px_rgba(0,0,0,0.3)]">
             <div class="p-8 flex items-center flex-col text-center md:items-start md:text-left">
               {heroTitle && (
                 <h1 class="text-white text-4xl md:text-5xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.3)] tracking-tighter">
@@ -89,8 +88,7 @@ const buttonStyle2 = data.buttonStyle2;
                 </p>
               )}
               <div class="mt-6 flex gap-4">
-                <div class="">
-                  {" "}
+                <div class="flex flex-col sm:flex-row gap-4">
                   {buttonLabel && buttonUrl && (
                     <MyButton
                       titel={buttonLabel}
@@ -98,8 +96,6 @@ const buttonStyle2 = data.buttonStyle2;
                       variant={buttonStyle || "primary"}
                     />
                   )}
-                </div>
-                <div class="">
                   {buttonLabel2 && buttonUrl2 && (
                     <MyButton
                       titel={buttonLabel2}
