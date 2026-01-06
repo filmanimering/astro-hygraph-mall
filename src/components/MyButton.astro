@@ -15,22 +15,22 @@ const {
   link,
   variant = "primary",
   fullWidth = false,
-  btnColor = "#000000",
+  btnColor = "#685CEF",
 } = Astro.props;
 
 const isExternal = /^https?:\/\//.test(link);
 
 const baseClasses =
-  "py-2 px-4 rounded-xl text-sm tracking-wide items-center gap-2 transition-all duration-300 hover:scale-[1.03] flex font-medium border transition-colors";
+  "py-3 px-5 rounded-lg text-base w-fit tracking-wide items-center gap-2 transition delay-100 duration-150 ease-in-out hover:-translate-y-0.5 hover:scale-101 flex font-medium  ";
 
 // Vi definierar objekten med Record för att TypeScript ska veta exakt vilka nycklar som finns
 const variants: Record<string, string> = {
   primary: "bg-(--btn-color) text-white border-slate-500 hover:opacity-80",
 
-  secondary: "bg-white text-slate-900  hover:bg-slate-50 ",
+  secondary: "bg-[#DDE1FF] text-blue-800",
 
   outlineDark:
-    "bg-transparent text-slate-900 border-slate-900/40 hover:border-slate-900 hover:bg-slate-900/5",
+    "bg-transparent text-slate-900 border-3 border-[#685CEF] hover:border-[#685CEF] hover:bg-slate-900/5",
 
   outlineLight:
     "bg-white/10 backdrop-blur-sm border-2 text-white border-white/80 hover:bg-white/20",

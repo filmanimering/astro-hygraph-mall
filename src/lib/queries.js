@@ -23,6 +23,12 @@ const GLOBAL_SETTINGS_FRAGMENT = /* GraphQL */ `
         url
       }
     }
+     navigationRight {
+      ... on Navigation {
+        label
+        url
+      }
+    }
     seo {
       seoTitle
       seoDescription
