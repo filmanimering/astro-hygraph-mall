@@ -1,20 +1,24 @@
 import rss from "@astrojs/rss";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-// Importera din Hygraph-klient här
-import { hygraph } from "../lib/hygraph";
+// Ändra importen så den matchar namnet i din hygraph.js-fil
+import { hygraphFetch } from "../lib/hygraph";
 
 export async function GET(context) {
-  // Hämta inläggen direkt från Hygraph
-  const { blogPosts } = await hygraph.request(`
-      query GetRssPosts {
-        blogPosts(orderBy: createdAt_DESC) {
-          title
-          slug
-          seoDescription
-          createdAt
-        }
+  // Skapa din query
+  const query = `
+    query GetRssPosts {
+      blogPosts(orderBy: createdAt_DESC) {
+        title
+        slug
+        seoDescription
+        createdAt
       }
-    `);
+    }
+  `;
+
+  // Använd din hygraphFetch-funktion istället för .request()
+  const data = await hygraphFetch(query);
+  const blogPosts = data.blogPosts;
 
   return rss({
     title: SITE_TITLE,
@@ -24,7 +28,6 @@ export async function GET(context) {
       title: post.title,
       pubDate: new Date(post.createdAt),
       description: post.seoDescription,
-      // Länken bygger på din struktur /blog/slug
       link: `/blog/${post.slug}/`,
     })),
   });
