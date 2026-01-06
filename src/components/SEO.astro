@@ -1,29 +1,50 @@
 ---
 // SEO.astro
 interface Props {
-    title: string;
-    description: string;
-    image?: string; // Vi tar emot URL:en som en sträng här
+  title?: string;
+  description?: string;
+  ogImage?: string; // Nu som en sträng-URL från Hygraph
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, ogImage } = Astro.props;
+
+// --- GLOBALA INSTÄLLNINGAR ---
+const brandName = " | Photo & Film Stories";
+const brandSuffix =
+  " Vi skapar film, foto och snabba hemsidor i Båstad och hela Skåne.";
+
+const fallbackTitle = "Foto, Video & Webb";
+const fallbackDesc = "Professionell visuell kommunikation för ditt företag.";
+const defaultOgImage = "/default-og-image.jpg"; // Se till att denna fil finns i /public/
+
+// --- LOGIK ---
+const finalTitle = title
+  ? `${title}${brandName}`
+  : `${fallbackTitle}${brandName}`;
+const finalDesc = `${description || fallbackDesc} ${brandSuffix}`
+  .substring(0, 155)
+  .trim();
+
+// Om ogImage saknas från Hygraph, använd default-bilden
+const finalImage = ogImage || defaultOgImage;
+
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <link rel="canonical" href={canonicalURL} />
 
-<title>{title}</title>
-<meta name="title" content={title} />
-<meta name="description" content={description} />
+<title>{finalTitle}</title>
+<meta name="title" content={finalTitle} />
+<meta name="description" content={finalDesc} />
 
 <meta property="og:type" content="website" />
 <meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-{image && <meta property="og:image" content={new URL(image, Astro.url)} />}
+<meta property="og:title" content={finalTitle} />
+<meta property="og:description" content={finalDesc} />
+<meta property="og:image" content={new URL(finalImage, Astro.url)} />
 
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-{image && <meta property="twitter:image" content={new URL(image, Astro.url)} />}
+<meta property="twitter:title" content={finalTitle} />
+<meta property="twitter:description" content={finalDesc} />
+<meta property="twitter:image" content={new URL(finalImage, Astro.url)} />

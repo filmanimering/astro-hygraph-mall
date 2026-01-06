@@ -41,8 +41,7 @@ export const PAGE_QUERY = /* GraphQL */ `
       seo {
         seoTitle
         seoDescription
-        ogImage { url }
-        noIndex
+        ogImage { url }        
       }
       sections {
         __typename
@@ -131,8 +130,7 @@ export const SINGLE_POST_QUERY = /* GraphQL */ `
       seo {
         seoTitle
         seoDescription
-        ogImage { url }
-        noIndex
+        ogImage { url }        
       }
     }
     allPosts: blogPosts(first: 4, orderBy: publishedDate_DESC) {
