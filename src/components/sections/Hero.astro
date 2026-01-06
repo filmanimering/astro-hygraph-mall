@@ -156,4 +156,52 @@ const videoUploadedUrl = data.videoUploadedUrl.url;
       </div>
     )
   }
+
+  {/* FALL 4: Full bredd bild - text vänster - video höger */}
+  {
+    heroLayout === "fullWidthBgTextLeftVideoRight" && (
+      <section
+        class="-mt-36 mb-20 w-full bg-center bg-cover bg-no-repeat"
+        style={`background-image: url(${heroImage.url});`}
+      >
+        <div class="min-h-screen md:pl-20 px-4 flex items-center">
+          <div class="px-4 pt-4 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div class=" px-4">
+              <div>
+                {heroTitle && <h1 class="mb-4">{heroTitle}</h1>}
+                {heroText && <p class="mb-6">{heroText}</p>}
+                <div class="mt-6 flex gap-4">
+                  <div class="flex flex-col sm:flex-row gap-4">
+                    {buttonLabel && buttonUrl && (
+                      <MyButton
+                        titel={buttonLabel}
+                        link={buttonUrl}
+                        variant={buttonStyle || "primary"}
+                      />
+                    )}
+
+                    {buttonLabel2 && buttonUrl2 && (
+                      <MyButton
+                        titel={buttonLabel2}
+                        link={buttonUrl2}
+                        variant={buttonStyle2 || "primary"}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Right section */}
+            <div>
+              <VideoCard
+                videoUrl={videoUploadedUrl}
+                poster={videoPoster}
+                videoStyle="defaultLayout"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
 </section>

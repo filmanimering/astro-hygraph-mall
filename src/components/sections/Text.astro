@@ -8,10 +8,8 @@ const { content, textLayout, image } = data;
 const htmlContent = content?.html;
 ---
 
-<section class="pt-2 pb-12 bg-slate-50 overflow-hidden">
-  <div
-    class="max-w-7xl mx-auto px-6 sm:px-8 shadow-xl shadow-gray-300 p-4 sm:p-8 rounded-2xl"
-  >
+<section class="pt-2 pb-12 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-6 sm:px-8 p-4 sm:p-8 rounded-2xl">
     {/* FALL 1: Text till vänster, Bild till höger */}
     {
       textLayout === "textLeftImageRight" && (

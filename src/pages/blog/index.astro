@@ -15,10 +15,10 @@ const settings = data.globalSettings?.[0] || {};
   fallbackTitle={`Blogg | ${settings.siteName}`}
   settings={settings}
 >
-  <main class="px-4 w-full bg-slate-50 antialiased">
+  <main class="px-4 w-full antialiased">
     <div class="max-w-7xl mx-auto pt-4">
       <div
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10"
       >
         {
           posts.map((post: any) => (
@@ -27,7 +27,7 @@ const settings = data.globalSettings?.[0] || {};
                 href={`/blog/${post.slug}`}
                 class="block no-underline grow group"
               >
-                <div class="bg-white/90 border border-slate-400 p-6 rounded-3xl h-full flex flex-col shadow-lg shadow-gray-400/20 transition-all duration-300 hover:shadow-2xl hover:scale-[1.02]">
+                <div class="bg-white/90 border border-slate-200 p-6 rounded-3xl h-full flex flex-col shadow-lg shadow-gray-800/20 transition-all duration-300  hover:scale-[1.02]">
                   {/* Bild-container */}
                   <div class="mb-6 overflow-hidden rounded-2xl">
                     <MyImage

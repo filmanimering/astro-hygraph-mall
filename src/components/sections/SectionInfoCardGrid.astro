@@ -6,7 +6,7 @@ const { data } = Astro.props;
 const { title, description, cards, infoCardLayout, buttonStyle } = data;
 ---
 
-<section class="pb-12 pt-8 sm:pt-20 shadow-lg bg-slate-100">
+<section class="pb-12 pt-8">
   <div class="max-w-7xl mx-auto px-4">
     <div class="mb-2">
       {
@@ -95,7 +95,7 @@ const { title, description, cards, infoCardLayout, buttonStyle } = data;
     {/* FALL 3: Mini (Kompakt) */}
     {
       infoCardLayout === "mini" && (
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {cards?.map((card: any) => (
             <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-slate-800 flex flex-col h-full hover:shadow-lg transition-shadow">
               <p class="font-semibold text-lg mb-1">{card.title}</p>
