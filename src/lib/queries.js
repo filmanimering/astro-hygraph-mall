@@ -89,6 +89,7 @@ export const PAGE_QUERY = /* GraphQL */ `
           title
           description
           infoCardLayout
+          cardColor { hex }
           buttonStyle
           cards {
             ... on InfoCard {

@@ -7,9 +7,16 @@ interface Props {
   link: string;
   variant?: "primary" | "secondary" | "outlineDark" | "outlineLight";
   fullWidth?: boolean;
+  btnColor?: string;
 }
 
-const { titel, link, variant = "primary", fullWidth = false } = Astro.props;
+const {
+  titel,
+  link,
+  variant = "primary",
+  fullWidth = false,
+  btnColor = "#000000",
+} = Astro.props;
 
 const isExternal = /^https?:\/\//.test(link);
 
@@ -18,7 +25,7 @@ const baseClasses =
 
 // Vi definierar objekten med Record för att TypeScript ska veta exakt vilka nycklar som finns
 const variants: Record<string, string> = {
-  primary: "bg-slate-900 text-white border-slate-500 hover:bg-slate-800",
+  primary: "bg-(--btn-color) text-white border-slate-500 hover:opacity-80",
 
   secondary: "bg-white text-slate-900  hover:bg-slate-50 ",
 
@@ -43,6 +50,7 @@ const themeClasses = variants[variant] || variants.primary;
     themeClasses,
     { "w-full justify-center": fullWidth },
   ]}
+  style={`--btn-color: ${btnColor};`}
 >
   {titel}
   {isExternal && <LinkExternal />}
