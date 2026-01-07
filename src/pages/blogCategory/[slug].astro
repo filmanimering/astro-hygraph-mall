@@ -5,6 +5,7 @@ import MyImage from "../../components/MyImage.astro";
 import { hygraphFetch } from "../../lib/hygraph";
 // Vi använder din CATEGORY_POST_QUERY (se till att den finns i lib/queries.js)
 import { CATEGORY_POSTS_QUERY } from "../../lib/queries";
+import MyBlogPost from "../../components/MyBlogPost.astro";
 
 // 1. Berätta för Astro vilka sidor som ska skapas (Animation, Hemsidor etc.)
 export async function getStaticPaths() {
@@ -39,16 +40,11 @@ const settings = data.globalSettings?.[0] || {};
   settings={settings}
 >
   <main class="px-4 w-full antialiased">
-    <div class="max-w-7xl mx-auto pt-10 md:pt-20">
-      <header class="mb-12 border-b border-slate-100 pb-8">
-        <h1 class="text-4xl md:text-6xl font-medium text-slate-900">
-          {category.displayName}
+    <div class="max-w-7xl mx-auto pt-2">
+      <header class="mb-12 border-b border-gray-400 pb-4">
+        <h1 class="text-2xl md:text-3xl font-medium">
+          Kategori: <span class="text-green-700">{category.displayName}</span>
         </h1>
-        <p class="text-slate-500 mt-4 italic">
-          Visar alla projekt och inlägg inom {
-            category.displayName.toLowerCase()
-          }.
-        </p>
       </header>
 
       <div
@@ -56,38 +52,14 @@ const settings = data.globalSettings?.[0] || {};
       >
         {
           posts.map((post: any) => (
-            <article class="flex flex-col">
-              <a
-                href={`/blog/${post.slug}`}
-                class="block no-underline grow group"
-              >
-                <div class="bg-[#F6F8F9] hover:scale-102 transition-transform duration-300 rounded-2xl h-full flex flex-col">
-                  <div class="mb-2 overflow-hidden rounded-t-2xl">
-                    <MyImage
-                      src={post.coverImage?.url || "/default-og-image.jpg"}
-                      alt={post.title || "Poster bild"}
-                      aspect="video"
-                      class="w-full h-auto"
-                    />
-                  </div>
-
-                  <div class="flex flex-col px-4 pt-2 pb-4">
-                    <div class="text-xs font-bold uppercase tracking-widest text-slate-500">
-                      <FormattedDate date={new Date(post.publishedDate)} />
-                    </div>
-                    <h2 class="mt-1 text-xl leading-tight text-slate-900">
-                      {post.title}
-                    </h2>
-
-                    {post.excerpt && (
-                      <p class="mt-1 text-sm leading-relaxed text-slate-600 line-clamp-3">
-                        {post.excerpt}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </a>
-            </article>
+            <MyBlogPost
+              title={post.title}
+              slug={post.slug}
+              excerpt={post.excerpt}
+              poster={post.coverImage}
+              date={post.publishedDate}
+              bloggKategori={post.blogCategory}
+            />
           ))
         }
       </div>
@@ -106,10 +78,10 @@ const settings = data.globalSettings?.[0] || {};
         )
       }
 
-      <div class="mt-20">
+      <div class="mt-12">
         <a
           href="/blog"
-          class="text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors"
+          class="text-white text-sm font-semibold tracking-widest hover:opacity-80 bg-[#685CEF] py-2 px-3 rounded-md"
         >
           ← Tillbaka till alla inlägg
         </a>

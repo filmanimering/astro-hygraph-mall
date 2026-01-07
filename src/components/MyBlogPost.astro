@@ -1,0 +1,85 @@
+---
+import FormattedDate from "./FormattedDate.astro";
+import MyImage from "./MyImage.astro";
+
+const { title, excerpt, slug, poster, date, bloggKategori } = Astro.props;
+---
+
+<article class="flex flex-col h-full">
+  <div
+    class="bg-[#F6F8F9] rounded-2xl h-full flex flex-col overflow-hidden transition-all duration-300 hover:shadow-md"
+  >
+    {/* Länk på bilden */}
+    <a href={`/blog/${slug}`} class="block overflow-hidden group">
+      <MyImage
+        src={poster?.url || "/default-og-image.jpg"}
+        alt={title || "Poster bild"}
+        aspect="video"
+        class="w-full h-auto transition-transform duration-500 group-hover:scale-105"
+      />
+    </a>
+
+    {/* Text-innehåll */}
+    <div class="flex flex-col px-4 pt-4 pb-6 grow">
+      <div class="flex items-center justify-between">
+        <div class="text-xs font-bold uppercase tracking-widest text-slate-700">
+          <FormattedDate date={new Date(date)} />
+        </div>
+
+        {/* SEPARAT LÄNK FÖR KATEGORI */}
+        {
+          bloggKategori && (
+            <a
+              href={`/blogCategory/${bloggKategori.slug}`}
+              class="text-xs font-bold uppercase tracking-widest text-slate-50 hover:opacity-80  bg-[#685CEF] px-2 py-1 rounded-xl"
+            >
+              {bloggKategori.displayName}
+            </a>
+          )
+        }
+      </div>
+
+      {/* Länk på rubriken */}
+      <h2 class="mt-4 text-xl leading-tight text-slate-900 font-medium">
+        <a
+          href={`/blog/${slug}`}
+          aria-label={bloggKategori.displayName}
+          class="hover:text-slate-600 transition-colors"
+        >
+          {title}
+        </a>
+      </h2>
+
+      {
+        excerpt && (
+          <p class="mt-2 text-sm leading-relaxed text-slate-600 line-clamp-3">
+            {excerpt}
+          </p>
+        )
+      }
+
+      {/* LÄS MER KNAPP */}
+      <div class="mt-auto pt-6">
+        <a
+          href={`/blog/${slug}`}
+          class="text-xs font-bold uppercase tracking-widest text-slate-900 hover:opacity-60 transition-opacity flex items-center"
+        >
+          Läs mer
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-3 w-3 ml-1"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 5l7 7-7 7"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</article>

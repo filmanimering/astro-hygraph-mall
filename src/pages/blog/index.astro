@@ -4,6 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import MyImage from "../../components/MyImage.astro";
 import { hygraphFetch } from "../../lib/hygraph";
 import { BLOG_LIST_QUERY } from "../../lib/queries"; // Importera den centrala queryn
+import MyBlogPost from "../../components/MyBlogPost.astro";
 
 const data = await hygraphFetch(BLOG_LIST_QUERY);
 const posts = data.blogPosts || [];
@@ -22,81 +23,14 @@ const settings = data.globalSettings?.[0] || {};
       >
         {
           posts.map((post: any) => (
-            <article class="flex flex-col h-full">
-              <div class="bg-[#F6F8F9] rounded-2xl h-full flex flex-col overflow-hidden transition-all duration-300 hover:shadow-md">
-                {/* Länk på bilden */}
-                <a
-                  href={`/blog/${post.slug}`}
-                  class="block overflow-hidden group"
-                >
-                  <MyImage
-                    src={post.coverImage?.url || "/default-og-image.jpg"}
-                    alt={post.title || "Poster bild"}
-                    aspect="video"
-                    class="w-full h-auto transition-transform duration-500 group-hover:scale-105"
-                  />
-                </a>
-
-                {/* Text-innehåll */}
-                <div class="flex flex-col px-4 pt-4 pb-6 grow">
-                  <div class="flex items-center justify-between">
-                    <div class="text-[10px] font-bold uppercase tracking-widest text-slate-500">
-                      <FormattedDate date={new Date(post.publishedDate)} />
-                    </div>
-
-                    {/* SEPARAT LÄNK FÖR KATEGORI */}
-                    {post.blogCategory && (
-                      <a
-                        href={`/blogCategory/${post.blogCategory.slug}`}
-                        class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors bg-slate-200/50 px-2 py-1 rounded"
-                      >
-                        {post.blogCategory.displayName}
-                      </a>
-                    )}
-                  </div>
-
-                  {/* Länk på rubriken */}
-                  <h2 class="mt-4 text-xl leading-tight text-slate-900 font-medium">
-                    <a
-                      href={`/blog/${post.slug}`}
-                      class="hover:text-slate-600 transition-colors"
-                    >
-                      {post.title}
-                    </a>
-                  </h2>
-
-                  {post.excerpt && (
-                    <p class="mt-2 text-sm leading-relaxed text-slate-600 line-clamp-3">
-                      {post.excerpt}
-                    </p>
-                  )}
-
-                  {/* LÄS MER KNAPP */}
-                  <div class="mt-auto pt-6">
-                    <a
-                      href={`/blog/${post.slug}`}
-                      class="text-xs font-bold uppercase tracking-widest text-slate-900 hover:opacity-60 transition-opacity flex items-center"
-                    >
-                      Läs mer
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-3 w-3 ml-1"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </article>
+            <MyBlogPost
+              title={post.title}
+              slug={post.slug}
+              excerpt={post.excerpt}
+              poster={post.coverImage}
+              date={post.publishedDate}
+              bloggKategori={post.blogCategory}
+            />
           ))
         }
       </div>
