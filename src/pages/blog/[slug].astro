@@ -52,6 +52,19 @@ const relatedPosts = data.allPosts
           <span class="text-sm font-medium text-slate-700">
             <FormattedDate date={new Date(post.publishedDate)} />
           </span>
+          <!-- Blogg-kategori länk -->
+          {
+            post.blogCategory && (
+              <div class="mt-2 mb-4">
+                <a
+                  href={`/blogCategory/${post.blogCategory.slug}`}
+                  class="inline-block bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-slate-900 hover:text-white transition-all duration-200"
+                >
+                  {post.blogCategory.displayName}
+                </a>
+              </div>
+            )
+          }
 
           <h1 class="text-3xl lg:text-5xl font-medium">
             {post.title}

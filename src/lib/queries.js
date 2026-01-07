@@ -115,6 +115,10 @@ export const BLOG_LIST_QUERY = /* GraphQL */ `
     blogPosts(orderBy: publishedDate_DESC) {
       title
       slug
+      blogCategory { 
+        displayName 
+        slug
+      }
       publishedDate
       excerpt
       coverImage {
@@ -131,6 +135,10 @@ export const SINGLE_POST_QUERY = /* GraphQL */ `
     blogPost(where: { slug: $slug }) {
       title
       excerpt
+      blogCategory { 
+        displayName
+        slug
+      }
       coverImage {
         url
       }
@@ -147,6 +155,28 @@ export const SINGLE_POST_QUERY = /* GraphQL */ `
       excerpt
       slug
       publishedDate
+    }
+    ${GLOBAL_SETTINGS_FRAGMENT}
+  }
+`;
+
+export const CATEGORY_POSTS_QUERY = /* GraphQL */ `
+  query GetCategoryPosts($slug: String!) {
+    blogPosts(
+      where: { blogCategory: { slug: $slug } }
+      orderBy: publishedDate_DESC
+    ) {
+      title
+      slug
+      publishedDate
+      coverImage {
+        url
+      }
+      excerpt
+      blogCategory {
+        displayName
+        slug
+      }
     }
     ${GLOBAL_SETTINGS_FRAGMENT}
   }
