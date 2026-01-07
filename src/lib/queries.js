@@ -125,6 +125,11 @@ export const BLOG_LIST_QUERY = /* GraphQL */ `
         url
       }
     }
+    # Hämta alla tillgängliga bloggkategorier till menyn
+    blogCategories {
+      displayName
+      slug
+    }
     ${GLOBAL_SETTINGS_FRAGMENT}
   }
 `;
@@ -177,6 +182,11 @@ export const CATEGORY_POSTS_QUERY = /* GraphQL */ `
         displayName
         slug
       }
+    }
+    # Hämta alla tillgängliga bloggkategorier till menyn
+    blogCategories {
+      displayName
+      slug
     }
     ${GLOBAL_SETTINGS_FRAGMENT}
   }
