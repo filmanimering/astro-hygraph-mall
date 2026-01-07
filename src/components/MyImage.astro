@@ -53,14 +53,14 @@ const fitClasses = {
 
 <div
   class:list={[
-    "relative overflow-hidden bg-slate-200/50 shadow-sm rounded-lg",
+    "relative overflow-hidden bg-slate-200/50 shadow-sm ",
     aspectClasses[aspect],
     className,
   ]}
 >
   <img
     src={optimizedSrc}
-    alt={alt}
+    alt={optimizedSrc || "Hero bild"}
     width={width}
     height={height}
     loading={priority ? "eager" : loading}

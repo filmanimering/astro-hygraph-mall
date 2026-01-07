@@ -22,7 +22,7 @@ const htmlContent = content?.html;
           <div>
             <MyImage
               src={image?.url}
-              alt=""
+              alt={image?.alt || "Poster bild"}
               width={800}
               height={600}
               class="rounded-3xl shadow-2xl"

@@ -131,6 +131,9 @@ export const SINGLE_POST_QUERY = /* GraphQL */ `
     blogPost(where: { slug: $slug }) {
       title
       excerpt
+      coverImage {
+        url
+      }
       publishedDate
       content { html }
       seo {

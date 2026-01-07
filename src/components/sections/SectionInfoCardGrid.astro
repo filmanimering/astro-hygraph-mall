@@ -33,7 +33,7 @@ const theCardColor = cardColor.hex || "#6b0184";
               {card.poster?.url && (
                 <MyImage
                   src={card.poster.url}
-                  alt={card.title}
+                  alt={card.title || "Card bild"}
                   width={600}
                   height={400}
                   class="mb-6 rounded-2xl"
@@ -76,7 +76,7 @@ const theCardColor = cardColor.hex || "#6b0184";
                 <div class="w-full md:w-2/5 shrink-0 overflow-hidden">
                   <MyImage
                     src={card.poster.url}
-                    alt={card.title}
+                    alt={card.title || "Card bild"}
                     width={800}
                     height={500}
                     class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
