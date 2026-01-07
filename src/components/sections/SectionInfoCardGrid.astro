@@ -12,11 +12,7 @@ const theCardColor = cardColor.hex || "#6b0184";
 <section class="pb-12 pt-8">
   <div class="max-w-7xl mx-auto px-4">
     <div class="mb-2">
-      {
-        title && (
-          <h2 class="text-3xl md:text-4xl font-semibold mb-2">{title}</h2>
-        )
-      }
+      {title && <h2 class="text-3xl md:text-4xl font-medium mb-2">{title}</h2>}
       {
         description && (
           <p class="mb-4 max-w-2xl text-slate-600">{description}</p>
@@ -42,7 +38,7 @@ const theCardColor = cardColor.hex || "#6b0184";
                 />
               )}
               <p
-                class="text-(--card-color) text-xl font-semibold mb-1"
+                class="text-(--card-color) text-xl font-medium mb-1"
                 style={`--card-color: ${theCardColor};`}
               >
                 {card.title}
@@ -86,7 +82,7 @@ const theCardColor = cardColor.hex || "#6b0184";
               )}
               <div class="p-8 md:p-10 flex flex-col justify-center">
                 <p
-                  class="text-2xl font-semibold mb-4 text-(--card-color)"
+                  class="text-2xl font-medium mb-4 text-(--card-color)"
                   style={`--card-color: ${theCardColor};`}
                 >
                   {card.title}
@@ -121,7 +117,7 @@ const theCardColor = cardColor.hex || "#6b0184";
               style={`--card-color: ${theCardColor};`}
             >
               <p
-                class="text-(--card-color) font-semibold text-xl mb-1"
+                class="text-(--card-color) font-medium text-xl mb-1"
                 style={`--card-color: ${theCardColor};`}
               >
                 {card.title}

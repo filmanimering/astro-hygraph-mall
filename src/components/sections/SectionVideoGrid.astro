@@ -21,9 +21,7 @@ const gridCols =
   {
     videoStyle === "defaultGrid" && (
       <div>
-        <h1 class="text-3xl md:text-4xl font-semibold">
-          {data.titleVideoGrid}
-        </h1>
+        <h1 class="text-3xl md:text-4xl font-medium">{data.titleVideoGrid}</h1>
         <p class="mt-4 mb-8 opacity-80">{data.textVideoGrid}</p>
 
         <div class:list={["grid grid-cols-1 gap-8", gridCols]}>
@@ -35,7 +33,7 @@ const gridCols =
                 videoStyle={videoStyle}
               />
               <div class="mt-4">
-                <p class="text-lg font-semibold ">{v.title}</p>
+                <p class="text-lg font-medium ">{v.title}</p>
                 <p class="text-sm  mt-1 line-clamp-2">{v.videoText}</p>
               </div>
             </div>

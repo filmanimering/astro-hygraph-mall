@@ -6,6 +6,7 @@ import { hygraphFetch } from "../../lib/hygraph";
 // Vi använder din CATEGORY_POST_QUERY (se till att den finns i lib/queries.js)
 import { CATEGORY_POSTS_QUERY } from "../../lib/queries";
 import MyBlogPost from "../../components/MyBlogPost.astro";
+import MyButton from "../../components/MyButton.astro";
 
 // 1. Berätta för Astro vilka sidor som ska skapas (Animation, Hemsidor etc.)
 export async function getStaticPaths() {
@@ -79,12 +80,11 @@ const settings = data.globalSettings?.[0] || {};
       }
 
       <div class="mt-12">
-        <a
-          href="/blog"
-          class="text-white text-sm font-semibold tracking-widest hover:opacity-80 bg-[#685CEF] py-2 px-3 rounded-md"
-        >
-          ← Tillbaka till alla inlägg
-        </a>
+        <MyButton
+          titel="← Tillbaka till alla inlägg"
+          link="/blog"
+          variant="primary"
+        />
       </div>
     </div>
     <div class="h-24"></div>

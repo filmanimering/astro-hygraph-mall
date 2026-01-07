@@ -1,5 +1,6 @@
 ---
 import FormattedDate from "./FormattedDate.astro";
+import MyButton from "./MyButton.astro";
 import MyImage from "./MyImage.astro";
 
 const { title, excerpt, slug, poster, date, bloggKategori } = Astro.props;
@@ -7,7 +8,7 @@ const { title, excerpt, slug, poster, date, bloggKategori } = Astro.props;
 
 <article class="flex flex-col h-full">
   <div
-    class="bg-[#F6F8F9] rounded-2xl h-full flex flex-col overflow-hidden transition-all duration-300 hover:shadow-md"
+    class="rounded-2xl h-full flex flex-col overflow-hidden transition-all duration-300 shadow-gray-300 shadow-lg"
   >
     {/* Länk på bilden */}
     <a href={`/blog/${slug}`} class="block overflow-hidden group">
@@ -31,7 +32,8 @@ const { title, excerpt, slug, poster, date, bloggKategori } = Astro.props;
           bloggKategori && (
             <a
               href={`/blogCategory/${bloggKategori.slug}`}
-              class="text-xs font-bold uppercase tracking-widest text-slate-50 hover:opacity-80  bg-[#685CEF] px-2 py-1 rounded-xl"
+              class="text-xs text-blue-950 font-medium uppercase tracking-widest  
+              bg-[#DDE1FF] px-3 py-1 rounded-xl transition delay-100 duration-150 ease-in-out hover:-translate-y-0.5 hover:scale-103"
             >
               {bloggKategori.displayName}
             </a>
@@ -59,26 +61,8 @@ const { title, excerpt, slug, poster, date, bloggKategori } = Astro.props;
       }
 
       {/* LÄS MER KNAPP */}
-      <div class="mt-auto pt-6">
-        <a
-          href={`/blog/${slug}`}
-          class="text-xs font-bold uppercase tracking-widest text-slate-900 hover:opacity-60 transition-opacity flex items-center"
-        >
-          Läs mer
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-3 w-3 ml-1"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"></path>
-          </svg>
-        </a>
+      <div class="mt-auto pt-2">
+        <MyButton titel="Läs mer" link={`/blog/${slug}`} variant="secondary" />
       </div>
     </div>
   </div>
