@@ -58,7 +58,8 @@ const relatedPosts = data.allPosts
               post.blogCategory && (
                 <a
                   href={`/blogCategory/${post.blogCategory.slug}`}
-                  class="text-xs font-bold uppercase tracking-widest text-slate-50 hover:opacity-80  bg-[#685CEF] px-2 py-1 rounded-xl"
+                  class="flex w-fit text-sm  font-medium  tracking-widest  
+              bg-[#DDE1FF] px-3 py-1 rounded-xl transition delay-100 duration-150 ease-in-out hover:-translate-y-0.5 hover:scale-103 hover:bg-blue-200"
                 >
                   {post.blogCategory.displayName}
                 </a>
@@ -112,7 +113,8 @@ const relatedPosts = data.allPosts
                   <li>
                     <a
                       href={`/blog/${rel.slug}`}
-                      class="group block bg-white border border-slate-100 rounded-2xl p-4 shadow-sm transition-all hover:shadow-xl hover:border-slate-300 hover:-translate-y-1"
+                      class="group block bg-white border border-slate-100 rounded-2xl p-4 
+                      shadow-sm transition-all hover:shadow-lg hover:border-slate-200 hover:-translate-y-0.5"
                     >
                       <span class="block text-sm  font-medium mb-1 text-slate-700 group-hover:text-slate-600 transition-colors">
                         <FormattedDate date={new Date(rel.publishedDate)} />

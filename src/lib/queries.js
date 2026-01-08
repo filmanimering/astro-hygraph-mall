@@ -70,6 +70,15 @@ export const PAGE_QUERY = /* GraphQL */ `
           textLayout
           content { html }
           image { url }
+          imageCards {
+            imageCardBild { 
+              url 
+              width
+              height
+            }
+            imageCardTitle
+            imageCardText
+          }
         }
         ... on SectionImageGrid {
           title

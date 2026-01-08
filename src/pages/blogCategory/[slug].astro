@@ -43,7 +43,7 @@ const settings = data.globalSettings?.[0] || {};
     <div class="max-w-7xl mx-auto pt-2">
       <!-- Meny för bloggkategorierna -->
       <div class="flex justify-center">
-        <nav class="mb-12">
+        <nav class="mb-2">
           <ul class="flex flex-wrap justify-center">
             <li class="">
               <a
@@ -80,14 +80,9 @@ const settings = data.globalSettings?.[0] || {};
           </ul>
         </nav>
       </div>
-      <header class="mb-12 border-b border-gray-400 pb-4">
-        <h1 class="text-2xl md:text-3xl font-medium">
-          Kategori: <span class="text-green-700">{category.displayName}</span>
-        </h1>
-      </header>
 
       <div
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-10"
+        class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
       >
         {
           posts.map((post: any) => (
@@ -116,14 +111,6 @@ const settings = data.globalSettings?.[0] || {};
           </div>
         )
       }
-
-      <div class="mt-12">
-        <MyButton
-          titel="← Tillbaka till alla inlägg"
-          link="/blog"
-          variant="primary"
-        />
-      </div>
     </div>
     <div class="h-24"></div>
   </main>
