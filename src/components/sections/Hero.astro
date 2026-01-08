@@ -26,7 +26,7 @@ const videoUploadedUrl = data.videoUploadedUrl.url;
     heroLayout === "textLeftImageRight" && (
       <div class="px-4 pt-4 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
         <div class="pb-12 px-4">
-          <div>
+          <div class="">
             {heroTitle && <h1 class="mb-4">{heroTitle}</h1>}
             {heroText && <p class="mb-6">{heroText}</p>}
             <div class="mt-6 flex gap-4">
@@ -164,9 +164,9 @@ const videoUploadedUrl = data.videoUploadedUrl.url;
         style={`background-image: url(${heroImage.url});`}
       >
         <div class="min-h-screen  flex items-center">
-          <div class=" pt-32 sm:pt-32 md:pt-32 lg:pt-0 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div class=" pt-32 sm:pt-32 md:pt-32 lg:pt-0 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center  ">
             {/* Left section */}
-            <div class="">
+            <div class="hero-content-animate">
               {heroTitle && (
                 <h1 class="text-5xl md:text-7xl mb-4">{heroTitle}</h1>
               )}
@@ -205,3 +205,30 @@ const videoUploadedUrl = data.videoUploadedUrl.url;
     )
   }
 </section>
+
+<!-- Animation -->
+<style>
+  /* 1. Definiera rörelsen */
+  @keyframes heroFadeUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 2. Applicera på din valda div */
+  .hero-content-animate {
+    opacity: 0; /* Viktigt: Håll den dold innan start */
+    animation: heroFadeUp 0.9s ease-out forwards;
+    animation-delay: 0.2s; /* En liten delay så att bakgrundsbilden hinner laddas */
+  }
+  .hero-video-animate {
+    opacity: 0; /* Viktigt: Håll den dold innan start */
+    animation: heroFadeUp 0.9s ease-out forwards;
+    animation-delay: 0.1s; /* En liten delay så att bakgrundsbilden hinner laddas */
+  }
+</style>
