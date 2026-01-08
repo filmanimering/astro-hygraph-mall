@@ -19,12 +19,12 @@ const { siteName, logo, navigation = [], navigationRight = [] } = settings;
           logo?.url && (
             <MyImage
               src={logo.url}
-              alt={`${siteName} logotyp`}
-              width={logo.width || 80}
-              height={logo.height || 30}
-              aspect="auto"
-              fit="contain"
-              class="h-6 w-auto bg-transparent border-none shadow-none rounded-sm group-hover:opacity-80 transition-opacity"
+              alt={siteName || "Logo"}
+              width={40}
+              height={40}
+              aspect="square"
+              priority={true}
+              class="w-6 h-6 rounded-md object-contain"
             />
           )
         }
