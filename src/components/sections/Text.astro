@@ -2,94 +2,191 @@
 // Text.astro
 import Prose from "../Prose.astro";
 import MyImage from "../MyImage.astro";
+import MyButton from "../MyButton.astro";
 
 const { data } = Astro.props;
-const { content, textLayout, image } = data;
+const {
+  content,
+  textLayout,
+  image,
+  buttonTitleTextSection,
+  buttonLinkTextSection,
+} = data;
 const htmlContent = content?.html;
-
 ---
 
-<section class="pt-2 pb-12 overflow-hidden">
-  <div class="max-w-7xl mx-auto px-6 sm:px-8 p-4 sm:p-8 rounded-2xl">
-    {/* FALL 1: Text till vänster, Bild till höger */}
-    {
-      textLayout === "textLeftImageRight" && (
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-12 items-center ">
-          <div>
-            <Prose>
-              <div set:html={htmlContent} />
-            </Prose>
-          </div>
-          <div>
-            <MyImage
-              src={image?.url}
-              alt={image?.alt || "Poster bild"}
-              width={800}
-              height={600}
-              aspect="auto"
-              class="rounded-3xl shadow-2xl"
-            />
-          </div>
-        </div>
-      )
-    }
-
-    {/* FALL 2: Text till höger, Bild till vänster */}
-    {
-      textLayout === "textRightImageLeft" && (
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* På mobil hamnar texten först (standard ordning) */}
-          <div class="lg:order-2">
-            <Prose>
-              <div set:html={htmlContent} />
-            </Prose>
-          </div>
-          <div class="lg:order-1">
-            <MyImage
-              src={image?.url}
-              alt=""
-              width={800}
-              height={600}
-              aspect="auto"
-              class="rounded-3xl shadow-2xl"
-            />
-          </div>
-        </div>
-      )
-    }
-
-    {/* FALL 3: Default (Endast text) */}
-    {
-      (textLayout === "default" || !textLayout) && (
-        <div class="">
+<section class="py-12 overflow-hidden">
+  {/* FALL 1: Text till vänster, Bild till höger */}
+  {
+    textLayout === "textLeftImageRight" && (
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-12 items-center px-4">
+        <div class="animate-fade-in">
           <Prose>
             <div set:html={htmlContent} />
           </Prose>
+          <div class="mt-6">
+            <MyButton
+              titel={buttonTitleTextSection}
+              link={buttonLinkTextSection}
+              variant="primary"
+              fullWidth={false}
+            />
+          </div>
         </div>
-        <div class="ml-2">
-          {data.imageCards?.map((card: any) => (
-            <div class="flex flex-col bg-white rounded-3xl  shadow-xl transition-all hover:shadow-2xl">
-              {card.imageCardTitle && (<p class="text-2xl font-medium">{card.imageCardTitle}</p>)}
-              {card.imageCardText && (<p class="mt-2 mb-4">{card.imageCardText}</p>)}
-             
-                
-                {card.imageCardBild && (                  
-                <MyImage
-                  src={card.imageCardBild.url}
-                  alt={card.imageCardBild?.alt || "Poster bild"}
-                  aspect="auto"
-                  width={card.imageCardBild.width || 800}
-                  height={card.imageCardBild.height || 600}
-                  class="w-full h-auto"
-                />                
-              )}
+        <div class="animate-fade-in-delay">
+          <MyImage
+            src={image?.url}
+            alt={image?.alt || "Sektionsbild"}
+            width={image?.width}
+            height={image?.height}
+            aspect="auto"
+            class="rounded-xl shadow-2xl"
+          />
+        </div>
+      </div>
+    )
+  }
 
-            </div>
-            )
-          )
-          }
+  {/* FALL 2: Text till höger, Bild till vänster */}
+  {
+    textLayout === "textRightImageLeft" && (
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-4">
+        <div class="lg:order-2 animate-fade-in">
+          <Prose>
+            <div set:html={htmlContent} />
+          </Prose>
+          <div class="mt-6">
+            <MyButton
+              titel={buttonTitleTextSection}
+              link={buttonLinkTextSection}
+              variant="primary"
+            />
+          </div>
+        </div>
+        <div class="lg:order-1 animate-fade-in-delay">
+          <MyImage
+            src={image?.url}
+            alt={image?.alt || "Sektionsbild"}
+            width={image?.width}
+            height={image?.height}
+            aspect="auto"
+            class="rounded-3xl shadow-2xl"
+          />
+        </div>
+      </div>
+    )
+  }
+
+  {/* FALL 3: Default (Endast text + InfoCards) */}
+  {
+    (textLayout === "default" || !textLayout) && !data.imageCards?.length && (
+      <div class="max-w-4xl mx-auto px-4">
+        <Prose>
+          <div set:html={htmlContent} />
+        </Prose>
+      </div>
+    )
+  }
+
+  {/* Specialvariant av Fall 3: Om det finns InfoCards */}
+  {
+    (textLayout === "default" || !textLayout) &&
+      data.imageCards?.length > 0 && (
+        <div class="max-w-7xl mx-auto px-4">
+          <div class="max-w-4xl mb-12">
+            <Prose>
+              <div set:html={htmlContent} />
+            </Prose>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {data.imageCards.map((card: any, index: number) => (
+              <div
+                class="flex flex-col bg-white rounded-3xl p-8 shadow-xl transition-all hover:shadow-2xl animate-fade-in"
+                style={`animation-delay: ${index * 0.1}s`}
+              >
+                {card.imageCardTitle && (
+                  <h3 class="text-2xl font-bold text-slate-900 mb-2">
+                    {card.imageCardTitle}
+                  </h3>
+                )}
+                {card.imageCardText && (
+                  <p class="text-slate-600 mb-6 leading-relaxed">
+                    {card.imageCardText}
+                  </p>
+                )}
+                {card.imageCardBild && (
+                  <div class="mt-auto pt-4">
+                    <MyImage
+                      src={card.imageCardBild.url}
+                      alt={card.imageCardTitle}
+                      width={card.imageCardBild.width}
+                      height={card.imageCardBild.height}
+                      aspect="auto"
+                      class="rounded-2xl"
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       )
-    }
-  </div>
+  }
+
+  {/* FALL 4: Full width Background */}
+  {
+    textLayout === "fullWidthBg" && (
+      <div class="p-12 md:p-24 bg-linear-to-b from-[#5A4DF8] to-[#9796FF]">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div class="max-w-lg">
+            <div class="prose prose-invert max-w-none">
+              <div set:html={htmlContent} />
+            </div>
+            <div class="mt-8">
+              <MyButton
+                titel={buttonTitleTextSection}
+                link={buttonLinkTextSection}
+                variant="primary"
+                fullWidth={false}
+              />
+            </div>
+          </div>
+          {/* Om du har en bild även här, annars kan denna kolumn vara tom eller tas bort */}
+          {image?.url && (
+            <MyImage
+              src={image.url}
+              width={image.width}
+              height={image.height}
+              aspect="auto"
+              class="rounded-3xl shadow-2xl"
+            />
+          )}
+        </div>
+      </div>
+    )
+  }
 </section>
+
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  .animate-fade-in-delay {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out forwards;
+    animation-delay: 0.3s;
+  }
+</style>

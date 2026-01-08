@@ -5,6 +5,7 @@ import { hygraphFetch } from "../../lib/hygraph";
 import { CATEGORY_POSTS_QUERY } from "../../lib/queries";
 import MyBlogPost from "../../components/MyBlogPost.astro";
 import MyButton from "../../components/MyButton.astro";
+import BlogCatMeny from "../../components/BlogCatMeny.astro";
 
 // 1. Berätta för Astro vilka sidor som ska skapas (Animation, Hemsidor etc.)
 export async function getStaticPaths() {
@@ -32,6 +33,8 @@ const data = await hygraphFetch(CATEGORY_POSTS_QUERY, { slug });
 const posts = data.blogPosts || [];
 const categories = data.blogCategories || []; // Hämta bloggkategorierna här
 const settings = data.globalSettings?.[0] || {};
+
+console.log("Kat: ", category.displayName);
 ---
 
 <BaseLayout
@@ -42,44 +45,11 @@ const settings = data.globalSettings?.[0] || {};
   <main class="px-4 w-full antialiased">
     <div class="max-w-7xl mx-auto pt-2">
       <!-- Meny för bloggkategorierna -->
-      <div class="flex justify-center">
-        <nav class="mb-2">
-          <ul class="flex flex-wrap justify-center">
-            <li class="">
-              <a
-                href="/blog"
-                class={`text-xs font-bold uppercase tracking-widest px-3 py-2 transition-colors block ${
-                  !slug
-                    ? "bg-slate-900 text-white"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                }`}
-              >
-                Alla
-              </a>
-            </li>
-
-            {
-              categories.map((cat: any) => {
-                const isActive = cat.slug === slug;
-                return (
-                  <li class="">
-                    <a
-                      href={`/blogCategory/${cat.slug}`}
-                      class={`text-xs font-bold uppercase tracking-widest px-3 py-2 transition-colors block ${
-                        isActive
-                          ? "bg-slate-900 text-white"
-                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                      }`}
-                    >
-                      {cat.displayName}
-                    </a>
-                  </li>
-                );
-              })
-            }
-          </ul>
-        </nav>
-      </div>
+      <BlogCatMeny
+        categories={categories}
+        slug={slug}
+        categoryName={category.displayName}
+      />
 
       <div
         class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"

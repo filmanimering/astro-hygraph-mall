@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { hygraphFetch } from "../../lib/hygraph";
 import { BLOG_LIST_QUERY } from "../../lib/queries"; // Importera den centrala queryn
 import MyBlogPost from "../../components/MyBlogPost.astro";
+import BlogCatMeny from "../../components/BlogCatMeny.astro";
 
 const data = await hygraphFetch(BLOG_LIST_QUERY);
 const posts = data.blogPosts || [];
@@ -18,45 +19,7 @@ const { slug } = Astro.params;
 >
   <main class="px-4 w-full antialiased">
     <div class="max-w-7xl mx-auto pt-2">
-      <!-- Meny för bloggkategorierna -->
-      <div class="flex justify-center">
-        <nav class="mb-2">
-          <ul class="flex flex-wrap justify-center">
-            <li class="">
-              <a
-                href="/blog"
-                class={`text-xs font-bold uppercase tracking-widest px-3 py-2 transition-colors block ${
-                  !slug
-                    ? "bg-slate-900 text-white"
-                    : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                }`}
-              >
-                Alla
-              </a>
-            </li>
-
-            {
-              categories.map((cat: any) => {
-                const isActive = cat.slug === slug;
-                return (
-                  <li class="">
-                    <a
-                      href={`/blogCategory/${cat.slug}`}
-                      class={`text-xs font-bold uppercase tracking-widest px-3 py-2 transition-colors block ${
-                        isActive
-                          ? "bg-slate-900 text-white"
-                          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-                      }`}
-                    >
-                      {cat.displayName}
-                    </a>
-                  </li>
-                );
-              })
-            }
-          </ul>
-        </nav>
-      </div>
+      <BlogCatMeny categories={categories} slug={slug} />
 
       <div
         class="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"

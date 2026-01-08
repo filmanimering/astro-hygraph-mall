@@ -25,24 +25,26 @@ const {
 
 /**
  * 1. OPTIMERING (Hygraph Transformations)
- * - auto=format: Viktigt för WebP/AVIF (Sparar de där 849 KiB).
- * - quality=75: Standard för webben, minskar filstorleken drastiskt utan synlig förlust.
- * - width: Vi skalar ner bilden på servern så vi inte laddar 1MB i onödan.
+ * Vi använder parametrar för att låta Hygraph sköta tunga lyft.
  */
 const params = new URLSearchParams();
 params.append("auto", "format,compress");
 params.append("quality", "75");
 if (width) params.append("width", width.toString());
 
-// Vi rensar URL:en från eventuella gamla querys för att maxa cache-träffar
-const baseUrl = src.split("?")[0];
+// Rensa URL:en från gamla querys
+const baseUrl = src?.split("?")[0];
 const optimizedSrc = `${baseUrl}?${params.toString()}`;
 
+/**
+ * 2. TAILWIND KLASSER
+ * Notera att "auto" nu lämnas tom för att inte störa naturlig höjd.
+ */
 const aspectClasses = {
   video: "aspect-video",
   square: "aspect-square",
   portrait: "aspect-[3/4]",
-  auto: "aspect-auto",
+  auto: "",
 };
 
 const fitClasses = {
@@ -53,19 +55,35 @@ const fitClasses = {
 
 <div
   class:list={[
-    "relative overflow-hidden bg-slate-200/50 shadow-sm ",
+    "relative overflow-hidden",
+    // Vi visar bara placeholder-bakgrunden om vi har en fast ratio
+    aspect !== "auto" && "bg-slate-200/50 shadow-sm",
     aspectClasses[aspect],
     className,
   ]}
 >
-  <img
-    src={optimizedSrc}
-    alt={optimizedSrc || "Hero bild"}
-    width={width}
-    height={height}
-    loading={priority ? "eager" : loading}
-    fetchpriority={priority ? "high" : "auto"}
-    decoding={priority ? "sync" : "async"}
-    class:list={["w-full h-full", fitClasses[fit]]}
-  />
+  {
+    src ? (
+      <img
+        src={optimizedSrc}
+        alt={alt || "Bild"}
+        width={width}
+        height={height}
+        loading={priority ? "eager" : loading}
+        fetchpriority={priority ? "high" : "auto"}
+        decoding={priority ? "sync" : "async"}
+        class:list={[
+          "w-full block transition-all duration-300",
+          // HÄR ÄR FIXEN: Om auto, använd h-auto. Annars fyll ut (h-full).
+          aspect === "auto" ? "h-auto" : "h-full",
+          fitClasses[fit],
+        ]}
+      />
+    ) : (
+      /* Fallback om bildkälla saknas helt */
+      <div class="w-full h-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 uppercase tracking-widest">
+        Saknar bild
+      </div>
+    )
+  }
 </div>

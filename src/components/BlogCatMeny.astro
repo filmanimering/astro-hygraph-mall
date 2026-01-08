@@ -1,0 +1,49 @@
+---
+const { categories, slug, categoryName = "Alla inlägg" } = Astro.props;
+---
+
+<div class="">
+  <nav class="mb-2">
+    <ul class="flex flex-wrap justify-center">
+      <li class="">
+        <a
+          href="/blog"
+          class={`text-sm font-medium uppercase tracking-widest px-3 py-2 transition-colors block ${
+            !slug
+              ? "bg-[#685CEF] text-white"
+              : "bg-[#DDE1FF] text-blue-800 hover:opacity-80"
+          }`}
+        >
+          Alla
+        </a>
+      </li>
+
+      {
+        categories.map((cat: any) => {
+          const isActive = cat.slug === slug;
+          return (
+            <div class="">
+              <li class="">
+                <a
+                  href={`/blogCategory/${cat.slug}`}
+                  class={`text-sm font-medium  tracking-widest px-3 py-2 transition-colors block ${
+                    isActive
+                      ? "bg-[#685CEF] text-white"
+                      : "bg-[#DDE1FF] text-blue-800 hover:opacity-80"
+                  }`}
+                >
+                  {cat.displayName}
+                </a>
+              </li>
+            </div>
+          );
+        })
+      }
+    </ul>
+  </nav>
+  <div class="">
+    <h1 class="mt-4 text-lg md:text-xl font-medium text-slate-950">
+      Kategori: <span class="text-green-700">{categoryName}</span>
+    </h1>
+  </div>
+</div>

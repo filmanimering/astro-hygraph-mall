@@ -37,12 +37,7 @@ const theCardColor = cardColor.hex || "#6b0184";
                   priority={index === 0}
                 />
               )}
-              <p
-                class="text-(--card-color) text-xl font-medium mb-1"
-                style={`--card-color: ${theCardColor};`}
-              >
-                {card.title}
-              </p>
+              <p class=" text-xl font-medium mb-1">{card.title}</p>
               <p class="grow text-sm text-slate-600 mb-3 leading-relaxed">
                 {card.text}
               </p>
@@ -81,12 +76,7 @@ const theCardColor = cardColor.hex || "#6b0184";
                 </div>
               )}
               <div class="p-8 md:p-10 flex flex-col justify-center">
-                <p
-                  class="text-2xl font-medium mb-4 text-(--card-color)"
-                  style={`--card-color: ${theCardColor};`}
-                >
-                  {card.title}
-                </p>
+                <p class="text-2xl font-medium mb-4 ">{card.title}</p>
                 <p class="text-slate-600 mb-8 leading-relaxed max-w-xl">
                   {card.text}
                 </p>
@@ -116,12 +106,7 @@ const theCardColor = cardColor.hex || "#6b0184";
               class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-(--card-color) flex flex-col h-full hover:shadow-lg transition-shadow"
               style={`--card-color: ${theCardColor};`}
             >
-              <p
-                class="text-(--card-color) font-medium text-xl mb-1"
-                style={`--card-color: ${theCardColor};`}
-              >
-                {card.title}
-              </p>
+              <p class=" font-medium text-xl mb-1">{card.title}</p>
               <p class="text-sm text-slate-600 grow mb-2 leading-relaxed">
                 {card.text}
               </p>
