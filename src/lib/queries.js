@@ -68,6 +68,7 @@ export const PAGE_QUERY = /* GraphQL */ `
         ... on SectionText {
           id
           textLayout
+          imageCardGridNumber
           buttonTitleTextSection
           buttonLinkTextSection
           content { html }

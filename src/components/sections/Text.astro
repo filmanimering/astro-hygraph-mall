@@ -8,11 +8,20 @@ const { data } = Astro.props;
 const {
   content,
   textLayout,
+  imageCardGridNumber,
   image,
   buttonTitleTextSection,
   buttonLinkTextSection,
 } = data;
 const htmlContent = content?.html;
+const gridCols =
+  {
+    1: "lg:grid-cols-1",
+    2: "lg:grid-cols-2",
+    3: "lg:grid-cols-3",
+    4: "lg:grid-cols-4",
+    5: "lg:grid-cols-5",
+  }[data.imageCardGridNumber as 1 | 2 | 3 | 4] || "lg:grid-cols-3";
 ---
 
 <section class="py-12 overflow-hidden">
@@ -24,13 +33,15 @@ const htmlContent = content?.html;
           <Prose>
             <div set:html={htmlContent} />
           </Prose>
-          <div class="mt-6">
-            <MyButton
-              titel={buttonTitleTextSection}
-              link={buttonLinkTextSection}
-              variant="primary"
-              fullWidth={false}
-            />
+          <div class="mt-2">
+            {buttonTitleTextSection && buttonLinkTextSection && (
+              <MyButton
+                titel={buttonTitleTextSection}
+                link={buttonLinkTextSection}
+                variant={"primary"}
+                fullWidth={false}
+              />
+            )}
           </div>
         </div>
         <div class="animate-fade-in-delay">
@@ -55,12 +66,15 @@ const htmlContent = content?.html;
           <Prose>
             <div set:html={htmlContent} />
           </Prose>
-          <div class="mt-6">
-            <MyButton
-              titel={buttonTitleTextSection}
-              link={buttonLinkTextSection}
-              variant="primary"
-            />
+          <div class="mt-2">
+            {buttonTitleTextSection && buttonLinkTextSection && (
+              <MyButton
+                titel={buttonTitleTextSection}
+                link={buttonLinkTextSection}
+                variant={"primary"}
+                fullWidth={false}
+              />
+            )}
           </div>
         </div>
         <div class="lg:order-1 animate-fade-in-delay">
@@ -84,6 +98,14 @@ const htmlContent = content?.html;
         <Prose>
           <div set:html={htmlContent} />
         </Prose>
+        {buttonTitleTextSection && buttonLinkTextSection && (
+          <MyButton
+            titel={buttonTitleTextSection}
+            link={buttonLinkTextSection}
+            variant={"primary"}
+            fullWidth={false}
+          />
+        )}
       </div>
     )
   }
@@ -97,8 +119,16 @@ const htmlContent = content?.html;
             <Prose>
               <div set:html={htmlContent} />
             </Prose>
+            {buttonTitleTextSection && buttonLinkTextSection && (
+              <MyButton
+                titel={buttonTitleTextSection}
+                link={buttonLinkTextSection}
+                variant={"primary"}
+                fullWidth={false}
+              />
+            )}
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2  gap-8">
+          <div class:list={["grid grid-cols-1 gap-8", gridCols]}>
             {data.imageCards.map((card: any, index: number) => (
               <div
                 class="flex flex-col bg-white rounded-3xl p-8 shadow-xl transition-all hover:shadow-2xl animate-fade-in"
@@ -143,12 +173,14 @@ const htmlContent = content?.html;
               <div set:html={htmlContent} />
             </div>
             <div class="mt-8">
-              <MyButton
-                titel={buttonTitleTextSection}
-                link={buttonLinkTextSection}
-                variant="primary"
-                fullWidth={false}
-              />
+              {buttonTitleTextSection && buttonLinkTextSection && (
+                <MyButton
+                  titel={buttonTitleTextSection}
+                  link={buttonLinkTextSection}
+                  variant={"primary"}
+                  fullWidth={false}
+                />
+              )}
             </div>
           </div>
           {/* Om du har en bild även här, annars kan denna kolumn vara tom eller tas bort */}
