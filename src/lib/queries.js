@@ -161,6 +161,17 @@ export const SINGLE_POST_QUERY = /* GraphQL */ `
       }
       publishedDate
       content { html }
+      video {
+        thumbnail { 
+          url
+          width
+          height 
+        }
+        title
+        videoText
+        videoUploadedUrl { url }
+      }
+   
       seo {
         seoTitle
         seoDescription

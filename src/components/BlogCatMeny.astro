@@ -8,10 +8,10 @@ const { categories, slug, categoryName = "Alla inlägg" } = Astro.props;
       <li class="">
         <a
           href="/blog"
-          class={`text-sm font-medium uppercase tracking-widest px-3 py-2 transition-colors block ${
+          class={`text-sm font-medium  tracking-widest px-3 py-2 transition-colors block ${
             !slug
               ? "bg-[#685CEF] text-white"
-              : "bg-[#DDE1FF] text-blue-800 hover:opacity-80"
+              : "border border-gray-300 hover:bg-blue-950/5"
           }`}
         >
           Alla
@@ -29,7 +29,7 @@ const { categories, slug, categoryName = "Alla inlägg" } = Astro.props;
                   class={`text-sm font-medium  tracking-widest px-3 py-2 transition-colors block ${
                     isActive
                       ? "bg-[#685CEF] text-white"
-                      : "bg-[#DDE1FF] text-blue-800 hover:opacity-80"
+                      : "border border-gray-300 hover:bg-blue-950/5"
                   }`}
                 >
                   {cat.displayName}

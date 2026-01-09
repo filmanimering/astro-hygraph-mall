@@ -1,14 +1,13 @@
 ---
 import FormattedDate from "../../components/FormattedDate.astro";
 import MyImage from "../../components/MyImage.astro";
+import VideoCard from "../../components/VideoCard.astro";
 import Prose from "../../components/Prose.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { hygraphFetch } from "../../lib/hygraph";
 import { SINGLE_POST_QUERY } from "../../lib/queries";
 
-// --- GENERERA ALLA SIDOR VID BUILD ---
 export async function getStaticPaths() {
-  // Vi hämtar bara slugs här för att veta vilka sidor som ska byggas
   const query = /* GraphQL */ `
     query GetPaths {
       blogPosts {
@@ -22,15 +21,11 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-
-// --- HÄMTA DATA (Använder central query) ---
 const data = await hygraphFetch(SINGLE_POST_QUERY, { slug });
 const post = data?.blogPost;
 
-// Om inlägget inte finns (t.ex. vid felaktig URL)
 if (!post) return Astro.redirect("/404");
 
-// Globala inställningar och relaterade inlägg
 const settings = data.globalSettings?.[0] || {};
 const relatedPosts = data.allPosts
   ?.filter((p: any) => p.slug !== slug)
@@ -44,95 +39,128 @@ const relatedPosts = data.allPosts
   fallbackTitle={post.title}
 >
   <main class="bg-white min-h-screen antialiased">
-    <div class="pt-8 px-4 max-w-7xl mx-auto pb-8">
+    <div class="pt-8 px-4 max-w-6xl mx-auto pb-8">
+      {/* --- HERO / HEADER --- */}
       <div
-        class="mb-12 lg:mb-28 grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-12"
+        class="mb-12 lg:mb-20 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
       >
-        <header class="col-span-7">
-          <span class="text-sm font-medium text-slate-700">
+        <header class="col-span-1 lg:col-span-7">
+          <span
+            class="text-sm font-medium text-slate-500 uppercase tracking-widest"
+          >
             <FormattedDate date={new Date(post.publishedDate)} />
           </span>
-          <!-- Blogg-kategori länk -->
-          <div class="py-2">
+          <div class="py-3">
             {
               post.blogCategory && (
                 <a
                   href={`/blogCategory/${post.blogCategory.slug}`}
-                  class="flex w-fit text-sm  font-medium  tracking-widest  
-             px-3 py-1 rounded-xl transition delay-100 duration-150 ease-in-out hover:-translate-y-0.5 hover:scale-103 bg-[#DDE1FF] text-blue-800 hover:opacity-80"
+                  class="inline-block text-xs font-bold tracking-wider px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors uppercase"
                 >
                   {post.blogCategory.displayName}
                 </a>
               )
             }
           </div>
-          <h1 class="text-3xl lg:text-5xl font-medium">
+          <h1
+            class="text-4xl lg:text-6xl font-bold text-slate-900 leading-tight"
+          >
             {post.title}
           </h1>
-
           {
             post.excerpt && (
-              <p class="mt-4  italic leading-relaxed">{post.excerpt}</p>
+              <p class="mt-6 text-xl text-slate-600 italic leading-relaxed">
+                {post.excerpt}
+              </p>
             )
           }
         </header>
-        <div class="col-span-5">
+
+        <div class="hidden lg:block col-span-1 lg:col-span-5">
           <MyImage
-            src={post.coverImage.url}
-            alt={post.coverImage.altText || data.title || "Galleri bild"}
+            src={post.coverImage}
+            alt={post.coverImage.altText || post.title}
             width={post.coverImage.width}
             height={post.coverImage.height}
             loading="eager"
-            aspect="auto"
-            class="transition-transform duration-700 rounded-2xl"
+            aspect="dynamic"
+            class="rounded-3xl shadow-2xl rotate-1 lg:rotate-2 hover:rotate-0 transition-transform duration-500"
           />
         </div>
       </div>
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
-        {/* --- HUVUDINNEHÅLL --- */}
-        <div class="lg:col-span-9">
-          <div class="">
-            <Prose>
-              <div set:html={post.content.html} />
-            </Prose>
-          </div>
-        </div>
 
-        {/* --- SIDEBAR (Relaterade inlägg) --- */}
-        <aside class="lg:col-span-3">
-          <div class="sticky top-32 space-y-6">
-            <h2
-              class="text-lg font-medium mb-1 pl-4 border-b border-slate-200 pb-2 text-slate-800"
-            >
-              Fler inlägg
-            </h2>
+      {/* --- ARTIKELINNEHÅLL --- */}
+      <div class="max-w-5xl">
+        <Prose>
+          <div set:html={post.content.html} />
+        </Prose>
 
-            <ul class="space-y-4">
-              {
-                relatedPosts.map((rel: any) => (
-                  <li>
-                    <a
-                      href={`/blog/${rel.slug}`}
-                      class="group block bg-white border border-slate-100 rounded-2xl p-4 
-                      shadow-sm transition-all hover:shadow-lg hover:border-slate-200 hover:-translate-y-0.5"
-                    >
-                      <span class="block text-sm  font-medium mb-1 text-slate-700 group-hover:text-slate-600 transition-colors">
-                        <FormattedDate date={new Date(rel.publishedDate)} />
-                      </span>
-                      <h3 class="text-base font-medium leading-snug text-slate-800 group-hover:text-black">
-                        {rel.title}
-                      </h3>
-                      <p class="text-sm line-clamp-2 text-slate-700 mt-1">
-                        {rel.excerpt}
-                      </p>
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-        </aside>
+        {/* --- VIDEOSEKTION --- */}
+        {
+          post.video && (
+            <div class="mt-4 pt-8 border-t border-slate-300 max-w-2xl">
+              {post.video.title && (
+                <h2 class="text-2xl font-medium  text-slate-900">
+                  {post.video.title}
+                </h2>
+              )}
+              {post.video.videoText && (
+                <div class="mt-4 ">
+                  <p class="text-lg text-slate-700 leading-relaxed  font-medium">
+                    {post.video.videoText}
+                  </p>
+                </div>
+              )}
+              <div class="mt-6 rounded-3xl overflow-hidden shadow-2xl bg-black">
+                <VideoCard
+                  videoUrl={post.video.videoUploadedUrl?.url}
+                  poster={post.video.thumbnail}
+                  videoStyle="defaultLayout"
+                />
+              </div>
+            </div>
+          )
+        }
       </div>
+
+      {/* --- RELATERADE INLÄGG (FOOTER SECTION) --- */}
+      {
+        relatedPosts && relatedPosts.length > 0 && (
+          <footer class="mt-12 pt-8 border-t border-slate-300 max-w-5xl mx-auto">
+            <div class="flex items-center justify-between mb-8">
+              <h2 class="text-3xl font-bold text-slate-900">Fler artiklar</h2>
+              <a
+                href="/blog"
+                class="text-indigo-600 font-semibold hover:underline"
+              >
+                Se alla →
+              </a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {relatedPosts.map((rel: any) => (
+                <a
+                  href={`/blog/${rel.slug}`}
+                  class="group flex flex-col bg-white border border-slate-100 rounded-3xl p-6 shadow-sm transition-all hover:shadow-xl hover:-translate-y-2"
+                >
+                  <span class="text-xs font-bold text-indigo-500 mb-2 uppercase tracking-tight">
+                    <FormattedDate date={new Date(rel.publishedDate)} />
+                  </span>
+                  <h3 class="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors mb-3">
+                    {rel.title}
+                  </h3>
+                  <p class="text-slate-600 line-clamp-3 text-sm leading-relaxed mb-4">
+                    {rel.excerpt}
+                  </p>
+                  <span class="mt-auto text-sm font-bold text-slate-400 group-hover:text-indigo-500 transition-colors">
+                    Läs mer →
+                  </span>
+                </a>
+              ))}
+            </div>
+          </footer>
+        )
+      }
     </div>
   </main>
 </BaseLayout>

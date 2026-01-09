@@ -1,11 +1,11 @@
 ---
 interface Props {
-  src: string;
+  src: any; // Ändrad till any för att tillåta både sträng och Hygraph-objekt
   alt?: string;
   width?: number;
   height?: number;
   class?: string;
-  aspect?: "video" | "square" | "auto" | "portrait";
+  aspect?: "video" | "square" | "auto" | "portrait" | "dynamic";
   fit?: "cover" | "contain";
   loading?: "lazy" | "eager";
   priority?: boolean;
@@ -17,34 +17,39 @@ const {
   width,
   height,
   class: className,
-  aspect = "video",
+  aspect = "auto",
   fit = "cover",
   loading = "lazy",
   priority = false,
 } = Astro.props;
 
 /**
- * 1. OPTIMERING (Hygraph Transformations)
- * Vi använder parametrar för att låta Hygraph sköta tunga lyft.
+ * 1. SÄKERHETSKONTROLL & OPTIMERING
+ * Vi kollar om src är en sträng eller ett Hygraph-objekt för att undvika .split() fel.
  */
+const imageUrl = typeof src === "object" ? src?.url : src;
+
 const params = new URLSearchParams();
 params.append("auto", "format,compress");
 params.append("quality", "75");
 if (width) params.append("width", width.toString());
 
-// Rensa URL:en från gamla querys
-const baseUrl = src?.split("?")[0];
-const optimizedSrc = `${baseUrl}?${params.toString()}`;
+// Rensa URL:en från gamla querys och bygg den optimerade strängen
+const baseUrl = imageUrl?.split("?")[0];
+const optimizedSrc = baseUrl ? `${baseUrl}?${params.toString()}` : "";
 
 /**
- * 2. TAILWIND KLASSER
- * Notera att "auto" nu lämnas tom för att inte störa naturlig höjd.
+ * 2. DYNAMISK ASPECT RATIO
+ * Vi räknar ut ration baserat på faktiska mått om de finns.
  */
+const dynamicRatio = width && height ? `${width} / ${height}` : "auto";
+
 const aspectClasses = {
   video: "aspect-video",
   square: "aspect-square",
   portrait: "aspect-[3/4]",
-  auto: "",
+  auto: "", // Vi kör h-auto istället för fast ratio
+  dynamic: "",
 };
 
 const fitClasses = {
@@ -56,14 +61,17 @@ const fitClasses = {
 <div
   class:list={[
     "relative overflow-hidden",
-    // Vi visar bara placeholder-bakgrunden om vi har en fast ratio
-    aspect !== "auto" && "bg-slate-200/50 shadow-sm",
+    // Visa bakgrundsplacerholder endast vid fasta format
+    aspect !== "auto" && aspect !== "dynamic" && "bg-slate-200/50 shadow-sm",
     aspectClasses[aspect],
     className,
   ]}
+  style={aspect === "dynamic" || (aspect === "auto" && width && height)
+    ? `aspect-ratio: ${dynamicRatio};`
+    : ""}
 >
   {
-    src ? (
+    imageUrl ? (
       <img
         src={optimizedSrc}
         alt={alt || "Bild"}
@@ -74,13 +82,12 @@ const fitClasses = {
         decoding={priority ? "sync" : "async"}
         class:list={[
           "w-full block transition-all duration-300",
-          // HÄR ÄR FIXEN: Om auto, använd h-auto. Annars fyll ut (h-full).
-          aspect === "auto" ? "h-auto" : "h-full",
+          // Om auto/dynamic: låt bilden styra höjden. Annars fyll ut boxen.
+          aspect === "auto" || aspect === "dynamic" ? "h-auto" : "h-full",
           fitClasses[fit],
         ]}
       />
     ) : (
-      /* Fallback om bildkälla saknas helt */
       <div class="w-full h-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 uppercase tracking-widest">
         Saknar bild
       </div>

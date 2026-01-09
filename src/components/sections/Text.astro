@@ -24,11 +24,11 @@ const gridCols =
   }[data.imageCardGridNumber as 1 | 2 | 3 | 4] || "lg:grid-cols-3";
 ---
 
-<section class="py-12 overflow-hidden">
+<section class="pb-12 overflow-hidden">
   {/* FALL 1: Text till vänster, Bild till höger */}
   {
     textLayout === "textLeftImageRight" && (
-      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-12 items-center px-4">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-12 lg:items-center px-4">
         <div class="animate-fade-in">
           <Prose>
             <div set:html={htmlContent} />
