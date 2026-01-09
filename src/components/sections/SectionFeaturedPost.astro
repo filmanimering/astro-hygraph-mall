@@ -1,0 +1,46 @@
+---
+// src/components/sections/SectionFeaturedPost.astro
+import MyImage from "../MyImage.astro";
+import FormattedDate from "../FormattedDate.astro";
+import MyBlogPost from "../MyBlogPost.astro";
+
+const { data } = Astro.props;
+const { title, subtitle, blogPosts } = data;
+---
+
+<section class="py-24 bg-slate-50">
+  <div class="max-w-7xl mx-auto px-4">
+    {/* Rubrikdel */}
+    <div class="mb-8 text-center lg:text-left">
+      <h2 class="text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight">
+        {title}
+      </h2>
+      {
+        subtitle && (
+          <p class="mt-4 text-xl text-slate-600 max-w-2xl italic leading-relaxed">
+            {subtitle}
+          </p>
+        )
+      }
+    </div>
+
+    {/* Grid med Blogginlägg */}
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+    >
+      {
+        blogPosts &&
+          blogPosts.map((post: any) => (
+            <MyBlogPost
+              title={post.title}
+              slug={post.slug}
+              excerpt={post.excerpt}
+              poster={post.coverImage}
+              date={post.publishedDate}
+              bloggKategori={post.blogCategory}
+            />
+          ))
+      }
+    </div>
+  </div>
+</section>

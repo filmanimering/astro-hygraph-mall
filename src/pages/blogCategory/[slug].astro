@@ -33,8 +33,6 @@ const data = await hygraphFetch(CATEGORY_POSTS_QUERY, { slug });
 const posts = data.blogPosts || [];
 const categories = data.blogCategories || []; // Hämta bloggkategorierna här
 const settings = data.globalSettings?.[0] || {};
-
-console.log("Kat: ", category.displayName);
 ---
 
 <BaseLayout

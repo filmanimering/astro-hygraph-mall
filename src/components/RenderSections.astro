@@ -4,6 +4,7 @@ import Text from "./sections/Text.astro";
 import ImageGrid from "./sections/ImageGrid.astro";
 import VideoGrid from "./sections/SectionVideoGrid.astro";
 import InfoCardGrid from "./sections/SectionInfoCardGrid.astro";
+import SectionFeaturedPost from "./sections/SectionFeaturedPost.astro";
 
 const { sections } = Astro.props;
 
@@ -14,6 +15,7 @@ const components: Record<string, any> = {
   SectionImageGrid: ImageGrid,
   SectionVideoGrid: VideoGrid,
   SectionInfoCardGrid: InfoCardGrid,
+  SectionFeaturedPost: SectionFeaturedPost,
 };
 ---
 

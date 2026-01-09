@@ -12,7 +12,7 @@ const { title, excerpt, slug, poster, date, bloggKategori } = Astro.props;
   >
     {/* Länk på bilden */}
     <a href={`/blog/${slug}`} class="block overflow-hidden group">
-      <div class="h-40 sm:h-28 overflow-hidden">
+      <div class="h-56 sm:h-40 overflow-hidden">
         <MyImage
           src={poster?.url || "/default-og-image.jpg"}
           alt={title || "Poster bild"}

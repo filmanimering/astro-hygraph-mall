@@ -101,6 +101,26 @@ export const PAGE_QUERY = /* GraphQL */ `
             videoText 
             thumbnail { url } }
         }
+        ... on SectionFeaturedPost {
+          __typename
+          title
+          subtitle
+          blogPosts {
+            title
+            slug
+            blogCategory { 
+              displayName 
+              slug
+            }
+            excerpt
+            publishedDate
+            coverImage {
+              url
+              width
+              height
+            }
+          }
+        }
         ... on SectionInfoCardGrid {
           id
           title
