@@ -110,19 +110,19 @@ const htmlContent = content?.html;
                   </h3>
                 )}
                 {card.imageCardText && (
-                  <p class="text-slate-600 mb-6 leading-relaxed">
+                  <p class="text-slate-600 mb-2 leading-relaxed">
                     {card.imageCardText}
                   </p>
                 )}
                 {card.imageCardBild && (
-                  <div class="mt-auto pt-4">
+                  <div class="mt-auto pt-2">
                     <MyImage
                       src={card.imageCardBild.url}
                       alt={card.imageCardTitle}
                       width={card.imageCardBild.width}
                       height={card.imageCardBild.height}
-                      aspect="auto"
-                      class="rounded-2xl"
+                      aspect="video"
+                      class="object-contain rounded-md"
                     />
                   </div>
                 )}
