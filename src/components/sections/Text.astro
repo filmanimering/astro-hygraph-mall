@@ -28,30 +28,37 @@ const gridCols =
   {/* FALL 1: Text till vänster, Bild till höger */}
   {
     textLayout === "textLeftImageRight" && (
-      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-12 lg:items-center px-4">
-        <div class="animate-fade-in">
+      <div class="py-4 lg:py-8 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 px-4 items-center">
+        {/* ^ lade till items-center här */}
+
+        <div class="flex flex-col justify-center">
           <Prose>
-            <div set:html={htmlContent} />
+            {/* set:html kan ibland rendera en tom <p> överst, vi kan motverka det med CSS inuti Prose */}
+            <div set:html={htmlContent} class="first:*:mt-0" />
           </Prose>
-          <div class="mt-2">
-            {buttonTitleTextSection && buttonLinkTextSection && (
+
+          {buttonTitleTextSection && buttonLinkTextSection && (
+            <div class="mt-8">
+              {" "}
+              {/* Lade till en tydlig mt-8 här för att separera från Prose */}
               <MyButton
                 titel={buttonTitleTextSection}
                 link={buttonLinkTextSection}
                 variant={"primary"}
                 fullWidth={false}
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
-        <div class="animate-fade-in-delay">
+
+        <div class="w-full">
           <MyImage
             src={image?.url}
             alt={image?.alt || "Sektionsbild"}
             width={image?.width}
             height={image?.height}
-            aspect="auto"
-            class="rounded-xl shadow-2xl"
+            aspect="video"
+            class="rounded-4xl shadow-2xl"
           />
         </div>
       </div>
@@ -64,7 +71,7 @@ const gridCols =
       <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-4">
         <div class="lg:order-2 animate-fade-in">
           <Prose>
-            <div set:html={htmlContent} />
+            <div set:html={htmlContent} class="first:*:mt-0" />
           </Prose>
           <div class="mt-2">
             {buttonTitleTextSection && buttonLinkTextSection && (
@@ -96,7 +103,7 @@ const gridCols =
     (textLayout === "default" || !textLayout) && !data.imageCards?.length && (
       <div class="max-w-7xl mx-auto px-4">
         <Prose>
-          <div set:html={htmlContent} />
+          <div set:html={htmlContent} class="first:*:mt-0" />
         </Prose>
         {buttonTitleTextSection && buttonLinkTextSection && (
           <MyButton
@@ -117,7 +124,7 @@ const gridCols =
         <div class="max-w-7xl mx-auto px-4">
           <div class="max-w-4xl mb-8">
             <Prose>
-              <div set:html={htmlContent} />
+              <div set:html={htmlContent} class="first:*:mt-0" />
             </Prose>
             {buttonTitleTextSection && buttonLinkTextSection && (
               <MyButton
@@ -170,7 +177,7 @@ const gridCols =
         <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div class="max-w-lg">
             <div class="prose prose-invert max-w-none">
-              <div set:html={htmlContent} />
+              <div set:html={htmlContent} class="first:*:mt-0" />
             </div>
             <div class="mt-8">
               {buttonTitleTextSection && buttonLinkTextSection && (

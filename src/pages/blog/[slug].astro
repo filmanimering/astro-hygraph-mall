@@ -92,7 +92,7 @@ const relatedPosts = data.allPosts
       {/* --- ARTIKELINNEHÅLL --- */}
       <div class="max-w-5xl">
         <Prose>
-          <div set:html={post.content.html} />
+          <div set:html={post.content.html} class="first:*:mt-0" />
         </Prose>
 
         {/* --- VIDEOSEKTION --- */}

@@ -57,31 +57,32 @@ const theCardColor = cardColor.hex || "#6b0184";
       )
     }
 
-    {/* FALL 2: List (Bild till vänster) */}
+    {/* FALL 2: List - Optimerad för Tailwind 4 */}
     {
       infoCardLayout === "list" && (
-        <div class="mt-8 flex flex-col gap-10 max-w-7xl mx-auto">
+        <div class="mt-12 flex flex-col gap-6 max-w-6xl ">
           {cards?.map((card: any) => (
-            <div class="flex flex-col md:flex-row bg-white rounded-3xl overflow-hidden shadow-lg transition-all hover:shadow-xl group">
-              {card.poster?.url && (
-                <div class="w-full md:w-2/5 shrink-0 overflow-hidden">
-                  <MyImage
-                    src={card.poster.url}
-                    alt={card.title || "Card bild"}
-                    width={800}
-                    height={500}
-                    class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    aspect="auto"
-                  />
+            <div class="group relative bg-white  rounded-4xl p-8 md:p-10  shadow-xl">
+              {/* Accent-linje med Tailwind 4 styling */}
+              <div
+                class="absolute left-0 top-10 bottom-10 w-1.5 rounded-r-full "
+                style={`background-color: ${theCardColor || "var(--color-indigo-600)"};`}
+              />
+
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+                {/* Textinnehåll */}
+                <div class="flex-1">
+                  <h3 class="text-2xl md:text-3xl font-medium text-slate-900 mb-4  tracking-tight">
+                    {card.title}
+                  </h3>
+                  <p class="text-slate-600 text-lg leading-relaxed max-w-2xl">
+                    {card.text}
+                  </p>
                 </div>
-              )}
-              <div class="p-8 md:p-10 flex flex-col justify-center">
-                <p class="text-2xl font-medium mb-4 ">{card.title}</p>
-                <p class="text-slate-600 mb-8 leading-relaxed max-w-xl">
-                  {card.text}
-                </p>
+
+                {/* Knapp-del med shrink-0 för att förhindra att knappen kläms */}
                 {card.buttonLabel && card.buttonLink && (
-                  <div class="w-fit">
+                  <div class="shrink-0 pt-1">
                     <MyButton
                       link={card.buttonLink}
                       titel={card.buttonLabel}
